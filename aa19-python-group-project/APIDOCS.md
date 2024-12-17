@@ -646,6 +646,41 @@ Deletes an existing comment.
 
 ## ALBUMS
 
+### Get all Albums
+
+Returns all the albums.
+
+* Require Authentication: false
+* Request
+  * Method: GET
+  * Route path: /albums
+  * Body: none
+
+* Successful Response
+  * Status Code: 200
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+  ```json
+    {
+      "Album": [
+        {
+          "id": 1,
+          "playlistId": 4,
+          "artist": "Big Bird",
+          "released_year": 2022,
+          "created_at": "2022-11-19 20:39:36",
+          "title": "Happy Songs",
+          "Images": [
+            {
+              "id": 1,
+              "url": "image url"
+            }
+          ],
+        }
+      ]
+    }
+    ```
 
 ### Get all Songs by an Album's id
 
