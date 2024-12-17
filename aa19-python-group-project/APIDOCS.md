@@ -806,7 +806,7 @@ Returns all the albums created by the current user.
 * Require Authentication: true
 * Request
   * Method: GET
-  * Route path: /user/:userId/albums
+  * Route path: /users/:userId/albums
   * Body: none
 
 * Successful Response
@@ -846,10 +846,10 @@ Returns all the albums created by the current user.
 
 Add Songs based on albumId.
 
-* Require Authentication: false
+* Require Authentication: True
 * Request
   * Method: POST
-  * Route path: /albums/:albumId/songs
+  * Route path: /users/:userId/albums/:albumId/songs
   * Body: none
 
 * Successful Response
@@ -992,7 +992,7 @@ Deletes an existing album, based on AlbumId.
     }
    ```
 
-###LIKES
+## LIKES
 
 ### Get all Songs liked by the Current User
 
@@ -1284,6 +1284,219 @@ Unlike album based on albumId
     ```json
     {
       "message": "Album couldn't be found"
+    }
+   ```
+
+## PLAYLISTS
+
+
+### User should GET all playlists created by user based on userId
+
+Returns all the playslists that belong to a userId specified by id.
+
+* Require Authentication: false
+* Request
+  * Method: GET
+  * Route path: /users/:userId/playlists
+  * Body: none
+
+* Successful Response
+  * Status Code: 200
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+    ```json
+    {
+      "playlist": [
+        {
+          "id": 1,
+          "playlistId": 4,
+          "created_at": "2022-11-19 20:39:36",
+          "name": "Happy Songs Playlist",
+          "updated_at":  "2022-11-19 20:39:36",
+        }
+      ]
+    }
+    ```
+
+* Error response: Couldn't find a Playlist with the specified id
+  * Status Code: 404
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+    ```json
+    {
+      "message": "Playlist couldn't be found"
+    }
+    ```
+
+### Create a new playlist based on user Id
+
+Create new playlist
+
+* Require Authentication: True
+* Request
+  * Method: POST
+  * Route path: /users/:userId/playlists/:playlistId
+  * Body: none
+
+* Successful Response
+  * Status Code: 200
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+    ```json
+    {
+      "playlist": [
+        {
+          "id": 1,
+          "playlistId": 4,
+          "created_at": "2022-11-19 20:39:36",
+          "name": "Happy Songs Playlist",
+          "updated_at":  "2022-11-19 20:39:36",
+        }
+      ]
+    }
+    ```
+
+    * Successful Response
+  * Status Code: 201
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+    ```json
+    {
+      "message": "Playlist successfully created"
+    }
+    ```
+
+* Error response: Couldn't add a Playlist with the specified id
+  * Status Code: 404
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+    ```json
+    {
+      "message": "Playlist Not Created"
+    }
+    ```
+
+
+
+### Add Songs to an User created Playlist based on Playlist's id
+
+Add Songs based on playListId.
+
+* Require Authentication: True
+* Request
+  * Method: POST
+  * Route path: /users/:userId/playlists/:playlistId/song/:songId
+  * Body: none
+
+* Successful Response
+  * Status Code: 200
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+    ```json
+    {
+      "playlist": [
+        {
+          "id": 1,
+          "playlistId": 4,
+          "created_at": "2022-11-19 20:39:36",
+          "name": "Happy Songs Playlist",
+          "updated_at":  "2022-11-19 20:39:36",
+        }
+      ]
+    }
+    ```
+
+    * Successful Response
+  * Status Code: 201
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+    ```json
+    {
+      "message": "Song successfully added to Playlist"
+    }
+    ```
+
+* Error response: Couldn't find a Playlist with the specified id
+  * Status Code: 404
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+    ```json
+    {
+      "message": "Playlist Not Found"
+    }
+    ```
+
+### Delete a song on users playlist    
+Add Songs based on playListId.
+
+* Require Authentication: True
+* Request
+  * Method: DELETE
+  * Route path: /users/:userId/playlists/:playlistId/song/:songId
+  * Body: none
+   
+   
+    * Successful Response
+  * Status Code: 201
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+    ```json
+    {
+      "message": "Song successfully deleted from Playlist"
+    }
+    ```
+
+
+### Users should be able DELETE playlists based on PlaylistId
+
+Deletes an existing playlist, based on PlaylistId.
+
+* Require Authentication: true
+* Require proper authorization: Playlist must belong to the current user
+* Request
+  * Method: DELETE
+  * Route path: /users/userId/playlists/:playlistId
+  * Body: none
+
+* Successful Response
+  * Status Code: 200
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+    ```json
+    {
+      "message": " Successfully deleted"
+    }
+    ```
+
+* Error response: Couldn't find a Playlist with the specified id
+  * Status Code: 404
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+    ```json
+    {
+      "message": "Playlist couldn't be found"
     }
    ```
 
