@@ -1,4 +1,4 @@
-# `UTUNES`
+# `Melody`
 
 ## Database Schema Design
 
