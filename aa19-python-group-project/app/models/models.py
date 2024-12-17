@@ -1,6 +1,7 @@
 from .db import db, environment, SCHEMA, add_prefix_for_prod
 from flask_login import UserMixin
 from sqlalchemy.orm import relationship
+from sqlalchemy.sql import func
 
 class Song(db.Model):
     __tablename__ = 'songs'
@@ -9,7 +10,7 @@ class Song(db.Model):
     title = db.Column(db.String(255), nullable=False)
     artist = db.Column(db.String(255), nullable=False)
     released_date = db.Column(db.Date, nullable=False)
-    created_at = db.Column(db.Date)
+    created_at = db.Column( db.DateTime, nullable=False, server_default=func.now())
     album_id = db.Column(db.Integer, db.ForeignKey('albums.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     duration = db.Column(db.Integer, nullable=False)
@@ -27,8 +28,8 @@ class Playlist(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id= db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     name = db.Column(db.String(255), nullable=False)
-    created_at = db.Column(db.Date)
-    updated_at = db.Column(db.Date)
+    created_at = db.Column(db.DateTime, nullable=False, server_default=func.now())
+    updated_at = db.Column(db.DateTime, onupdate=func.now())
 
     user = relationship("User", back_populates="playlists")
     song = relationship("Song", back_populates="playlists")
@@ -41,7 +42,7 @@ class Like(db.Model):
     user_id= db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     song_id = db.Column(db.Integer, db.ForeignKey("songs.id"), nullable=False)
     album_id = db.Column(db.Integer,db.ForeignKey("albums.id"), nullable=False)
-    created_at = db.Column(db.Date)
+    created_at = db.Column(db.DateTime, nullable=False, server_default=func.now())
 
     album = relationship("Album", back_populates="likes")
     song = relationship("Song", back_populates="likes")
@@ -55,7 +56,7 @@ class Album(db.Model):
     title = db.Column(db.String(255), nullable=False)
     artist = db.Column(db.String(255), nullable=False)
     released_year = db.Column(db.Integer, nullable=False)
-    created_at = db.Column(db.Date)
+    created_at = db.Column(db.DateTime, nullable=False, server_default=func.now())
     song_id = db.Column(db.Integer, db.ForeignKey('songs.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     duration = db.Column(db.Integer, nullable=False)
@@ -83,5 +84,5 @@ class Playlist_song(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     song_id = db.Column(db.Integer, db.ForeignKey('songs.id'), nullable=False)
-    playlist_id = db.Column(db.Integer, db.ForeignKey('playlist.id'), nullable=False)
+    playlist_id = db.Column(db.Integer, db.ForeignKey('playlists.id'), nullable=False)
 

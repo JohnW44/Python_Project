@@ -3,6 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from sqlalchemy.orm import relationship
 from .models import Like, Playlist, Playlist_song, Image, Song, Album
+from sqlalchemy.sql import func
 
 
 class User(db.Model, UserMixin):
@@ -17,7 +18,7 @@ class User(db.Model, UserMixin):
     hashed_password = db.Column(db.String(255), nullable=False)
     first_name = db.Column(db.String(255), nullable=False)
     last_name = db.Column(db.String(255), nullable=False)
-    created_at = db.Column(db.Date)
+    created_at = db.Column (db.DateTime, nullable=False, server_default=func.now())
     profile_image = db.Column(db.String(1000))
 
     album = relationship("Album", back_populates="users")
