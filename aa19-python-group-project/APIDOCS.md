@@ -255,6 +255,7 @@ Returns all the songs.
           "user_id": 1,
           "duration": 500,
           "lyrics": "Happy birthday too youu",
+          // "genre": "kids song"
           // "comment": "good song would reccomend",
         }
       ]
@@ -368,6 +369,7 @@ Adds and returns a new song.
           "album_id": 1,
           "user_id": 1,
           "lyrics": "Happy birthday too youu",
+          //"genre": "kids songs"
         }
       ],
       "SongImage": [
@@ -797,16 +799,16 @@ Returns all the songs that belong to an album specified by id.
       "message": "Song couldn't be found"
     }
     ```
+<!-- 
+### Add an Image to a album based on the album's id
 
-### Add an Image to a Review based on the Review's id
-
-Create and return a new image for a review specified by id.
+Create and return a new image for an album specified by id.
 
 * Require Authentication: true
 * Require proper authorization: Review must belong to the current user
 * Request
   * Method: POST
-  * Route path: /reviews/:reviewId
+  * Route path: /album/:albumId/addImage
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -830,7 +832,7 @@ Create and return a new image for a review specified by id.
     }
     ```
 
-* Error response: Couldn't find a Review with the specified id
+* Error response: Couldn't find album with the specified id
   * Status Code: 404
   * Headers:
     * Content-Type: application/json
@@ -838,7 +840,7 @@ Create and return a new image for a review specified by id.
 
     ```json
     {
-      "message": "Review couldn't be found"
+      "message": "Album couldn't be found"
     }
     ```
 
@@ -853,9 +855,204 @@ Create and return a new image for a review specified by id.
     {
       "message": "Maximum number of images for this resource was reached"
     }
+    ``` -->
+
+ ### Users should be able to view all albums created by users
+
+Returns all the albums created by the current user.
+
+* Require Authentication: true
+* Request
+  * Method: GET
+  * Route path: /user/:userId/albums
+  * Body: none
+
+* Successful Response
+  * Status Code: 200
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+    ```json
+    {
+      "Albums": [
+        {
+          "id": 1,
+          "title": "Happy Songs",
+          "artist": "Big Bird",
+          "album_id": 1,
+          "duration": 500,
+          "image": "image url"
+        }
+      ]
+    }
     ```
 
-### Edit a Review
+  * Error response: Couldn't find album with the specified id
+  * Status Code: 404
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+    ```json
+    {
+      "message": "No Albums found"
+    }
+    ```
+
+### Add Songs to an User created Album based on Album's id
+
+Add Songs based on albumId.
+
+* Require Authentication: false
+* Request
+  * Method: POST
+  * Route path: /albums/:albumId/songs
+  * Body: none
+
+* Successful Response
+  * Status Code: 200
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+    ```json
+    {
+      "Album": [
+        {
+          "id": 1,
+          "playlistId": 4,
+          "artist": "Big Bird",
+          "released_year": 2022,
+          "created_at": "2022-11-19 20:39:36",
+          "title": "Happy Songs",
+          "songs": [
+            {
+            "songid": 1
+          }
+          ]
+          "Images": [
+            {
+              "id": 1,
+              "url": "image url"
+            }
+          ],
+        }
+      ]
+    }
+    ```
+
+    * Successful Response
+  * Status Code: 201
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+    ```json
+    {
+      "message": "Song successfully added to Album"
+    }
+    ```
+
+* Error response: Couldn't find a Album with the specified id
+  * Status Code: 404
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+    ```json
+    {
+      "message": "Album Not Found"
+    }
+    ```
+
+### Users should be able to remove songs from albums based on AlbumId
+
+Deletes an existing song, based on AlbumId.
+
+* Require Authentication: true
+* Require proper authorization: Song must belong to the current user
+* Request
+  * Method: DELETE
+  * Route path: /album/:albumId/songs/:songId
+  * Body: none
+
+* Successful Response
+  * Status Code: 200
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+    ```json
+    {
+      "message": "Successfully deleted"
+    }
+    ```
+
+* Error response: Couldn't find a Album with the specified id
+  * Status Code: 404
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+    ```json
+    {
+      "message": "Album couldn't be found"
+    }
+    ```
+
+    * Error response: Couldn't find Song with the specified id
+  * Status Code: 404
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+    ```json
+    {
+      "message": "Song couldn't be found"
+    }
+    ```
+
+
+
+### Users should be able DELETE albums based on AlbumId
+
+Deletes an existing album, based on AlbumId.
+
+* Require Authentication: true
+* Require proper authorization: Album must belong to the current user
+* Request
+  * Method: DELETE
+  * Route path: /album/:albumId
+  * Body: none
+
+* Successful Response
+  * Status Code: 200
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+    ```json
+    {
+      "message": "Album Successfully deleted"
+    }
+    ```
+
+* Error response: Couldn't find a Album with the specified id
+  * Status Code: 404
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+    ```json
+    {
+      "message": "Album couldn't be found"
+    }
+   ```
+
+
+
+### Edit a review
 
 Update and return an existing review.
 
