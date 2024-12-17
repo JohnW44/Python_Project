@@ -408,53 +408,7 @@ Adds and returns a new song.
         },
       ]
     }
-    ```
-
-<!-- ### Add an Image to a Spot based on the Spot's id
-
-Create and return a new image for a spot specified by id.
-
-* Require Authentication: true
-* Require proper authorization: Spot must belong to the current user
-* Request
-  * Method: POST
-  * Route path: /spots/:spotId
-  * Headers:
-    * Content-Type: application/json
-  * Body:
-
-    ```json
-    {
-      "url": "image url",
-      "preview": true
-    }
-    ```
-
-* Successful Response
-  * Status Code: 201
-  * Headers:
-    * Content-Type: application/json
-  * Body:
-
-    ```json
-    {
-      "id": 1,
-      "url": "image url",
-      "preview": true
-    }
-    ```
-
-* Error response: Couldn't find a Spot with the specified id
-  * Status Code: 404
-  * Headers:
-    * Content-Type: application/json
-  * Body:
-
-    ```json
-    {
-      "message": "Spot couldn't be found"
-    }
-    ``` -->
+  ```
 
 ### Update a Song
 
@@ -916,7 +870,7 @@ Deletes an existing song, based on AlbumId.
 * Require proper authorization: Song must belong to the current user
 * Request
   * Method: DELETE
-  * Route path: /album/:albumId/songs/:songId
+  * Route path: /albums/:albumId/songs/:songId
   * Body: none
 
 * Successful Response
@@ -965,7 +919,7 @@ Deletes an existing album, based on AlbumId.
 * Require proper authorization: Album must belong to the current user
 * Request
   * Method: DELETE
-  * Route path: /album/:albumId/
+  * Route path: /albums/:albumId/
   * Body: none
 
 * Successful Response
@@ -1001,7 +955,7 @@ Returns all the songs liked by the current user.
 * Require Authentication: true
 * Request
   * Method: GET
-  * Route path: /user/:userId/likedsongs
+  * Route path: /users/:userId/likedsongs
   * Body: none
 * Successful Response
   * Status Code: 200
@@ -1029,7 +983,7 @@ Returns all the albums liked by the current user.
 * Require Authentication: true
 * Request
   * Method: GET
-  * Route path: /user/:userId/likedalbums
+  * Route path: /users/:userId/likedalbums
   * Body: none
 
 * Successful Response
@@ -1067,7 +1021,7 @@ Like song based on songId
 * Require Authentication: true
 * Request
   * Method: POST
-  * Route path: /user/:userId/likedsongs
+  * Route path: /users/:userId/likedsongs
   * Body: none
 * Successful Response
   * Status Code: 200
@@ -1121,7 +1075,7 @@ Like album based on albumId
 * Require Authentication: true
 * Request
   * Method: POST
-  * Route path: /user/:userId/likedalbums
+  * Route path: /users/:userId/likedalbums
   * Body: none
 * Successful Response
   * Status Code: 200
@@ -1181,7 +1135,7 @@ Unlike song based on songId
 * Require Authentication: true
 * Request
   * Method: PUT
-  * Route path: /user/:userId/likedsongs
+  * Route path: /users/:userId/likedsongs
   * Body: none
 * Successful Response
   * Status Code: 200
@@ -1235,7 +1189,7 @@ Unlike album based on albumId
 * Require Authentication: true
 * Request
   * Method: PUT
-  * Route path: /user/:userId/likedalbums
+  * Route path: /users/:userId/likedalbums
   * Body: none
 * Successful Response
   * Status Code: 200
