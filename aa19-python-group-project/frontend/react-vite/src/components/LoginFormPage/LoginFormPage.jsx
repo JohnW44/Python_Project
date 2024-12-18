@@ -54,7 +54,9 @@ function LoginFormPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            
           />
+          
         </label>
         {errors.password && <p>{errors.password}</p>}
         <button type="submit">Log In</button>
