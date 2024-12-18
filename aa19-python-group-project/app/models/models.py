@@ -27,6 +27,19 @@ class Song(db.Model):
     likes = relationship("Like", back_populates="songs")
     images = relationship("Image", back_populates="songs")
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "title": self.title,
+            "artist": self.artist,
+            "released_date":self.released_date,
+            "created_at": self.created_at,
+            "album_id": self.album_id,
+            "user_id": self.user_id,
+            "duration": self.duration,
+            "lyrics": self.lyrics
+        }
+
 class Playlist(db.Model):
     __tablename__ = 'playlists'
 
