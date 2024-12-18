@@ -15,7 +15,7 @@ from dotenv import load_dotenv
 
 # load_dotenv()
 
-app = Flask(__name__, static_folder='../react-vite/dist', static_url_path='/')
+app = Flask(__name__, static_folder='../frontend/react-vite/dist', static_url_path='/')
 # app.config['SECRET_KEY']= "DJEM"
 # Setup login manager
 login = LoginManager(app)
