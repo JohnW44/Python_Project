@@ -2,7 +2,6 @@ from .db import db, environment, SCHEMA, add_prefix_for_prod
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from sqlalchemy.orm import relationship
-from .models import Like, Playlist, Playlist_song, Image, Song, Album
 from sqlalchemy.sql import func
 
 
@@ -21,10 +20,10 @@ class User(db.Model, UserMixin):
     created_at = db.Column (db.DateTime, nullable=False, server_default=func.now())
     profile_image = db.Column(db.String(1000))
 
-    album = relationship("Album", back_populates="users")
-    song = relationship("Song", back_populates="users")
-    like = relationship("Like", back_populates="users")
-    playlist = relationship("Playlist", back_populates="users")
+    albums = relationship("Album", back_populates="users")
+    songs = relationship("Song", back_populates="users")
+    likes = relationship("Like", back_populates="users")
+    playlists = relationship("Playlist", back_populates="users")
 
     @property
     def password(self):

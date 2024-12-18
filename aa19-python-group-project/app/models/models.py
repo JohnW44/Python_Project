@@ -2,9 +2,14 @@ from .db import db, environment, SCHEMA, add_prefix_for_prod
 from flask_login import UserMixin
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
+from .user import User
+
 
 class Song(db.Model):
     __tablename__ = 'songs'
+
+    if environment == "production":
+        __table_args__ = {'schema': SCHEMA}
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False)
@@ -16,14 +21,17 @@ class Song(db.Model):
     duration = db.Column(db.Integer, nullable=False)
     lyrics = db.Column(db.String(50000))
 
-    user = relationship("User", back_populates="songs")
-    album = relationship("Album", back_populates="songs")
-    playlist = relationship("Playlist", back_populates="songs")
+    users = relationship("User", back_populates="songs")
+    albums = relationship("Album", back_populates="songs")
+    playlist_songs = relationship("PlaylistSong", back_populates="songs")
     likes = relationship("Like", back_populates="songs")
-    image = relationship("Image", back_populates="songs")
+    images = relationship("Image", back_populates="songs")
 
 class Playlist(db.Model):
     __tablename__ = 'playlists'
+
+    if environment == "production":
+        __table_args__ = {'schema': SCHEMA}
 
     id = db.Column(db.Integer, primary_key=True)
     user_id= db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
@@ -31,12 +39,15 @@ class Playlist(db.Model):
     created_at = db.Column(db.DateTime, nullable=False, server_default=func.now())
     updated_at = db.Column(db.DateTime, onupdate=func.now())
 
-    user = relationship("User", back_populates="playlists")
-    song = relationship("Song", back_populates="playlists")
+    users = relationship("User", back_populates="playlists")
+    playlist_songs = relationship("PlaylistSong", back_populates="playlists", cascade="all, delete-orphan")
 
 
 class Like(db.Model):
     __tablename__ = 'likes'
+
+    if environment == "production":
+        __table_args__ = {'schema': SCHEMA}
 
     id = db.Column(db.Integer, primary_key=True)
     user_id= db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
@@ -44,31 +55,38 @@ class Like(db.Model):
     album_id = db.Column(db.Integer,db.ForeignKey("albums.id"), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, server_default=func.now())
 
-    album = relationship("Album", back_populates="likes")
-    song = relationship("Song", back_populates="likes")
-    user = relationship("User", back_populates="likes")
+    albums = relationship("Album", back_populates="likes")
+    songs = relationship("Song", back_populates="likes")
+    users = relationship("User", back_populates="likes")
 
 
 class Album(db.Model):
     __tablename__ = 'albums'
+
+    if environment == "production":
+        __table_args__ = {'schema': SCHEMA}
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False)
     artist = db.Column(db.String(255), nullable=False)
     released_year = db.Column(db.Integer, nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, server_default=func.now())
-    song_id = db.Column(db.Integer, db.ForeignKey('songs.id'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    # song_id = db.Column(db.Integer, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     duration = db.Column(db.Integer, nullable=False)
-    playlist_id = db.Column(db.Integer, db.ForeignKey('playlists.id'), nullable=False)
-
+    
+    users = relationship("User", back_populates="albums")
     likes = relationship("Like", back_populates="albums")
-    song = relationship("Song", back_populates="albums")
+    songs = relationship("Song", back_populates="albums")
+    images = relationship("Image", back_populates="albums")
 
 
 
 class Image(db.Model):
     __tablename__ = 'images'
+
+    if environment == "production":
+        __table_args__ = {'schema': SCHEMA}
 
     id = db.Column(db.Integer, primary_key=True)
     song_id = db.Column(db.Integer, db.ForeignKey('songs.id'), nullable=False)
@@ -76,13 +94,19 @@ class Image(db.Model):
     url = db.Column(db.String(1000), nullable=False)
 
 
-    song = relationship("Song", back_populates="images")
-    album = relationship("Album", back_populates="images")
+    songs = relationship("Song", back_populates="images")
+    albums = relationship("Album", back_populates="images")
 
-class Playlist_song(db.Model):
+class PlaylistSong(db.Model):
     __tablename__ = 'playlist_songs'
+
+    if environment == "production":
+        __table_args__ = {'schema': SCHEMA}
 
     id = db.Column(db.Integer, primary_key=True)
     song_id = db.Column(db.Integer, db.ForeignKey('songs.id'), nullable=False)
     playlist_id = db.Column(db.Integer, db.ForeignKey('playlists.id'), nullable=False)
+    added_at = db.Column(db.DateTime, default=func.now())
 
+    songs = relationship("Song", back_populates="playlist_songs")
+    playlists = relationship("Playlist", back_populates="playlist_songs")
