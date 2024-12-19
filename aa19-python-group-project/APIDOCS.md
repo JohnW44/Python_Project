@@ -934,7 +934,7 @@ Deletes an existing song, based on AlbumId.
 * Require proper authorization: Song must belong to the current user
 * Request
   * Method: DELETE
-  * Route path: /albums/:albumId/songs/:songId
+  * Route path: /albums/:albumId/:userId/songs
   * Body: none
 
 * Successful Response
@@ -975,7 +975,7 @@ Deletes an existing song, based on AlbumId.
 
 
 
-### Users should be able DELETE albums based on AlbumId
+### Users should be able to DELETE albums based on AlbumId
 
 Deletes an existing album, based on AlbumId.
 
