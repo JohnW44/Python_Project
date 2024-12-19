@@ -866,28 +866,9 @@ Add Songs based on albumId if user is album owner.
 
     ```json
     {
-      "Album": [
-        {
-          "id": 1,
-          "playlistId": 4,
-          "artist": "Big Bird",
-          "released_year": 2022,
-          "created_at": "2022-11-19 20:39:36",
-          "title": "Happy Songs",
-          "songs": [
-            {
-            "songid": 1
-          }
-          ]
-          "Images": [
-            {
-              "id": 1,
-              "url": "image url"
-            }
-          ],
-        }
-      ]
+        "songid": 8
     }
+
     ```
 
     * Successful Response
@@ -898,6 +879,38 @@ Add Songs based on albumId if user is album owner.
 
     ```json
     {
+    "Album": [
+        {
+            "artist": "Daft Punk",
+            "created_at": "Thu, 19 Dec 2024 14:03:12 GMT",
+            "duration": 4464,
+            "title": "Random Access Memories",
+            "user_id": 1,
+            "id": 1,
+            "images": [
+                {
+                    "album_id": 1,
+                    "id": 1,
+                    "song_id": 1,
+                    "url": "https://cdn-p.smehost.net/sites/35faef12c1b64b21b3fda052d205af13/wp-content/uploads/2023/02/230222-daftpunk-ram10.jpg"
+                }
+            ],
+            "released_year": 2013,
+            "songs": [
+                {
+                    "album_id": 1,
+                    "artist": "Daft Punk",
+                    "created_at": "Thu, 19 Dec 2024 14:03:12 GMT",
+                    "duration": 200,
+                    "id": 8,
+                    "lyrics": "buy it, use it, break it, fix it, trash it, change it, mail, upgrade it",
+                    "released_date": "Tue, 17 May 2005 00:00:00 GMT",
+                    "title": "Technologic",
+                    "user_id": 1
+                }
+            ],
+          }
+      ],
       "message": "Song successfully added to Album"
     }
     ```
