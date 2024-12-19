@@ -699,27 +699,36 @@ Returns all the songs that belong to an album specified by id.
   * Body:
 
     ```json
+    
     {
-      "Album": [
+    "Songs": [
         {
-          "id": 1,
-          "playlistId": 4,
-          "artist": "Big Bird",
-          "released_year": 2022,
-          "created_at": "2022-11-19 20:39:36",
-          "title": "Happy Songs",
-          "Images": [
-            {
-              "id": 1,
-              "url": "image url"
-            }
-          ],
+            "album_id": 1,
+            "artist": "Big Bird",
+            "created_at": "Wed, 18 Dec 2022 12:13:46 GMT",
+            "duration": 400,
+            "id": 1,
+            "lyrics": "gadsfgeag",
+            "released_date": "Tue, 01 Jan 2013 00:00:00 GMT",
+            "title": "first",
+            "user_id": 1
+        },
+        {
+            "album_id": 1,
+            "artist": "Big Bird",
+            "created_at": "Wed, 18 Dec 2022 12:13:46 GMT",
+            "duration": 450,
+            "id": 2,
+            "lyrics": "gweagwea",
+            "released_date": "Fri, 01 Feb 2013 00:00:00 GMT",
+            "title": "second ",
+            "user_id": 1
         }
       ]
     }
     ```
 
-* Error response: Couldn't find a Song with the specified id
+* Error response: Couldn't find a Album with the specified id
   * Status Code: 404
   * Headers:
     * Content-Type: application/json
@@ -727,7 +736,7 @@ Returns all the songs that belong to an album specified by id.
 
     ```json
     {
-      "message": "Song couldn't be found"
+      "message": "No Album found"
     }
     ```
 <!-- 
