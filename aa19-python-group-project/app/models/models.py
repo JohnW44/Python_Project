@@ -55,6 +55,14 @@ class Playlist(db.Model):
     users = relationship("User", back_populates="playlists")
     playlist_songs = relationship("PlaylistSong", back_populates="playlists", cascade="all, delete-orphan")
 
+    def to_dict(self):
+        return {
+        "id": self.id,
+        "user_id": self.user_id,
+        "name": self.name,
+        "created_at": self.created_at
+         }
+
 
 class Like(db.Model):
     __tablename__ = 'likes'
@@ -87,7 +95,7 @@ class Album(db.Model):
     # song_id = db.Column(db.Integer, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     duration = db.Column(db.Integer, nullable=False)
-    
+
     users = relationship("User", back_populates="albums")
     likes = relationship("Like", back_populates="albums")
     songs = relationship("Song", back_populates="albums")

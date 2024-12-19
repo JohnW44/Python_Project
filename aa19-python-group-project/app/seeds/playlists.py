@@ -12,7 +12,7 @@ def seed_playlists():
     )
 
     playlist2 = Playlist(
-        user_id = 2,
+        user_id = 1,
         name = "testing playlist2",
         created_at = datetime.now(),
     )

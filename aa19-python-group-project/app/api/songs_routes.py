@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
-from app.models import Song, Image 
+from app.models import Song, Image
 from flask_login import login_required, current_user
-from app import db  
+from app import db
 
 
 songs_routes = Blueprint('songs_routes', __name__)
@@ -12,7 +12,7 @@ def songs():
     """
     Query for all songs and return them in a list of song dictionaries.
     """
-    songs = Song.query.all() 
+    songs = Song.query.all()
     return jsonify({'Songs': [song.to_dict() for song in songs]})
 
 
@@ -33,7 +33,7 @@ def add_song():
     """
     Adds and Returns a new song when a user is signed in
     """
-    data = request.json 
+    data = request.json
 
     if not data.get('Songs'):
         return jsonify({ "message": "Bad Request"}), 400
@@ -77,7 +77,7 @@ def update_song():
         return jsonify({"error": "Unauthorized"}), 403
     if not data.get('Songs'):
         return jsonify({"message": "Bad Request"}), 400
-    
+
     song_data = data['Songs'][0]
 
     song.title = song_data['title']
@@ -94,4 +94,4 @@ def update_song():
         image = Image.query
 
 
-something random
+# something random

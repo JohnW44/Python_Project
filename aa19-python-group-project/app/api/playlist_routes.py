@@ -1,14 +1,16 @@
 from flask import Blueprint, request, jsonify
 from app.models import User, Playlist, PlaylistSong
 from app import db
-from flask_login import current_user
+from flask_login import current_user, login_required
 
 
-playlists_routes = Blueprint('playlist_routes', __name__)
+playlists_routes = Blueprint('playlists', __name__)
 
 
 @playlists_routes.route('/', methods=['GET'])
-def playlist():
+def playlists():
 
     playlists = Playlist.query.all()
-    return jsonify({'Playlist': [playlist.to_dict() for playlist in playlists ]})
+    return jsonify({'Playlists': [playlist.to_dict() for playlist in playlists ]})
+
+
