@@ -50,7 +50,7 @@ Returns the information about the current user that is logged in.
 * Require Authentication: false
 * Request
   * Method: GET
-  * Route path: /user
+  * Route path: /api/auth
   * Body: none
 
 * Successful Response when there is a logged in user
@@ -79,7 +79,7 @@ Returns the information about the current user that is logged in.
 
     ```json
     {
-      "user": null
+      "user": "null"
     }
     ```
 
@@ -91,7 +91,7 @@ information.
 * Require Authentication: false
 * Request
   * Method: GET
-  * Route path: /login
+  * Route path: /api/auth/login
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -113,8 +113,8 @@ information.
     {
       "user": {
         "id": 1,
-        "firstName": "John",
-        "lastName": "Smith",
+        "first_name": "John",
+        "last_name": "Smith",
         "email": "john.smith@gmail.com",
         "username": "JohnSmith"
       }
@@ -157,15 +157,15 @@ user's information.
 * Require Authentication: false
 * Request
   * Method: POST
-  * Route path: /signup
+  * Route path: /api/auth/signup
   * Headers:
     * Content-Type: application/json
   * Body:
 
     ```json
     {
-      "firstName": "John",
-      "lastName": "Smith",
+      "first_name": "John",
+      "last_name": "Smith",
       "email": "john.smith@gmail.com",
       "username": "JohnSmith",
       "password": "secret password"
@@ -180,14 +180,13 @@ user's information.
 
     ```json
     {
-      "user": {
         "id": 1,
-        "firstName": "John",
-        "lastName": "Smith",
+        "first_name": "John",
+        "last_name": "Smith",
         "email": "john.smith@gmail.com",
         "username": "JohnSmith"
       }
-    }
+    
     ```
 
 * Error response: User already exists with the specified email or username
