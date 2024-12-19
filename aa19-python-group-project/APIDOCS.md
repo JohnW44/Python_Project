@@ -50,7 +50,7 @@ Returns the information about the current user that is logged in.
 * Require Authentication: false
 * Request
   * Method: GET
-  * Route path: /user
+  * Route path: /api/auth
   * Body: none
 
 * Successful Response when there is a logged in user
@@ -79,7 +79,7 @@ Returns the information about the current user that is logged in.
 
     ```json
     {
-      "user": null
+      "user": "null"
     }
     ```
 
@@ -91,7 +91,7 @@ information.
 * Require Authentication: false
 * Request
   * Method: GET
-  * Route path: /login
+  * Route path: /api/auth/login
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -113,8 +113,8 @@ information.
     {
       "user": {
         "id": 1,
-        "firstName": "John",
-        "lastName": "Smith",
+        "first_name": "John",
+        "last_name": "Smith",
         "email": "john.smith@gmail.com",
         "username": "JohnSmith"
       }
@@ -157,15 +157,15 @@ user's information.
 * Require Authentication: false
 * Request
   * Method: POST
-  * Route path: /signup
+  * Route path: /api/auth/signup
   * Headers:
     * Content-Type: application/json
   * Body:
 
     ```json
     {
-      "firstName": "John",
-      "lastName": "Smith",
+      "first_name": "John",
+      "last_name": "Smith",
       "email": "john.smith@gmail.com",
       "username": "JohnSmith",
       "password": "secret password"
@@ -180,14 +180,13 @@ user's information.
 
     ```json
     {
-      "user": {
         "id": 1,
-        "firstName": "John",
-        "lastName": "Smith",
+        "first_name": "John",
+        "last_name": "Smith",
         "email": "john.smith@gmail.com",
         "username": "JohnSmith"
       }
-    }
+    
     ```
 
 * Error response: User already exists with the specified email or username
@@ -297,7 +296,7 @@ Returns the details of a song specified by its id.
           "likeCount": 20,
         }
       ],
-      "SongImage": [
+      "Images": [
         {
           "id": 1,
           "url": "image url",
@@ -320,7 +319,7 @@ Returns the details of a song specified by its id.
 
 ### Add a Song
 
-Adds and returns a new song.
+Adds and returns a new song when a user is signed in.
 
 * Require Authentication: true
 * Request
@@ -336,14 +335,14 @@ Adds and returns a new song.
         {
           "title": "Happy birthday",
           "artist": "Big Bird",
-          "release_year": "1545",
+          "released_date": "1545",
           "album_id": 1,
           "user_id": 1,
           "lyrics": "Happy birthday too youu",
           //"genre": "kids songs"
         }
       ],
-      "SongImage": [
+      "Images": [
         {
           "id": 1,
           "url": "image url",
@@ -365,7 +364,7 @@ Adds and returns a new song.
           "id": 1,
           "title": "Happy birthday",
           "artist": "Big Bird",
-          "release_year": "1545",
+          "released_date": "1545",
           "created_at": "2021-11-19 20:39:36",
           "album_id": 1,
           "user_id": 1,
@@ -373,7 +372,7 @@ Adds and returns a new song.
           "lyrics": "Happy birthday too youu",
         }
       ],
-      "SongImage": [
+      "Images": [
         {
           "id": 1,
           "url": "image url",
@@ -395,13 +394,13 @@ Adds and returns a new song.
        "errors": {
           "title": "Title is required",
           "artist": "Artist is required",
-          "release_year": "Release year is required",
-          "album_id": "Album id is require",
+          "released_date": "Release year is required",
+          "album_id": "Album id is required",
           "user_id": 1,
           "lyrics": "Happy birthday too youu",
         }
       ,
-      "SongImage": [
+      "Images": [
         {
           "id": 1,
           "url": "Image url is required",
@@ -435,7 +434,7 @@ Updates and returns an existing song.
           "lyrics": "Happy birthday too youu",
         }
       ],
-      "SongImage": [
+      "Images": [
         {
           "id": 1,
           "url": "image url",
@@ -465,7 +464,7 @@ Updates and returns an existing song.
           "lyrics": "Happy birthday too youu",
         }
       ],
-      "SongImage": [
+      "Images": [
         {
           "id": 1,
           "url": "image url",
@@ -492,7 +491,7 @@ Updates and returns an existing song.
           "lyrics": "Happy birthday too youu",
         }
       ,
-      "SongImage": [
+      "Images": [
         {
           "id": 1,
           "url": "Image url is required",
@@ -532,7 +531,7 @@ Deletes an existing song.
 
     ```json
     {
-      "message": "Successfully deleted"
+      "message": "Song Successfully deleted"
     }
     ```
 
@@ -699,27 +698,36 @@ Returns all the songs that belong to an album specified by id.
   * Body:
 
     ```json
+    
     {
-      "Album": [
+    "Songs": [
         {
-          "id": 1,
-          "playlistId": 4,
-          "artist": "Big Bird",
-          "released_year": 2022,
-          "created_at": "2022-11-19 20:39:36",
-          "title": "Happy Songs",
-          "Images": [
-            {
-              "id": 1,
-              "url": "image url"
-            }
-          ],
+            "album_id": 1,
+            "artist": "Big Bird",
+            "created_at": "Wed, 18 Dec 2022 12:13:46 GMT",
+            "duration": 400,
+            "id": 1,
+            "lyrics": "gadsfgeag",
+            "released_date": "Tue, 01 Jan 2013 00:00:00 GMT",
+            "title": "first",
+            "user_id": 1
+        },
+        {
+            "album_id": 1,
+            "artist": "Big Bird",
+            "created_at": "Wed, 18 Dec 2022 12:13:46 GMT",
+            "duration": 450,
+            "id": 2,
+            "lyrics": "gweagwea",
+            "released_date": "Fri, 01 Feb 2013 00:00:00 GMT",
+            "title": "second ",
+            "user_id": 1
         }
       ]
     }
     ```
 
-* Error response: Couldn't find a Song with the specified id
+* Error response: Couldn't find a Album with the specified id
   * Status Code: 404
   * Headers:
     * Content-Type: application/json
@@ -727,7 +735,7 @@ Returns all the songs that belong to an album specified by id.
 
     ```json
     {
-      "message": "Song couldn't be found"
+      "message": "No Album found"
     }
     ```
 <!-- 
@@ -795,7 +803,7 @@ Returns all the albums created by the current user.
 * Require Authentication: true
 * Request
   * Method: GET
-  * Route path: /users/:userId/albums
+  * Route path: albums/users/:userId
   * Body: none
 
 * Successful Response
