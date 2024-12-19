@@ -798,7 +798,7 @@ Create and return a new image for an album specified by id.
 
  ### Users should be able to view all albums created by users
 
-Returns all the albums created by the current user.
+Returns all the albums created by the user.
 
 * Require Authentication: true
 * Request
@@ -821,7 +821,16 @@ Returns all the albums created by the current user.
           "artist": "Big Bird",
           "album_id": 1,
           "duration": 500,
-          "image": "image url"
+          "created_at": "Thu, 19 Dec 2024 11:53:11 GMT",
+          "released_year": 2013,
+          "images": [
+                {
+                    "album_id": 1,
+                    "id": 1,
+                    "song_id": 1,
+                    "url": "https://cdn-p.smehost.net/sites/35faef12c1b64b21b3fda052d205af13/wp-content/uploads/2023/02/230222-daftpunk-ram10.jpg"
+                }
+            ],
         }
       ]
     }
@@ -841,12 +850,12 @@ Returns all the albums created by the current user.
 
 ### Add Songs to an User created Album based on Album's id
 
-Add Songs based on albumId.
+Add Songs based on albumId if user is album owner.
 
 * Require Authentication: True
 * Request
   * Method: POST
-  * Route path: /users/:userId/albums/:albumId/songs
+  * Route path: /albums/:albumId/:userId/songs
   * Body: none
 
 * Successful Response
@@ -904,7 +913,6 @@ Add Songs based on albumId.
       "message": "Album Not Found"
     }
     ```
-
 ### Users should be able to remove songs from albums based on AlbumId
 
 Deletes an existing song, based on AlbumId.

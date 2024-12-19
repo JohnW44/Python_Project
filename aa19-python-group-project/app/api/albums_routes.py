@@ -1,7 +1,7 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 from app.models import Album , Song
 from app import db  
-from flask_login import current_user
+from flask_login import current_user, login_required
 
 # use this to cross models to_dict methods
 from sqlalchemy.orm import joinedload
@@ -30,6 +30,7 @@ def songs_in_album(albumId):
     return jsonify({"Songs": [song.to_dict() for song in album.songs]})
 
 @albums_routes.route('users/<userId>', methods =['GET'])
+@login_required
 def my_albums(userId):
     """
     Query for all albums and return the albums owned by current user.
@@ -44,3 +45,35 @@ def my_albums(userId):
         return jsonify({'Albums': [album.to_dict() for album in user_albums]})
 
     return jsonify({"error": "Unauthorized access"}), 401
+
+@albums_routes.route('/<albumId>/<userId>/songs', methods=['POST'])
+@login_required
+def add_song_to_album(albumId):
+    """
+    Find album and then add song to album owned by current user.
+    """
+
+    if not current_user.is_authenticated:
+        return jsonify({"error": "Authentication required"}), 401
+    
+    album = Album.query.get(albumId)
+    if not album:
+        return jsonify({"message": "Album Not Found"}), 404
+    
+    if album.user_id != current_user.id:
+        return jsonify({"message": "You must be owner of this album"}),402
+    
+    song_data = request.json
+    song_id= song_data.get('songid')
+
+    song = Song.query.get(song_id)
+    if not song:
+        return jsonify({"message": "Song Not Found"}), 404
+    
+    album.songs.append(song)
+    db.session.commit()
+
+    return jsonify({
+        "message": "Song successfully added to Album",
+        'Album': [album.to_dict()]
+        })

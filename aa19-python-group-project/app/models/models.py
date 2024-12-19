@@ -16,7 +16,7 @@ class Song(db.Model):
     artist = db.Column(db.String(255), nullable=False)
     released_date = db.Column(db.Date, nullable=False)
     created_at = db.Column( db.DateTime, nullable=False, server_default=func.now())
-    album_id = db.Column(db.Integer, db.ForeignKey('albums.id'), nullable=False)
+    album_id = db.Column(db.Integer, db.ForeignKey('albums.id'), nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     duration = db.Column(db.Integer, nullable=False)
     lyrics = db.Column(db.String(50000))
@@ -102,7 +102,8 @@ class Album(db.Model):
             "created_at": self.created_at,
             "user_id": self.user_id,
             "duration": self.duration,
-            "images": [image.to_dict() for image in self.images]
+            "images": [image.to_dict() for image in self.images],
+            "songs" :[song.to_dict() for song in self.songs]
         }
 
 class Image(db.Model):

@@ -93,5 +93,3 @@ def update_song():
     if data.get('Images'):
         image = Image.query
 
-
-something random
