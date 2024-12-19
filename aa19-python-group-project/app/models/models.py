@@ -93,7 +93,17 @@ class Album(db.Model):
     songs = relationship("Song", back_populates="albums")
     images = relationship("Image", back_populates="albums")
 
-
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "title": self.title,
+            "artist": self.artist,
+            "released_year":self.released_year,
+            "created_at": self.created_at,
+            "user_id": self.user_id,
+            "duration": self.duration,
+            "images": [image.to_dict() for image in self.images]
+        }
 
 class Image(db.Model):
     __tablename__ = 'images'
@@ -109,6 +119,14 @@ class Image(db.Model):
 
     songs = relationship("Song", back_populates="images")
     albums = relationship("Album", back_populates="images")
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "song_id": self.song_id,
+            "album_id": self.album_id,
+            "url": self.url
+        }
 
 class PlaylistSong(db.Model):
     __tablename__ = 'playlist_songs'

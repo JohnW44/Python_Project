@@ -14,7 +14,9 @@ def authenticate():
     """
     if current_user.is_authenticated:
         return current_user.to_dict()
-    return {'errors': {'message': 'Unauthorized'}}, 401
+    return {
+      "user": "null"
+    }, 401
 
 
 @auth_routes.route('/login', methods=['POST'])
@@ -34,7 +36,7 @@ def login():
     return form.errors, 401
 
 
-@auth_routes.route('/logout')
+@auth_routes.route('/logout', methods=['POST'])
 def logout():
     """
     Logs a user out
