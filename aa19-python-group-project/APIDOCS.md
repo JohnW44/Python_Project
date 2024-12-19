@@ -803,7 +803,7 @@ Returns all the albums created by the current user.
 * Require Authentication: true
 * Request
   * Method: GET
-  * Route path: /users/:userId/albums
+  * Route path: albums/users/:userId
   * Body: none
 
 * Successful Response
