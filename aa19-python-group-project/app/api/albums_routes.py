@@ -122,3 +122,25 @@ def delete_song_to_album(albumId, userId):
     return jsonify({
         "message": "Song has been successfully deleted from album",
         })
+
+@albums_routes.route('/<albumId>', methods=['DELETE'])
+@login_required
+def delete_album(albumId):
+    """
+    Deletes album if you are the current owner.
+    """
+
+    if not current_user.is_authenticated:
+        return jsonify({"error": "Authentication required"}), 401
+
+    album = Album.query.get(albumId)
+    if not album:
+        return jsonify({"message": "Album Not Found"}), 404
+    
+    if album.user_id != current_user.id:
+        return jsonify({"message": "You must be owner of this album"}),402
+    
+    db.session.delete(album)
+    db.session.commit()
+
+    return jsonify({"message": "Successfully deleted"})
