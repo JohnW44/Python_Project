@@ -98,10 +98,18 @@ def update_song(songId):
     db.session.commit()
     return jsonify({'Songs': song.to_dict()}), 200
 
-@songs_routes.route('/<int:songId>', methods=['PUT'])
+@songs_routes.route('/<int:songId>', methods=['DELETE'])
 @login_required
 def delete_song(songId):
      """
      Deletes a users song by songId
      """
-
+     song = Song.query.get(songId)
+     if not song: 
+          return jsonify({"message" : "Song couldn't be found"}), 404
+     if song.user_id != current_user.id: 
+          return jsonify({"message" : "Unauthorized"}), 403
+     db.session.delete(song)
+     db.session.commit()
+     return jsonify({"message" : "Song Successfully deleted"})
+    

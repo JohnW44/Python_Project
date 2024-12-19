@@ -254,8 +254,6 @@ Returns all the songs.
           "user_id": 1,
           "duration": 500,
           "lyrics": "Happy birthday too youu",
-          // "genre": "kids song"
-          // "comment": "good song would reccomend",
         }
       ]
     }
@@ -291,7 +289,6 @@ Returns the details of a song specified by its id.
           "user_id": 1,
           "duration": 500,
           "lyrics": "Happy birthday too youu",
-          // "comment": "good song would reccomend",
           "like": "True",
           "likeCount": 20,
         }
@@ -499,6 +496,17 @@ Updates and returns an existing song.
       ]
     }
     ```
+* Error response: User not authorized to delete song
+  * Status Code: 403
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+    ```json
+    {
+      "message": "Unauthorized"
+    }
+    ```
 
 * Error response: Couldn't find a Song with the specified id
   * Status Code: 404
@@ -544,6 +552,18 @@ Deletes an existing song.
     ```json
     {
       "message": "Song couldn't be found"
+    }
+    ```
+
+* Error response: User not authorized to delete song
+  * Status Code: 403
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+    ```json
+    {
+      "message": "Unauthorized"
     }
     ```
 
