@@ -16,7 +16,7 @@ class Song(db.Model):
     artist = db.Column(db.String(255), nullable=False)
     released_date = db.Column(db.Date, nullable=False)
     created_at = db.Column( db.DateTime, nullable=False, server_default=func.now())
-    album_id = db.Column(db.Integer, db.ForeignKey('albums.id'), nullable=False)
+    album_id = db.Column(db.Integer, db.ForeignKey('albums.id'), nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     duration = db.Column(db.Integer, nullable=False)
     lyrics = db.Column(db.String(50000))
@@ -25,7 +25,7 @@ class Song(db.Model):
     albums = relationship("Album", back_populates="songs")
     playlist_songs = relationship("PlaylistSong", back_populates="songs")
     likes = relationship("Like", back_populates="songs")
-    images = relationship("Image", back_populates="songs")
+    images = relationship("Image", back_populates="songs", cascade="all, delete-orphan")
 
     def to_dict(self):
         return {
@@ -113,7 +113,7 @@ class Image(db.Model):
         __table_args__ = {'schema': SCHEMA}
 
     id = db.Column(db.Integer, primary_key=True)
-    song_id = db.Column(db.Integer, db.ForeignKey('songs.id'), nullable=False)
+    song_id = db.Column(db.Integer, db.ForeignKey('songs.id'), nullable=True)
     album_id = db.Column(db.Integer, db.ForeignKey('albums.id'), nullable=False)
     url = db.Column(db.String(1000), nullable=False)
 

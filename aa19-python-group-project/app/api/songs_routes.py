@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request
 from app.models import Song, Image 
 from flask_login import login_required, current_user
+from datetime import datetime
 from app import db  
 
 
@@ -40,11 +41,13 @@ def add_song():
 
     song_data = data['Songs'][0]
     song_data['user_id'] = current_user.id
-
+    song_data['released_date'] = datetime.strptime(song_data['released_date'], '%Y-%m-%d').date()
+    
     new_song = Song(**song_data)
 
     db.session.add(new_song)
     db.session.commit()
+
     
     if data.get('Images'):
         new_image = Image(
@@ -54,42 +57,44 @@ def add_song():
         )
         db.session.add(new_image)
         db.session.commit()
-    return jsonify({'Songs': [song.to_dict() for song in songs]}), 201
+    return jsonify({'Songs': new_song.to_dict()}), 201
 
 
-@songs_routes.route('/<int:songId>', methods=['PUT'])
-@login_required
-def update_song():
-    """
-    Updates and returns a song uploaded by user
-    """
-    data = request.json
+# @songs_routes.route('/<int:songId>', methods=['PUT'])
+# @login_required
+# def update_song():
+#     """
+#     Updates and returns a song uploaded by user
+#     """
+#     data = request.json
 
-    song = Song.query.get(songId)
-    if not song:
-        return jsonify({"error": "Song couldn't be found"}), 404
-    if song.user_id != current_user.id:
-        return jsonify({"error": "Unauthorized"}), 403
-    if not data.get('Songs'):
-        return jsonify({"message": "Bad Request"}), 400
+#     song = Song.query.get(song_id)
+#     if not song:
+#         return jsonify({"error": "Song couldn't be found"}), 404
+#     if song.user_id != current_user.id:
+#         return jsonify({"error": "Unauthorized"}), 403
+#     if not data.get('Songs'):
+#         return jsonify({"message": "Bad Request"}), 400
     
-    song_data = data['Songs'][0]
+#     song_data = data['Songs'][0]
 
-    song.title = song_data['title']
-    song.artist = song_data['artist']
-    song.release_year = song_data['release_year']
-    song.album_id = song_data['album_id']
-    song.lyrics = song_data['lyrics']
+#     song.title = song_data['title']
+#     song.artist = song_data['artist']
+#     song.release_year = song_data['release_year']
+#     song.album_id = song_data['album_id']
+#     song.lyrics = song_data['lyrics']
 
-    if data.get('Images'):
+#     if data.get('images'):
+        # if existing_image = Image.query.(song_id).delete(synchronize_session)
+    
         
 
-    db.session.add(song)
+    # db.session.add(song)
 
-    response = {'Songs': [song.to_dict()]}
+    # response = {'Songs': [song.to_dict()]}
 
-    if data.get('Images'):
-        image = Image.query
+    # if data.get('images'):
+    #     image = Image.query
 
 
 
