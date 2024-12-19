@@ -296,7 +296,7 @@ Returns the details of a song specified by its id.
           "likeCount": 20,
         }
       ],
-      "SongImage": [
+      "Images": [
         {
           "id": 1,
           "url": "image url",
@@ -319,7 +319,7 @@ Returns the details of a song specified by its id.
 
 ### Add a Song
 
-Adds and returns a new song.
+Adds and returns a new song when a user is signed in.
 
 * Require Authentication: true
 * Request
@@ -335,14 +335,14 @@ Adds and returns a new song.
         {
           "title": "Happy birthday",
           "artist": "Big Bird",
-          "release_year": "1545",
+          "released_date": "1545",
           "album_id": 1,
           "user_id": 1,
           "lyrics": "Happy birthday too youu",
           //"genre": "kids songs"
         }
       ],
-      "SongImage": [
+      "Images": [
         {
           "id": 1,
           "url": "image url",
@@ -364,7 +364,7 @@ Adds and returns a new song.
           "id": 1,
           "title": "Happy birthday",
           "artist": "Big Bird",
-          "release_year": "1545",
+          "released_date": "1545",
           "created_at": "2021-11-19 20:39:36",
           "album_id": 1,
           "user_id": 1,
@@ -372,7 +372,7 @@ Adds and returns a new song.
           "lyrics": "Happy birthday too youu",
         }
       ],
-      "SongImage": [
+      "Images": [
         {
           "id": 1,
           "url": "image url",
@@ -394,13 +394,13 @@ Adds and returns a new song.
        "errors": {
           "title": "Title is required",
           "artist": "Artist is required",
-          "release_year": "Release year is required",
-          "album_id": "Album id is require",
+          "released_date": "Release year is required",
+          "album_id": "Album id is required",
           "user_id": 1,
           "lyrics": "Happy birthday too youu",
         }
       ,
-      "SongImage": [
+      "Images": [
         {
           "id": 1,
           "url": "Image url is required",
@@ -434,7 +434,7 @@ Updates and returns an existing song.
           "lyrics": "Happy birthday too youu",
         }
       ],
-      "SongImage": [
+      "Images": [
         {
           "id": 1,
           "url": "image url",
@@ -464,7 +464,7 @@ Updates and returns an existing song.
           "lyrics": "Happy birthday too youu",
         }
       ],
-      "SongImage": [
+      "Images": [
         {
           "id": 1,
           "url": "image url",
@@ -491,7 +491,7 @@ Updates and returns an existing song.
           "lyrics": "Happy birthday too youu",
         }
       ,
-      "SongImage": [
+      "Images": [
         {
           "id": 1,
           "url": "Image url is required",
@@ -531,7 +531,7 @@ Deletes an existing song.
 
     ```json
     {
-      "message": "Successfully deleted"
+      "message": "Song Successfully deleted"
     }
     ```
 
