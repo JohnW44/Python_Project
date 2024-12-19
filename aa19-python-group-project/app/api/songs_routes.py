@@ -60,41 +60,48 @@ def add_song():
     return jsonify({'Songs': new_song.to_dict()}), 201
 
 
-# @songs_routes.route('/<int:songId>', methods=['PUT'])
-# @login_required
-# def update_song():
-#     """
-#     Updates and returns a song uploaded by user
-#     """
-#     data = request.json
+@songs_routes.route('/<int:songId>', methods=['PUT'])
+@login_required
+def update_song(songId):
+    """
+    Updates and returns a song uploaded by user
+    """
+    data = request.json
 
-#     song = Song.query.get(song_id)
-#     if not song:
-#         return jsonify({"error": "Song couldn't be found"}), 404
-#     if song.user_id != current_user.id:
-#         return jsonify({"error": "Unauthorized"}), 403
-#     if not data.get('Songs'):
-#         return jsonify({"message": "Bad Request"}), 400
+    song = Song.query.get(songId)
+    if not song:
+            return jsonify({"error": "Song couldn't be found"}), 404
+    if song.user_id != current_user.id:
+            return jsonify({"error": "Unauthorized"}), 403
+    if not data.get('Songs'):
+            return jsonify({"message": "Bad Request"}), 400
     
-#     song_data = data['Songs'][0]
+    song_data = data['Songs'][0]
 
-#     song.title = song_data['title']
-#     song.artist = song_data['artist']
-#     song.release_year = song_data['release_year']
-#     song.album_id = song_data['album_id']
-#     song.lyrics = song_data['lyrics']
+    song.title = song_data['title']
+    song.artist = song_data['artist']
+    song.released_date = datetime.strptime(song_data['released_date'], '%Y-%m-%d').date()
+    song.album_id = song_data['album_id']
+    song.lyrics = song_data['lyrics']
+    if data.get('Images'):
+        existing_image = Image.query.filter_by(song_id=songId).first()
+        if existing_image:
+            db.session.delete(existing_image)
 
-#     if data.get('images'):
-        # if existing_image = Image.query.(song_id).delete(synchronize_session)
-    
+        new_image = Image(
+            song_id=songId,
+            album_id=song_data['album_id'],
+            url=data['Images'][0]['url']
+        )
+        db.session.add(new_image)
         
+    db.session.commit()
+    return jsonify({'Songs': song.to_dict()}), 200
 
-    # db.session.add(song)
-
-    # response = {'Songs': [song.to_dict()]}
-
-    # if data.get('images'):
-    #     image = Image.query
-
-
+@songs_routes.route('/<int:songId>', methods=['PUT'])
+@login_required
+def delete_song(songId):
+     """
+     Deletes a users song by songId
+     """
 
