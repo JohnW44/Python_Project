@@ -44,9 +44,8 @@ def add_song():
     new_song = Song(**song_data)
 
     db.session.add(new_song)
-
-    response = {'Songs': [new_song.to_dict()]}
-
+    db.session.commit()
+    
     if data.get('Images'):
         new_image = Image(
             song_id=new_song.id,
@@ -54,12 +53,8 @@ def add_song():
             url=data['Images'][0]['url']
         )
         db.session.add(new_image)
-        response['Images'] = [{
-            "id": new_image.id,
-            "url": new_image.url
-        }]
-    db.session.commit()
-    return jsonify(response), 201
+        db.session.commit()
+    return jsonify({'Songs': [song.to_dict() for song in songs]}), 201
 
 
 @songs_routes.route('/<int:songId>', methods=['PUT'])
@@ -86,6 +81,9 @@ def update_song():
     song.album_id = song_data['album_id']
     song.lyrics = song_data['lyrics']
 
+    if data.get('Images'):
+        
+
     db.session.add(song)
 
     response = {'Songs': [song.to_dict()]}
@@ -94,4 +92,4 @@ def update_song():
         image = Image.query
 
 
-something random
+

@@ -37,7 +37,8 @@ class Song(db.Model):
             "album_id": self.album_id,
             "user_id": self.user_id,
             "duration": self.duration,
-            "lyrics": self.lyrics
+            "lyrics": self.lyrics,
+            "images": [image.to_dict() for image in self.images]
         }
 
 class Playlist(db.Model):
