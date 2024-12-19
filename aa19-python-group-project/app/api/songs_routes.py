@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
-from app.models import Song 
-from flask_login import login_required
+from app.models import Song, Image 
+from flask_login import login_required, current_user
 from app import db  
 
 
@@ -35,11 +35,30 @@ def add_song():
     """
     song_data = request.json
 
+    if not song_data.get('Songs'):
+        return jsonify({ "message": "Bad Request"}), 400
+
+    song_data = ['Songs'][0]
+    song_data['user_id'] = current_user.id
+
     new_song = Song(**song_data)
 
     db.session.add(new_song)
-    db.session.commit()
 
-    return jsonify(new_song.to_dict()), 201
+    response = {'Songs': [new_song.to_dict()]}
+
+    if song_data.get('Images'):
+        new_image = Image(
+            song_id=new_song.id,
+            album_id=song_data['album_id'],
+            url=song_data['Images'][0]['url']
+        )
+        db.session.add(new_image)
+        response['Images'] = [{
+            "id": new_image.id,
+            "url": new_image.url
+        }]
+    db.session.commit()
+    return jsonify(response), 201
 
 

@@ -297,7 +297,7 @@ Returns the details of a song specified by its id.
           "likeCount": 20,
         }
       ],
-      "SongImage": [
+      "Images": [
         {
           "id": 1,
           "url": "image url",
@@ -343,7 +343,7 @@ Adds and returns a new song when a user is signed in.
           //"genre": "kids songs"
         }
       ],
-      "SongImage": [
+      "Images": [
         {
           "id": 1,
           "url": "image url",
@@ -373,7 +373,7 @@ Adds and returns a new song when a user is signed in.
           "lyrics": "Happy birthday too youu",
         }
       ],
-      "SongImage": [
+      "Images": [
         {
           "id": 1,
           "url": "image url",
@@ -396,12 +396,12 @@ Adds and returns a new song when a user is signed in.
           "title": "Title is required",
           "artist": "Artist is required",
           "released_date": "Release year is required",
-          "album_id": "Album id is require",
+          "album_id": "Album id is required",
           "user_id": 1,
           "lyrics": "Happy birthday too youu",
         }
       ,
-      "SongImage": [
+      "Images": [
         {
           "id": 1,
           "url": "Image url is required",
@@ -435,7 +435,7 @@ Updates and returns an existing song.
           "lyrics": "Happy birthday too youu",
         }
       ],
-      "SongImage": [
+      "Images": [
         {
           "id": 1,
           "url": "image url",
@@ -465,7 +465,7 @@ Updates and returns an existing song.
           "lyrics": "Happy birthday too youu",
         }
       ],
-      "SongImage": [
+      "Images": [
         {
           "id": 1,
           "url": "image url",
@@ -492,7 +492,7 @@ Updates and returns an existing song.
           "lyrics": "Happy birthday too youu",
         }
       ,
-      "SongImage": [
+      "Images": [
         {
           "id": 1,
           "url": "Image url is required",
@@ -532,7 +532,7 @@ Deletes an existing song.
 
     ```json
     {
-      "message": "Successfully deleted"
+      "message": "Song Successfully deleted"
     }
     ```
 
