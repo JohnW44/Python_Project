@@ -1,7 +1,8 @@
 from flask import Blueprint, jsonify, request
-from app.models import Album , Song
+from app.models import Album , Song, Image
 from app import db  
 from flask_login import current_user, login_required
+from datetime import datetime
 
 # use this to cross models to_dict methods
 from sqlalchemy.orm import joinedload
@@ -144,3 +145,44 @@ def delete_album(albumId):
     db.session.commit()
 
     return jsonify({"message": "Successfully deleted"})
+
+@albums_routes.route('/', methods=['POST'])
+@login_required
+def create_album():
+    """
+    Creates album if you are logged in.
+    """
+    if not current_user.is_authenticated:
+        return jsonify({"error": "Authentication required"}), 401
+    
+    data = request.json
+
+    title = data.get('title')
+    artist = data.get('artist')
+    released_year = data.get('released_year')
+    duration = data.get('duration')
+    image_urls = data.get('images', [])
+
+    if not title or not artist or not released_year or not duration:
+        return jsonify({"message": "Please enter required fields"}), 400
+    
+    new_data = Album(
+        user_id = current_user.id,
+        title= title,
+        artist= artist,
+        released_year = released_year,
+        duration = duration,
+        created_at = datetime.now()
+    )
+   
+    db.session.add(new_data)
+    db.session.commit()
+
+    for url in image_urls:
+        image = Image(url=url, album_id=new_data.id)
+        db.session.add(image)
+
+    db.session.commit()
+
+    return jsonify({"message": "Album successfully created",
+                    "Album": new_data.to_dict()}),200
