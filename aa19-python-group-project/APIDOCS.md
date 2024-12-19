@@ -645,6 +645,69 @@ Deletes an existing comment.
 
 ## ALBUMS
 
+### Users should be able to Create albums 
+
+Creates an album.
+
+* Require Authentication: true
+* Require proper authorization: false
+* Request
+  * Method: POST
+  * Route path: /albums/:albumId/
+  * Body:
+  ```json 
+  {
+    "title":"Create album",
+    "artist": "artist name",
+    "released_year": 20237,
+    "duration": 4534,
+    "images" : [
+      "https://m.media-amazon.com/images/M/MV5BNDRkM2NjMzctNGNmNy00ZjUzLWJlN2UtM2ZlZGI5M2NkMTAyXkEyXkFqcGc@._V1_.jpgdd"
+      ]}
+  ```
+
+* Successful Response
+  * Status Code: 200
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+    ```json
+    {
+    "Album": {
+        "artist": "artist name",
+        "created_at": "Thu, 19 Dec 2024 17:52:12 GMT",
+        "duration": 4534,
+        "id": 5,
+        "images": [
+            {
+                "album_id": 5,
+                "id": 4,
+                "song_id": null,
+                "url": "https://m.media-amazon.com/images/M/MV5BNDRkM2NjMzctNGNmNy00ZjUzLWJlN2UtM2ZlZGI5M2NkMTAyXkEyXkFqcGc@._V1_.jpgdd"
+            }
+        ],
+        "released_year": 20237,
+        "songs": [],
+        "title": "Create album",
+        "user_id": 1
+    },
+    "message": "Album successfully created"
+    }
+    ```
+
+* Error response: Please enter all required fields
+  * Status Code: 404
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+    ```json
+    {
+    "message": "Please enter required fields"
+    }
+   ```
+
 ### Get all Albums
 
 Returns all the albums.
