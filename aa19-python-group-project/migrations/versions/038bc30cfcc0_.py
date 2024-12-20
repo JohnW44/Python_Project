@@ -1,8 +1,8 @@
-"""create tables
+"""empty message
 
-Revision ID: 1044e46c2d6b
+Revision ID: 038bc30cfcc0
 Revises: 
-Create Date: 2024-12-18 11:32:23.308308
+Create Date: 2024-12-20 11:36:25.605473
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '1044e46c2d6b'
+revision = '038bc30cfcc0'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -57,7 +57,7 @@ def upgrade():
     sa.Column('artist', sa.String(length=255), nullable=False),
     sa.Column('released_date', sa.Date(), nullable=False),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
-    sa.Column('album_id', sa.Integer(), nullable=False),
+    sa.Column('album_id', sa.Integer(), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('duration', sa.Integer(), nullable=False),
     sa.Column('lyrics', sa.String(length=50000), nullable=True),
@@ -67,7 +67,7 @@ def upgrade():
     )
     op.create_table('images',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('song_id', sa.Integer(), nullable=False),
+    sa.Column('song_id', sa.Integer(), nullable=True),
     sa.Column('album_id', sa.Integer(), nullable=False),
     sa.Column('url', sa.String(length=1000), nullable=False),
     sa.ForeignKeyConstraint(['album_id'], ['albums.id'], ),
@@ -77,8 +77,8 @@ def upgrade():
     op.create_table('likes',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
-    sa.Column('song_id', sa.Integer(), nullable=False),
-    sa.Column('album_id', sa.Integer(), nullable=False),
+    sa.Column('song_id', sa.Integer(), nullable=True),
+    sa.Column('album_id', sa.Integer(), nullable=True),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
     sa.ForeignKeyConstraint(['album_id'], ['albums.id'], ),
     sa.ForeignKeyConstraint(['song_id'], ['songs.id'], ),
