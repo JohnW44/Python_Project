@@ -123,7 +123,7 @@ class Album(db.Model):
     users = relationship("User", back_populates="albums")
     likes = relationship("Like", back_populates="albums", cascade="all, delete-orphan")
     songs = relationship("Song", back_populates="albums")
-    images = relationship("Image", back_populates="albums")
+    images = relationship("Image", back_populates="albums", cascade="all, delete-orphan")
 
 
     def to_dict(self):

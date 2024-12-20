@@ -149,12 +149,11 @@ def delete_album(albumId):
     Deletes album if you are the current owner.
     """
 
+    album = Album.query.get(albumId)
 
     if not current_user.is_authenticated:
         return jsonify({"error": "Authentication required"}), 401
 
-
-    album = Album.query.get(albumId)
     if not album:
         return jsonify({"message": "Album Not Found"}), 404
    

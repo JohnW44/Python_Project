@@ -47,10 +47,15 @@ def add_song():
         return jsonify({ "message": "Bad Request"}), 400
 
 
+
     song_data = data['Songs'][0]
     song_data['user_id'] = current_user.id
     song_data['released_date'] = datetime.strptime(song_data['released_date'], '%Y-%m-%d').date()
-   
+    if 'album_id' not in song_data or song_data['album_id'] == '':
+        song_data['album_id'] = None
+    
+
+    # print( song_data)
     new_song = Song(**song_data)
 
 
@@ -62,7 +67,7 @@ def add_song():
     if data.get('Images'):
         new_image = Image(
             song_id=new_song.id,
-            album_id=song_data['album_id'],
+            album_id=song_data['album_id', None],
             url=data['Images'][0]['url']
         )
         db.session.add(new_image)

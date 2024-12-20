@@ -1064,7 +1064,7 @@ Deletes an existing song, based on AlbumId.
     ```
 
 
-    * Error response: Couldn't find Song with the specified id
+    <!-- * Error response: Couldn't find Song with the specified id
   * Status Code: 404
   * Headers:
     * Content-Type: application/json
@@ -1075,7 +1075,7 @@ Deletes an existing song, based on AlbumId.
     {
       "message": "Song couldn't be found"
     }
-    ```
+    ``` -->
 
 
 
@@ -1092,7 +1092,7 @@ Deletes an existing album, based on AlbumId.
 * Require proper authorization: Album must belong to the current user
 * Request
   * Method: DELETE
-  * Route path: /albums/:albumId/
+  * Route path: /albums/:albumId
   * Body: none
 
 
@@ -1122,6 +1122,7 @@ Deletes an existing album, based on AlbumId.
       "message": "Album couldn't be found"
     }
    ```
+   
 
 
 
