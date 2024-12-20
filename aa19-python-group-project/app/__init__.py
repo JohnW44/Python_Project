@@ -7,6 +7,7 @@ from flask_login import LoginManager
 from .models import db, User, Album
 from .api.user_routes import user_routes
 from .api.auth_routes import auth_routes
+from .api.likes_routes import likes_routes
 from .seeds import seed_commands
 from .config import Config
 from .api.main_user import mainuser_routes
@@ -36,6 +37,7 @@ csrf = CSRFProtect(app)
 app.register_blueprint(user_routes, url_prefix='/api/users')
 app.register_blueprint(auth_routes, url_prefix='/api/auth')
 app.register_blueprint(mainuser_routes, url_prefix='/api/user')
+app.register_blueprint(likes_routes)
 # app.register_blueprint(login_routes, url_prefix='/api/login')
 db.init_app(app)
 Migrate(app, db)

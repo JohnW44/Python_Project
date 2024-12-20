@@ -1,8 +1,8 @@
-"""create tables
+"""empty message
 
-Revision ID: 1044e46c2d6b
+Revision ID: 4e10aa315813
 Revises: 
-Create Date: 2024-12-18 11:32:23.308308
+Create Date: 2024-12-19 13:55:53.038969
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '1044e46c2d6b'
+revision = '4e10aa315813'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -77,8 +77,8 @@ def upgrade():
     op.create_table('likes',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
-    sa.Column('song_id', sa.Integer(), nullable=False),
-    sa.Column('album_id', sa.Integer(), nullable=False),
+    sa.Column('song_id', sa.Integer(), nullable=True),
+    sa.Column('album_id', sa.Integer(), nullable=True),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
     sa.ForeignKeyConstraint(['album_id'], ['albums.id'], ),
     sa.ForeignKeyConstraint(['song_id'], ['songs.id'], ),

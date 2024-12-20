@@ -1057,7 +1057,12 @@ Like song based on songId
 * Request
   * Method: POST
   * Route path: /users/:userId/likedsongs
-  * Body: none
+  * Body: 
+  ```json
+  {
+    "song_id": 2
+  }
+  ```
 * Successful Response
   * Status Code: 200
   * Headers:
@@ -1069,10 +1074,9 @@ Like song based on songId
       "Songs": [
         {
           "id": 1,
-          "title": "Happy birthday",
+          "song_id": 1,
           "artist": "Big Bird",
           "album_id": 1,
-          "duration": 500,
         }
       ]
     }

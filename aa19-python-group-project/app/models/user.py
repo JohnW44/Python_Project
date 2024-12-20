@@ -22,7 +22,7 @@ class User(db.Model, UserMixin):
 
     albums = relationship("Album", back_populates="users")
     songs = relationship("Song", back_populates="users")
-    likes = relationship("Like", back_populates="users")
+    likes = relationship("Like", back_populates="users", cascade="all, delete-orphan")
     playlists = relationship("Playlist", back_populates="users")
 
     @property
