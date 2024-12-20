@@ -3,6 +3,7 @@ from flask_login import UserMixin
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from .user import User
+from sqlalchemy import CheckConstraint
 
 
 class Song(db.Model):
@@ -27,7 +28,7 @@ class Song(db.Model):
     users = relationship("User", back_populates="songs")
     albums = relationship("Album", back_populates="songs")
     playlist_songs = relationship("PlaylistSong", back_populates="songs")
-    likes = relationship("Like", back_populates="songs")
+    likes = relationship("Like", back_populates="songs", cascade="all, delete-orphan")
     images = relationship("Image", back_populates="songs", cascade="all, delete-orphan")
 
 
@@ -76,17 +77,29 @@ class Like(db.Model):
     __tablename__ = 'likes'
 
     if environment == "production":
-        __table_args__ = {'schema': SCHEMA}
+        __table_args__ = (
+            {'schema': SCHEMA},
+            CheckConstraint('(song_id IS NOT NULL AND album_id IS NULL) OR (song_id IS NULL AND album_id IS NOT NULL)',
+                            name='check_like_references_only_one')
+        )
 
     id = db.Column(db.Integer, primary_key=True)
     user_id= db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
-    song_id = db.Column(db.Integer, db.ForeignKey("songs.id"), nullable=False)
-    album_id = db.Column(db.Integer,db.ForeignKey("albums.id"), nullable=False)
+    song_id = db.Column(db.Integer, db.ForeignKey("songs.id"), nullable=True)
+    album_id = db.Column(db.Integer,db.ForeignKey("albums.id"), nullable=True)
     created_at = db.Column(db.DateTime, nullable=False, server_default=func.now())
 
     albums = relationship("Album", back_populates="likes")
     songs = relationship("Song", back_populates="likes")
     users = relationship("User", back_populates="likes")
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "song_id": self.song_id,
+            "album_id": self.album_id,
+        }
 
 
 class Album(db.Model):
@@ -107,7 +120,7 @@ class Album(db.Model):
     duration = db.Column(db.Integer, nullable=False)
    
     users = relationship("User", back_populates="albums")
-    likes = relationship("Like", back_populates="albums")
+    likes = relationship("Like", back_populates="albums", cascade="all, delete-orphan")
     songs = relationship("Song", back_populates="albums")
     images = relationship("Image", back_populates="albums")
 
