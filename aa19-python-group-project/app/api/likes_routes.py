@@ -15,7 +15,7 @@ def get_liked_songs(user_id):
         return {"error": "Unauthorized access"}, 403
     
     likes = Like.query.filter_by(user_id=user_id, album_id=None).all()
-    songs = [like.song.to_dict() for like in likes if like.song]
+    songs = [like.songs.to_dict() for like in likes if like.songs]
 
     return jsonify({"Songs": songs}), 200
 
@@ -29,8 +29,8 @@ def get_liked_albums(user_id):
     if user_id != current_user.id:
         return {"error": "Unauthorized access"}, 403
     
-    likes = Like.query.filtter_by(user_id=user_id, song_id=None).all()
-    albums = [like.album.to_dict() for like in likes if like.album]
+    likes = Like.query.filter_by(user_id=user_id, song_id=None).all()
+    albums = [like.albums.to_dict() for like in likes if like.albums]
 
     return jsonify({"Albums": albums}), 200
 
@@ -53,7 +53,7 @@ def like_song(user_id):
     db.session.add(like)
     db.session.commit()
 
-    return jsonify({"messege": "Successfully Liked Song", "like": like.to_dict()}), 200
+    return jsonify({"message": "Successfully Liked Song", "like": like.to_dict()}), 200
 
 
 @likes_routes.route('/users/<int:user_id>/likedalbums', methods=['POST'])
@@ -68,13 +68,13 @@ def like_album(user_id):
     album_id = request.json.get('album_id')
     album = Album.query.get(album_id)
     if not album: 
-        return {"messege": "Album couldn't be found"}, 404
+        return {"message": "Album couldn't be found"}, 404
     
     like = Like(user_id=user_id, album_id=album_id)
     db.session.add(like)
     db.session.commit()
 
-    return jsonify({"messege": "Successfully Like Album", "like": like.to_dict()}), 200
+    return jsonify({"message": "Successfully Like Album", "like": like.to_dict()}), 200
 
 
 @likes_routes.route('/users/<int:user_id>/likedsongs', methods=['DELETE'])
@@ -89,12 +89,12 @@ def unlike_song(user_id):
     song_id = request.json.get('song_id')
     like = Like.query.filter_by(user_id=user_id, song_id=song_id).first()
     if not like:
-        return {"messege": "Song couldn't be found"}, 404
+        return {"message": "Song couldn't be found"}, 404
     
     db.session.delete(like)
     db.session.commit()
 
-    return jsonify({"messege": "Successfully Unliked Song"}), 200
+    return jsonify({"message": "Successfully Unliked Song"}), 200
 
 
 @likes_routes.route('/users/<int:user_id>/likedalbums', methods=['DELETE'])
@@ -109,9 +109,9 @@ def unlike_album(user_id):
     album_id = request.json.get('album_id')
     like = Like.query.filter_by(user_id=user_id, album_id=album_id).first()
     if not like: 
-        return {"messege": "Album couldn't be found"}, 404
+        return {"message": "Album couldn't be found"}, 404
     
     db.session.delete(like)
     db.session.commit()
 
-    return jsonify({"messege": "Successfully Unliked Album"}), 200
+    return jsonify({"message": "Successfully Unliked Album"}), 200
