@@ -4,7 +4,7 @@ from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect, generate_csrf
 from flask_login import LoginManager
-from .models import db, User, Album
+from .models import db, User, Album, Playlist
 from .api.user_routes import user_routes
 from .api.auth_routes import auth_routes
 from .seeds import seed_commands
@@ -12,6 +12,7 @@ from .config import Config
 from .api.main_user import mainuser_routes
 from .api.songs_routes import songs_routes
 from .api.albums_routes import albums_routes
+from .api.playlist_routes import playlists_routes
 
 
 from dotenv import load_dotenv
@@ -41,6 +42,7 @@ app.register_blueprint(user_routes, url_prefix='/api/users')
 app.register_blueprint(auth_routes, url_prefix='/api/auth')
 app.register_blueprint(mainuser_routes, url_prefix='/api/user')
 app.register_blueprint(songs_routes, url_prefix="/songs")
+app.register_blueprint(playlists_routes, url_prefix="/playlists")
 app.register_blueprint(albums_routes, url_prefix="/albums")
 # app.register_blueprint(login_routes, url_prefix='/api/login')
 db.init_app(app)
