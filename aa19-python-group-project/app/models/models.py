@@ -86,8 +86,10 @@ class Like(db.Model):
 class Album(db.Model):
     __tablename__ = 'albums'
 
+
     if environment == "production":
         __table_args__ = {'schema': SCHEMA}
+
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False)
@@ -97,11 +99,12 @@ class Album(db.Model):
     # song_id = db.Column(db.Integer, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     duration = db.Column(db.Integer, nullable=False)
-
+   
     users = relationship("User", back_populates="albums")
     likes = relationship("Like", back_populates="albums")
     songs = relationship("Song", back_populates="albums")
     images = relationship("Image", back_populates="albums")
+
 
     def to_dict(self):
         return {
@@ -112,23 +115,30 @@ class Album(db.Model):
             "created_at": self.created_at,
             "user_id": self.user_id,
             "duration": self.duration,
-            "images": [image.to_dict() for image in self.images]
+            "images": [image.to_dict() for image in self.images],
+            "songs" :[song.to_dict() for song in self.songs]
         }
+
 
 class Image(db.Model):
     __tablename__ = 'images'
 
+
     if environment == "production":
         __table_args__ = {'schema': SCHEMA}
 
+
     id = db.Column(db.Integer, primary_key=True)
-    song_id = db.Column(db.Integer, db.ForeignKey('songs.id'), nullable=False)
+    song_id = db.Column(db.Integer, db.ForeignKey('songs.id'), nullable=True)
     album_id = db.Column(db.Integer, db.ForeignKey('albums.id'), nullable=False)
     url = db.Column(db.String(1000), nullable=False)
 
 
+
+
     songs = relationship("Song", back_populates="images")
     albums = relationship("Album", back_populates="images")
+
 
     def to_dict(self):
         return {
@@ -137,6 +147,7 @@ class Image(db.Model):
             "album_id": self.album_id,
             "url": self.url
         }
+
 
 class PlaylistSong(db.Model):
     __tablename__ = 'playlist_songs'

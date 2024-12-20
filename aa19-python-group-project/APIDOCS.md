@@ -645,15 +645,89 @@ Deletes an existing comment.
 
 ## ALBUMS
 
+
+### Users should be able to Create albums
+
+
+Creates an album.
+
+
+* Require Authentication: true
+* Require proper authorization: false
+* Request
+  * Method: POST
+  * Route path: /albums/:albumId/
+  * Body:
+  ```json
+  {
+    "title":"Create album",
+    "artist": "artist name",
+    "released_year": 20237,
+    "duration": 4534,
+    "images" : [
+      "https://m.media-amazon.com/images/M/MV5BNDRkM2NjMzctNGNmNy00ZjUzLWJlN2UtM2ZlZGI5M2NkMTAyXkEyXkFqcGc@._V1_.jpgdd"
+      ]}
+  ```
+
+
+* Successful Response
+  * Status Code: 200
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+
+    ```json
+    {
+    "Album": {
+        "artist": "artist name",
+        "created_at": "Thu, 19 Dec 2024 17:52:12 GMT",
+        "duration": 4534,
+        "id": 5,
+        "images": [
+            {
+                "album_id": 5,
+                "id": 4,
+                "song_id": null,
+                "url": "https://m.media-amazon.com/images/M/MV5BNDRkM2NjMzctNGNmNy00ZjUzLWJlN2UtM2ZlZGI5M2NkMTAyXkEyXkFqcGc@._V1_.jpgdd"
+            }
+        ],
+        "released_year": 20237,
+        "songs": [],
+        "title": "Create album",
+        "user_id": 1
+    },
+    "message": "Album successfully created"
+    }
+    ```
+
+
+* Error response: Please enter all required fields
+  * Status Code: 404
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+
+    ```json
+    {
+    "message": "Please enter required fields"
+    }
+   ```
+
+
 ### Get all Albums
 
+
 Returns all the albums.
+
 
 * Require Authentication: false
 * Request
   * Method: GET
   * Route path: /albums
   * Body: none
+
 
 * Successful Response
   * Status Code: 200
@@ -681,9 +755,12 @@ Returns all the albums.
     }
     ```
 
+
 ### Get all Songs by an Album's id
 
+
 Returns all the songs that belong to an album specified by id.
+
 
 * Require Authentication: false
 * Request
@@ -691,14 +768,16 @@ Returns all the songs that belong to an album specified by id.
   * Route path: /albums/:albumId/songs
   * Body: none
 
+
 * Successful Response
   * Status Code: 200
   * Headers:
     * Content-Type: application/json
   * Body:
 
+
     ```json
-    
+   
     {
     "Songs": [
         {
@@ -727,21 +806,25 @@ Returns all the songs that belong to an album specified by id.
     }
     ```
 
+
 * Error response: Couldn't find a Album with the specified id
   * Status Code: 404
   * Headers:
     * Content-Type: application/json
   * Body:
 
+
     ```json
     {
       "message": "No Album found"
     }
     ```
-<!-- 
+<!--
 ### Add an Image to a album based on the album's id
 
+
 Create and return a new image for an album specified by id.
+
 
 * Require Authentication: true
 * Require proper authorization: Review must belong to the current user
@@ -752,17 +835,20 @@ Create and return a new image for an album specified by id.
     * Content-Type: application/json
   * Body:
 
+
     ```json
     {
       "url": "image url"
     }
     ```
 
+
 * Successful Response
   * Status Code: 201
   * Headers:
     * Content-Type: application/json
   * Body:
+
 
     ```json
     {
@@ -771,17 +857,20 @@ Create and return a new image for an album specified by id.
     }
     ```
 
+
 * Error response: Couldn't find album with the specified id
   * Status Code: 404
   * Headers:
     * Content-Type: application/json
   * Body:
 
+
     ```json
     {
       "message": "Album couldn't be found"
     }
     ```
+
 
 * Error response: Cannot add any more images because there is a maximum of 10
   images per resource
@@ -790,15 +879,19 @@ Create and return a new image for an album specified by id.
     * Content-Type: application/json
   * Body:
 
+
     ```json
     {
       "message": "Maximum number of images for this resource was reached"
     }
     ``` -->
 
+
  ### Users should be able to view all albums created by users
 
-Returns all the albums created by the current user.
+
+Returns all the albums created by the user.
+
 
 * Require Authentication: true
 * Request
@@ -806,11 +899,13 @@ Returns all the albums created by the current user.
   * Route path: albums/users/:userId
   * Body: none
 
+
 * Successful Response
   * Status Code: 200
   * Headers:
     * Content-Type: application/json
   * Body:
+
 
     ```json
     {
@@ -821,11 +916,21 @@ Returns all the albums created by the current user.
           "artist": "Big Bird",
           "album_id": 1,
           "duration": 500,
-          "image": "image url"
+          "created_at": "Thu, 19 Dec 2024 11:53:11 GMT",
+          "released_year": 2013,
+          "images": [
+                {
+                    "album_id": 1,
+                    "id": 1,
+                    "song_id": 1,
+                    "url": "https://cdn-p.smehost.net/sites/35faef12c1b64b21b3fda052d205af13/wp-content/uploads/2023/02/230222-daftpunk-ram10.jpg"
+                }
+            ],
         }
       ]
     }
     ```
+
 
   * Error response: Couldn't find album with the specified id
   * Status Code: 404
@@ -833,21 +938,26 @@ Returns all the albums created by the current user.
     * Content-Type: application/json
   * Body:
 
+
     ```json
     {
       "message": "No Albums found"
     }
     ```
 
+
 ### Add Songs to an User created Album based on Album's id
 
-Add Songs based on albumId.
+
+Add Songs based on albumId if user is album owner.
+
 
 * Require Authentication: True
 * Request
   * Method: POST
-  * Route path: /users/:userId/albums/:albumId/songs
+  * Route path: /albums/:albumId/:userId/songs
   * Body: none
+
 
 * Successful Response
   * Status Code: 200
@@ -855,31 +965,15 @@ Add Songs based on albumId.
     * Content-Type: application/json
   * Body:
 
+
     ```json
     {
-      "Album": [
-        {
-          "id": 1,
-          "playlistId": 4,
-          "artist": "Big Bird",
-          "released_year": 2022,
-          "created_at": "2022-11-19 20:39:36",
-          "title": "Happy Songs",
-          "songs": [
-            {
-            "songid": 1
-          }
-          ]
-          "Images": [
-            {
-              "id": 1,
-              "url": "image url"
-            }
-          ],
-        }
-      ]
+        "songid": 8
     }
+
+
     ```
+
 
     * Successful Response
   * Status Code: 201
@@ -887,11 +981,45 @@ Add Songs based on albumId.
     * Content-Type: application/json
   * Body:
 
+
     ```json
     {
+    "Album": [
+        {
+            "artist": "Daft Punk",
+            "created_at": "Thu, 19 Dec 2024 14:03:12 GMT",
+            "duration": 4464,
+            "title": "Random Access Memories",
+            "user_id": 1,
+            "id": 1,
+            "images": [
+                {
+                    "album_id": 1,
+                    "id": 1,
+                    "song_id": 1,
+                    "url": "https://cdn-p.smehost.net/sites/35faef12c1b64b21b3fda052d205af13/wp-content/uploads/2023/02/230222-daftpunk-ram10.jpg"
+                }
+            ],
+            "released_year": 2013,
+            "songs": [
+                {
+                    "album_id": 1,
+                    "artist": "Daft Punk",
+                    "created_at": "Thu, 19 Dec 2024 14:03:12 GMT",
+                    "duration": 200,
+                    "id": 8,
+                    "lyrics": "buy it, use it, break it, fix it, trash it, change it, mail, upgrade it",
+                    "released_date": "Tue, 17 May 2005 00:00:00 GMT",
+                    "title": "Technologic",
+                    "user_id": 1
+                }
+            ],
+          }
+      ],
       "message": "Song successfully added to Album"
     }
     ```
+
 
 * Error response: Couldn't find a Album with the specified id
   * Status Code: 404
@@ -899,22 +1027,25 @@ Add Songs based on albumId.
     * Content-Type: application/json
   * Body:
 
+
     ```json
     {
       "message": "Album Not Found"
     }
     ```
-
 ### Users should be able to remove songs from albums based on AlbumId
 
+
 Deletes an existing song, based on AlbumId.
+
 
 * Require Authentication: true
 * Require proper authorization: Song must belong to the current user
 * Request
   * Method: DELETE
-  * Route path: /albums/:albumId/songs/:songId
+  * Route path: /albums/:albumId/:userId/songs
   * Body: none
+
 
 * Successful Response
   * Status Code: 200
@@ -922,11 +1053,13 @@ Deletes an existing song, based on AlbumId.
     * Content-Type: application/json
   * Body:
 
+
     ```json
     {
       "message": "Successfully deleted"
     }
     ```
+
 
 * Error response: Couldn't find a Album with the specified id
   * Status Code: 404
@@ -934,17 +1067,20 @@ Deletes an existing song, based on AlbumId.
     * Content-Type: application/json
   * Body:
 
+
     ```json
     {
       "message": "Album couldn't be found"
     }
     ```
 
+
     * Error response: Couldn't find Song with the specified id
   * Status Code: 404
   * Headers:
     * Content-Type: application/json
   * Body:
+
 
     ```json
     {
@@ -954,9 +1090,14 @@ Deletes an existing song, based on AlbumId.
 
 
 
-### Users should be able DELETE albums based on AlbumId
+
+
+
+### Users should be able to DELETE albums based on AlbumId
+
 
 Deletes an existing album, based on AlbumId.
+
 
 * Require Authentication: true
 * Require proper authorization: Album must belong to the current user
@@ -965,11 +1106,13 @@ Deletes an existing album, based on AlbumId.
   * Route path: /albums/:albumId/
   * Body: none
 
+
 * Successful Response
   * Status Code: 200
   * Headers:
     * Content-Type: application/json
   * Body:
+
 
     ```json
     {
@@ -977,17 +1120,21 @@ Deletes an existing album, based on AlbumId.
     }
     ```
 
+
 * Error response: Couldn't find a Album with the specified id
   * Status Code: 404
   * Headers:
     * Content-Type: application/json
   * Body:
 
+
     ```json
     {
       "message": "Album couldn't be found"
     }
    ```
+
+
 
 ## LIKES
 
