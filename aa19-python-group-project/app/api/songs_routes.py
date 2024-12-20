@@ -32,7 +32,6 @@ def song_details(songId):
     if song is None:
         return jsonify({"error": "Song couldn't be found"}), 404
     return jsonify(song.to_dict())
-#missing Likes
 
 
 @songs_routes.route('/', methods=['POST'])
@@ -92,12 +91,27 @@ def update_song(songId):
    
     song_data = data['Songs'][0]
 
-
-    song.title = song_data['title']
-    song.artist = song_data['artist']
-    song.released_date = datetime.strptime(song_data['released_date'], '%Y-%m-%d').date()
-    song.album_id = song_data['album_id']
-    song.lyrics = song_data['lyrics']
+    if "title" in song_data and song_data["title"] == "":
+         return jsonify({"error": "Title cannot be empty"}), 400 
+    if "title" in song_data:
+        song.title = song_data['title']
+    if "artist" in song_data and song_data["artist"] == "":
+         return jsonify({"error": "Artist cannot be empty"}), 400     
+    if "artist" in song_data:
+        song.artist = song_data['artist']
+    if "released_date" in song_data and song_data["released_date"] == "":
+         return jsonify({"error": "Released date cannot be empty"}), 400     
+    if "released_date" in song_data:    
+        song.released_date = datetime.strptime(song_data['released_date'], '%Y-%m-%d').date()
+    if "album_id" in song_data:
+        song.album_id = song_data['album_id']
+    if "lyrics" in song_data:
+        song.lyrics = song_data['lyrics']
+    if "duration" in song_data and song_data["duration"] == "":
+         return jsonify({"error": "Duration cannot be empty"}), 400     
+    if "duration" in song_data:
+        song.duration = song_data['duration']    
+    
     if data.get('Images'):
         existing_image = Image.query.filter_by(song_id=songId).first()
         if existing_image:

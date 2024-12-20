@@ -43,6 +43,7 @@ class Song(db.Model):
             "user_id": self.user_id,
             "duration": self.duration,
             "lyrics": self.lyrics,
+            "likes": [like.to_dict() for like in self.likes],
             "images": [image.to_dict() for image in self.images]
         }
 
@@ -148,7 +149,7 @@ class Image(db.Model):
 
 
     id = db.Column(db.Integer, primary_key=True)
-    song_id = db.Column(db.Integer, db.ForeignKey('songs.id'), nullable=True)
+    song_id = db.Column(db.Integer, db.ForeignKey('songs.id'), nullable=True, unique=True)
     album_id = db.Column(db.Integer, db.ForeignKey('albums.id'), nullable=False)
     url = db.Column(db.String(1000), nullable=False)
 

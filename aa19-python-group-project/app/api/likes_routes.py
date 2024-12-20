@@ -74,7 +74,7 @@ def like_album(user_id):
     db.session.add(like)
     db.session.commit()
 
-    return jsonify({"messege": "Successfully Like Album", "like": like.ro_dict()}), 200
+    return jsonify({"messege": "Successfully Like Album", "like": like.to_dict()}), 200
 
 
 @likes_routes.route('/users/<int:user_id>/likedsongs', methods=['DELETE'])
