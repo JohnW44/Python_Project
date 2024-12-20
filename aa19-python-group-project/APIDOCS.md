@@ -317,9 +317,126 @@ Returns the details of a song specified by its id.
     }
     ```
 
+## SONGS
+
+
+### Get all Songs
+
+
+Returns all the songs.
+
+
+* Require Authentication: false
+* Request
+  * Method: GET
+  * Route path: /songs
+  * Body: none
+
+
+* Successful Response
+  * Status Code: 200
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+
+    ```json
+    {
+      "Songs": [
+        {
+          "album_id": 1,
+          "artist": "Big Bird",
+          "created_at": "2021-11-19 20:39:36",
+          "duration": 500,
+          "id": 1,
+          "images": [
+            {
+              "album_id": 1,
+              "id": 1,
+              "song_id":1,
+              "url": "url"
+            }
+          ],
+          "lyrics": "Happy birthday too youu",
+          "released_date": "year, month, date",
+          "title": "Happy birthday",
+          "user_id": 1,
+        }
+      ]
+    }
+    ```
+
+
+
+
+### Get details of a Song from an id
+
+
+Returns the details of a song specified by its id.
+
+
+* Require Authentication: false
+* Request
+  * Method: GET
+  * Route path: /songs/:songId
+  * Body: none
+
+
+* Successful Response
+  * Status Code: 200
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+
+    ```json
+    {
+      "Songs": [
+        {
+          "id": 1,
+          "title": "Happy birthday",
+          "artist": "Big Bird",
+          "released_date": "1545",
+          "created_at": "2021-11-19 20:39:36",
+          "album_id": 1,
+          "user_id": 1,
+          "duration": 500,
+          "lyrics": "Happy birthday too youu",
+          "like": "True",
+          "likeCount": 20,
+        }
+      ],
+      "Images": [
+        {
+          "album_id": 1,
+          "id": 1,
+          "song_id": 1,
+          "url": "image url",
+        },
+      ]
+    }
+    ```
+
+
+* Error response: Couldn't find a Song with the specified id
+  * Status Code: 404
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+
+    ```json
+    {
+      "message": "Song couldn't be found"
+    }
+    ```
+
+
 ### Add a Song
 
+
 Adds and returns a new song when a user is signed in.
+
 
 * Require Authentication: true
 * Request
@@ -328,6 +445,7 @@ Adds and returns a new song when a user is signed in.
   * Headers:
     * Content-Type: application/json
   * Body:
+
 
     ```json
     {
@@ -351,11 +469,13 @@ Adds and returns a new song when a user is signed in.
     }
     ```
 
+
 * Successful Response
   * Status Code: 201
   * Headers:
     * Content-Type: application/json
   * Body:
+
 
     ```json
     {
@@ -381,16 +501,18 @@ Adds and returns a new song when a user is signed in.
     }
     ```
 
+
 * Error Response: Body validation errors
   * Status Code: 400
   * Headers:
     * Content-Type: application/json
   * Body:
 
+
     ```json
  
      {
-       "message": "Bad Request", 
+       "message": "Bad Request",
        "errors": {
           "title": "Title is required",
           "artist": "Artist is required",
@@ -409,9 +531,12 @@ Adds and returns a new song when a user is signed in.
     }
   ```
 
+
 ### Update a Song
 
+
 Updates and returns an existing song.
+
 
 * Require Authentication: true
 * Require proper authorization: Song must belong to the current user
@@ -421,6 +546,7 @@ Updates and returns an existing song.
   * Headers:
     * Content-Type: application/json
   * Body:
+
 
     ```json
      {
@@ -443,11 +569,13 @@ Updates and returns an existing song.
     }
     ```
 
+
 * Successful Response
   * Status Code: 200
   * Headers:
     * Content-Type: application/json
   * Body:
+
 
     ```json
     {
@@ -473,15 +601,17 @@ Updates and returns an existing song.
     }
     ```
 
+
 * Error Response: Body validation errors
   * Status Code: 400
   * Headers:
     * Content-Type: application/json
   * Body:
 
+
     ```json
     {
-       "message": "Bad Request", 
+       "message": "Bad Request",
        "errors": {
           "title": "Title is required",
           "artist": "Artist is required",
@@ -499,6 +629,19 @@ Updates and returns an existing song.
       ]
     }
     ```
+* Error response: User not authorized to delete song
+  * Status Code: 403
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+
+    ```json
+    {
+      "message": "Unauthorized"
+    }
+    ```
+
 
 * Error response: Couldn't find a Song with the specified id
   * Status Code: 404
@@ -506,15 +649,19 @@ Updates and returns an existing song.
     * Content-Type: application/json
   * Body:
 
+
     ```json
     {
       "message": "Song couldn't be found"
     }
     ```
 
+
 ### Delete a Song
 
+
 Deletes an existing song.
+
 
 * Require Authentication: true
 * Require proper authorization: Song must belong to the current user
@@ -523,11 +670,13 @@ Deletes an existing song.
   * Route path: /songs/:songId
   * Body: none
 
+
 * Successful Response
   * Status Code: 200
   * Headers:
     * Content-Type: application/json
   * Body:
+
 
     ```json
     {
@@ -535,17 +684,34 @@ Deletes an existing song.
     }
     ```
 
+
 * Error response: Couldn't find a Song with the specified id
   * Status Code: 404
   * Headers:
     * Content-Type: application/json
   * Body:
 
+
     ```json
     {
       "message": "Song couldn't be found"
     }
     ```
+
+
+* Error response: User not authorized to delete song
+  * Status Code: 403
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+
+    ```json
+    {
+      "message": "Unauthorized"
+    }
+    ```
+
 
 <!-- ### Create a comment for a Song based on the Song's id
 
