@@ -8,7 +8,6 @@ def seed_playlists():
         user_id = 2,
         name = "testing playlist",
         created_at = datetime.now(),
-
     )
 
     playlist2 = Playlist(

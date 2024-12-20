@@ -20,6 +20,7 @@ class Song(db.Model):
     released_date = db.Column(db.Date, nullable=False)
     created_at = db.Column( db.DateTime, nullable=False, server_default=func.now())
     album_id = db.Column(db.Integer, db.ForeignKey('albums.id'), nullable=True)
+    # playlist_id = db.Column(db.Integer, db.ForeignKey('playlists.id'), nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     duration = db.Column(db.Integer, nullable=False)
     lyrics = db.Column(db.String(50000))
@@ -30,7 +31,7 @@ class Song(db.Model):
     playlist_songs = relationship("PlaylistSong", back_populates="songs")
     likes = relationship("Like", back_populates="songs", cascade="all, delete-orphan")
     images = relationship("Image", back_populates="songs", cascade="all, delete-orphan")
-
+    # playlist = relationship("Playlist", back_populates="songs")
 
     def to_dict(self):
         return {
@@ -67,6 +68,7 @@ class Playlist(db.Model):
     def to_dict(self):
         return {
         "id": self.id,
+        # "playlist_songs" :[playlist_song.to_dict() for playlist_song in self.playlist_songs],
         "user_id": self.user_id,
         "name": self.name,
         "created_at": self.created_at
@@ -118,7 +120,7 @@ class Album(db.Model):
     # song_id = db.Column(db.Integer, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     duration = db.Column(db.Integer, nullable=False)
-   
+
     users = relationship("User", back_populates="albums")
     likes = relationship("Like", back_populates="albums", cascade="all, delete-orphan")
     songs = relationship("Song", back_populates="albums")
