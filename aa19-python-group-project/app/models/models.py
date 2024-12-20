@@ -3,29 +3,34 @@ from flask_login import UserMixin
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from .user import User
+from sqlalchemy import CheckConstraint
 
 
 class Song(db.Model):
     __tablename__ = 'songs'
 
+
     if environment == "production":
         __table_args__ = {'schema': SCHEMA}
+
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False)
     artist = db.Column(db.String(255), nullable=False)
     released_date = db.Column(db.Date, nullable=False)
     created_at = db.Column( db.DateTime, nullable=False, server_default=func.now())
-    album_id = db.Column(db.Integer, db.ForeignKey('albums.id'), nullable=False)
+    album_id = db.Column(db.Integer, db.ForeignKey('albums.id'), nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     duration = db.Column(db.Integer, nullable=False)
     lyrics = db.Column(db.String(50000))
 
+
     users = relationship("User", back_populates="songs")
     albums = relationship("Album", back_populates="songs")
     playlist_songs = relationship("PlaylistSong", back_populates="songs")
-    likes = relationship("Like", back_populates="songs")
-    images = relationship("Image", back_populates="songs")
+    likes = relationship("Like", back_populates="songs", cascade="all, delete-orphan")
+    images = relationship("Image", back_populates="songs", cascade="all, delete-orphan")
+
 
     def to_dict(self):
         return {
@@ -37,8 +42,11 @@ class Song(db.Model):
             "album_id": self.album_id,
             "user_id": self.user_id,
             "duration": self.duration,
-            "lyrics": self.lyrics
+            "lyrics": self.lyrics,
+            "likes": [like.to_dict() for like in self.likes],
+            "images": [image.to_dict() for image in self.images]
         }
+
 
 class Playlist(db.Model):
     __tablename__ = 'playlists'
@@ -48,11 +56,13 @@ class Playlist(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id= db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    # song_id = db.Column(db.Integer, db.ForeignKey("songs.id"), nullable=False)
     name = db.Column(db.String(255), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, server_default=func.now())
     updated_at = db.Column(db.DateTime, onupdate=func.now())
 
     users = relationship("User", back_populates="playlists")
+    # songs = relationship("Song", back_populates="playlists")
     playlist_songs = relationship("PlaylistSong", back_populates="playlists", cascade="all, delete-orphan")
 
     def to_dict(self):
@@ -68,24 +78,38 @@ class Like(db.Model):
     __tablename__ = 'likes'
 
     if environment == "production":
-        __table_args__ = {'schema': SCHEMA}
+        __table_args__ = (
+            {'schema': SCHEMA},
+            CheckConstraint('(song_id IS NOT NULL AND album_id IS NULL) OR (song_id IS NULL AND album_id IS NOT NULL)',
+                            name='check_like_references_only_one')
+        )
 
     id = db.Column(db.Integer, primary_key=True)
     user_id= db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
-    song_id = db.Column(db.Integer, db.ForeignKey("songs.id"), nullable=False)
-    album_id = db.Column(db.Integer,db.ForeignKey("albums.id"), nullable=False)
+    song_id = db.Column(db.Integer, db.ForeignKey("songs.id"), nullable=True)
+    album_id = db.Column(db.Integer,db.ForeignKey("albums.id"), nullable=True)
     created_at = db.Column(db.DateTime, nullable=False, server_default=func.now())
 
     albums = relationship("Album", back_populates="likes")
     songs = relationship("Song", back_populates="likes")
     users = relationship("User", back_populates="likes")
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "song_id": self.song_id,
+            "album_id": self.album_id,
+        }
+
 
 class Album(db.Model):
     __tablename__ = 'albums'
 
+
     if environment == "production":
         __table_args__ = {'schema': SCHEMA}
+
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False)
@@ -95,11 +119,12 @@ class Album(db.Model):
     # song_id = db.Column(db.Integer, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     duration = db.Column(db.Integer, nullable=False)
-
+   
     users = relationship("User", back_populates="albums")
-    likes = relationship("Like", back_populates="albums")
+    likes = relationship("Like", back_populates="albums", cascade="all, delete-orphan")
     songs = relationship("Song", back_populates="albums")
     images = relationship("Image", back_populates="albums")
+
 
     def to_dict(self):
         return {
@@ -110,23 +135,30 @@ class Album(db.Model):
             "created_at": self.created_at,
             "user_id": self.user_id,
             "duration": self.duration,
-            "images": [image.to_dict() for image in self.images]
+            "images": [image.to_dict() for image in self.images],
+            "songs" :[song.to_dict() for song in self.songs]
         }
+
 
 class Image(db.Model):
     __tablename__ = 'images'
 
+
     if environment == "production":
         __table_args__ = {'schema': SCHEMA}
 
+
     id = db.Column(db.Integer, primary_key=True)
-    song_id = db.Column(db.Integer, db.ForeignKey('songs.id'), nullable=False)
+    song_id = db.Column(db.Integer, db.ForeignKey('songs.id'), nullable=True, unique=True)
     album_id = db.Column(db.Integer, db.ForeignKey('albums.id'), nullable=False)
     url = db.Column(db.String(1000), nullable=False)
 
 
+
+
     songs = relationship("Song", back_populates="images")
     albums = relationship("Album", back_populates="images")
+
 
     def to_dict(self):
         return {
@@ -135,6 +167,7 @@ class Image(db.Model):
             "album_id": self.album_id,
             "url": self.url
         }
+
 
 class PlaylistSong(db.Model):
     __tablename__ = 'playlist_songs'
