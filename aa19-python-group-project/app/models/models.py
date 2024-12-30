@@ -4,6 +4,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from .user import User
 from sqlalchemy import CheckConstraint
+from datetime import datetime
 
 
 class Song(db.Model):
@@ -28,7 +29,7 @@ class Song(db.Model):
 
     users = relationship("User", back_populates="songs")
     albums = relationship("Album", back_populates="songs")
-    playlist_songs = relationship("PlaylistSong", back_populates="songs")
+    # playlist_songs = relationship("PlaylistSong", back_populates="songs")
     likes = relationship("Like", back_populates="songs", cascade="all, delete-orphan")
     images = relationship("Image", back_populates="songs", cascade="all, delete-orphan")
     # playlist = relationship("Playlist", back_populates="songs")
@@ -46,33 +47,6 @@ class Song(db.Model):
             "lyrics": self.lyrics,
             "images": [image.to_dict() for image in self.images]
         }
-
-
-class Playlist(db.Model):
-    __tablename__ = 'playlists'
-
-    if environment == "production":
-        __table_args__ = {'schema': SCHEMA}
-
-    id = db.Column(db.Integer, primary_key=True)
-    user_id= db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    # song_id = db.Column(db.Integer, db.ForeignKey("songs.id"), nullable=False)
-    name = db.Column(db.String(255), nullable=False)
-    created_at = db.Column(db.DateTime, nullable=False, server_default=func.now())
-    updated_at = db.Column(db.DateTime, onupdate=func.now())
-
-    users = relationship("User", back_populates="playlists")
-    # songs = relationship("Song", back_populates="playlists")
-    playlist_songs = relationship("PlaylistSong", back_populates="playlists", cascade="all, delete-orphan")
-
-    def to_dict(self):
-        return {
-        "id": self.id,
-        # "playlist_songs" :[playlist_song.to_dict() for playlist_song in self.playlist_songs],
-        "user_id": self.user_id,
-        "name": self.name,
-        "created_at": self.created_at
-         }
 
 
 class Like(db.Model):
@@ -169,6 +143,32 @@ class Image(db.Model):
             "url": self.url
         }
 
+class Playlist(db.Model):
+    __tablename__ = 'playlists'
+
+    if environment == "production":
+        __table_args__ = {'schema': SCHEMA}
+
+    id = db.Column(db.Integer, primary_key=True)
+    playlist_id = db.Column(db.Integer, unique=True, nullable=False)
+    user_id= db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    name = db.Column(db.String(255), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    users = db.relationship('User', back_populates='playlists')
+    songs = db.relationship('PlaylistSong', back_populates='playlist', cascade='all, delete-orphan')
+
+    def to_dict(self):
+        return {
+        "id": self.id,
+        "user_id": self.user_id,
+        "name": self.name,
+        "created_at": self.created_at,
+        "updated_at": self.updated_at
+         }
+
+
 
 class PlaylistSong(db.Model):
     __tablename__ = 'playlist_songs'
@@ -177,9 +177,14 @@ class PlaylistSong(db.Model):
         __table_args__ = {'schema': SCHEMA}
 
     id = db.Column(db.Integer, primary_key=True)
-    song_id = db.Column(db.Integer, db.ForeignKey('songs.id'), nullable=False)
-    playlist_id = db.Column(db.Integer, db.ForeignKey('playlists.id'), nullable=False)
-    added_at = db.Column(db.DateTime, default=func.now())
+    playlist_id = db.Column(db.Integer, db.ForeignKey('playlists.id'), nullable=False)  # ForeignKey to Playlist model
+    song_name = db.Column(db.String(255), nullable=False)
 
-    songs = relationship("Song", back_populates="playlist_songs")
-    playlists = relationship("Playlist", back_populates="playlist_songs")
+    playlist = db.relationship('Playlist', back_populates='songs')
+
+    def to_dict(self):
+        return {
+        "id": self.id,
+        "playlist_id": self.playlist_id,
+        "song_name": self.song_name,
+         }

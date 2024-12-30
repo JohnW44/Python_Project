@@ -1,26 +1,28 @@
-from app.models import db, Playlist
+from app.models import db, Playlist, environment, SCHEMA
 from sqlalchemy.sql import text
 from datetime import datetime
-from app.models import environment, SCHEMA
+
 
 def seed_playlists():
-    playlist = Playlist(
-        user_id = 2,
-        name = "testing playlist",
-        created_at = datetime.now(),
-    )
-
-    playlist2 = Playlist(
+    playlist1 = Playlist(
+        playlist_id = 1,
         user_id = 1,
-        name = "testing playlist2",
-        created_at = datetime.now(),
+        name = "Top Hits"
     )
-
-
-    db.session.add(playlist)
+    playlist2 = Playlist(
+        playlist_id = 2,
+        user_id = 2,
+        name = "Chill Vibes"
+    )
+    playlist3 = Playlist(
+        playlist_id = 3,
+        user_id = 2,
+        name = "Workout Tunes"
+    )
+    db.session.add(playlist1)
     db.session.add(playlist2)
+    db.session.add(playlist3)
     db.session.commit()
-
 
 def undo_playlist():
     if environment == "production":

@@ -186,7 +186,7 @@ user's information.
         "email": "john.smith@gmail.com",
         "username": "JohnSmith"
       }
-    
+
     ```
 
 * Error response: User already exists with the specified email or username
@@ -510,7 +510,7 @@ Adds and returns a new song when a user is signed in.
 
 
     ```json
- 
+
      {
        "message": "Bad Request",
        "errors": {
@@ -755,7 +755,7 @@ Create and return a new comment for a song specified by id.
 
     ```json
     {
-      "message": "Bad Request", 
+      "message": "Bad Request",
       "errors": {
         "comment": "Comment is required"
       }
@@ -943,7 +943,7 @@ Returns all the songs that belong to an album specified by id.
 
 
     ```json
-   
+
     {
     "Songs": [
         {
@@ -1378,7 +1378,7 @@ Like song based on songId
 * Request
   * Method: POST
   * Route path: /users/:userId/likedsongs
-  * Body: 
+  * Body:
   ```json
   {
     "song_id": 1
@@ -1486,7 +1486,7 @@ Like album based on albumId
       "message": "Album couldn't be found"
     }
    ```
-   
+
 ### Users should be able to unlike a Song
 
 Unlike song based on songId
@@ -1621,17 +1621,17 @@ Returns all the playslists that belong to a userId specified by id.
   * Body:
 
     ```json
-    {
-      "playlist": [
+  {
+    "playlist": [
         {
-          "id": 1,
-          "playlistId": 4,
-          "created_at": "2022-11-19 20:39:36",
-          "name": "Happy Songs Playlist",
-          "updated_at":  "2022-11-19 20:39:36",
+            "created_at": "2024-12-23 20:54:24",
+            "id": 1,
+            "name": "Top Hits",
+            "playlistId": 1,
+            "updated_at": "2024-12-23 20:54:24"
         }
-      ]
-    }
+    ]
+  }
     ```
 
 * Error response: Couldn't find a Playlist with the specified id
@@ -1704,7 +1704,6 @@ Create new playlist
 
 ### Add Songs to an User created Playlist based on Playlist's id
 
-Add Songs based on playListId.
 
 * Require Authentication: True
 * Request
@@ -1756,16 +1755,15 @@ Add Songs based on playListId.
     }
     ```
 
-### Delete a song on users playlist    
-Add Songs based on playListId.
+### Delete a song on users playlist
 
 * Require Authentication: True
 * Request
   * Method: DELETE
   * Route path: /users/:userId/playlists/:playlistId/song/:songId
   * Body: none
-   
-   
+
+
     * Successful Response
   * Status Code: 201
   * Headers:
@@ -1813,4 +1811,3 @@ Deletes an existing playlist, based on PlaylistId.
       "message": "Playlist couldn't be found"
     }
    ```
-
