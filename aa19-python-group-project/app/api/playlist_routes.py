@@ -185,3 +185,5 @@ def delete_playlist(user_id, playlist_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({"message": "Error deleting playlist"}), 500
+
+boi
