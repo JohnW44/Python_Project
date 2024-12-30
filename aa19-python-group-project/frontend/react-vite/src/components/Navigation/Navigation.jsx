@@ -1,25 +1,38 @@
 import { NavLink } from "react-router-dom";
 import ProfileButton from "./ProfileButton";
 import { useSelector } from "react-redux";
+import { FaSearch } from 'react-icons/fa';
 import "./Navigation.css";
 
 
 function Navigation() {
   const sessionUser = useSelector(state => state.session.user);
   return (
-    <ul>
-      <li>
-        <NavLink to="/">Home</NavLink>
-      </li>
-      {sessionUser && (
-        <li>
-          <NavLink to="/songs/new">Add Song</NavLink>
-        </li>
-      )}
-      <li>
+    <nav className="nav-container">
+      <div className="nav-left">
+        <img src="/logo.png" alt="Logo" className="logo" />
+        <span className="site-name">Melody</span>
+      </div>
+      
+      <div className="nav-center">
+        <div className="search-container">
+          <FaSearch className="search-icon" />
+          <input 
+            type="search" 
+            className="search-bar" 
+            placeholder="Search for songs..."
+          />
+      </div>
+      
+      <div className="nav-right">
+        {sessionUser && (
+          <NavLink to="/songs/new" className="nav-link">
+            Add Song
+          </NavLink>
+        )}
         <ProfileButton />
-      </li>
-    </ul>
+      </div>
+    </nav>
   );
 }
 
