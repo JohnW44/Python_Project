@@ -1,3 +1,57 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.nav-container {
+  background-color: rgb(67, 156, 184);
+  padding: 20px;
+  height: 65px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.nav-left{
+  display:flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo { 
+  height: 40px;
+  width:auto;
+}
+
+.site-name {
+  font-size: 24px;
+  font-weight: bold;
+  color: rgb(214, 218, 20)
+}
+
+.search-icon{
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  color: #666;
+  font-size: 16px;
+}
+
+
+.search-bar {
+  width: 500px;
+  height: 55px;
+  border-radius: 50px;
+}
+
+.search-bar::placeholder {
+  font-size: 20px;
+}
+
+
 .profile-dropdown {
   position: absolute;
 }
+
