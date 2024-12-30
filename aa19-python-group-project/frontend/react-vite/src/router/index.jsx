@@ -4,6 +4,8 @@ import SignupFormPage from '../components/SignupFormPage';
 import AddSongForm from '../components/AddSongForm/AddSongForm';
 import Layout from './Layout';
 import LandingPage from '../components/LandingPage/LandingPage';
+import ProfilePage from '../components/ProfilePage/ProfilePage';
+
 
 
 
@@ -27,6 +29,10 @@ export const router = createBrowserRouter([
       {
         path: "songs/new",
         element: <AddSongForm />,
+      },
+      {
+        path: "profile",
+        element: <ProfilePage />,
       },
     ],
   },

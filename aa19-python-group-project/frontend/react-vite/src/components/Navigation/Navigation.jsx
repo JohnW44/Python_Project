@@ -7,6 +7,8 @@ import "./Navigation.css";
 
 function Navigation() {
   const sessionUser = useSelector(state => state.session.user);
+
+
   return (
     <nav className="nav-container">
       <div className="nav-left">
@@ -23,7 +25,7 @@ function Navigation() {
             placeholder="Search for songs..."
           />
       </div>
-      
+      </div>
       <div className="nav-right">
         {sessionUser && (
           <NavLink to="/songs/new" className="nav-link">

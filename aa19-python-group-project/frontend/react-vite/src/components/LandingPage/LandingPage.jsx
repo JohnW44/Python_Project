@@ -23,21 +23,17 @@ const [albums, setAlbums] = useState([]);
     }, []);
 
     return (
-       <div className="landing-page-container">
-           <div className="playlist-sidebar">
-               <h2>Playlists</h2>
-               <ul className="playlist-list">
-               </ul>
-           </div>
+        <>
+        <div className="landing-page-container">
             <div className="main-content">
                <div className="albums-grid">
                    {albums.map(album => (
                        <div key={album.id} className="album-circle">
                        {album.images && album.images.length > 0 && album.images[0].url ? (
                            <img src={album.images[0].url} />
-                       ) : (
-                           <div>No image available</div> 
-                       )}
+                        ) : (
+                            <div>No image available</div> 
+                        )}
                            <p>{album.title}</p>
                            <p>{album.artist}</p>
                        </div>
@@ -45,6 +41,7 @@ const [albums, setAlbums] = useState([]);
                </div>
            </div>
        </div>
+    </>
    );
 }
 
