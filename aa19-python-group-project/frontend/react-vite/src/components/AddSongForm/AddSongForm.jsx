@@ -1,21 +1,21 @@
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+// import { useDispatch } from 'react-redux';
 import { useModal } from '../../context/Modal'
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import './AddSongForm.css'
 
 
-function AddSongForm({ songs }) {
+function AddSongForm() {
     const [title, setTitle] = useState("");
     const [artist, setArtist] = useState("");
     const [releasedDate, setReleasedDate] = useState("");
     const [duration, setDuration] = useState("");
     const [lyrics, setLyrics] = useState("");
-    const [albumId, setAlbumId] = useState("");
-    const [image, setImage] = useState(null);
-    const [imagePreview, setImagePreview] = useState(null);
+    // const [albumId, setAlbumId] = useState("");
+    // const [image, setImage] = useState(null);
+    // const [imagePreview, setImagePreview] = useState(null);
     const [errors, setErrors] = useState({});
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
 
     useEffect(() => {
@@ -56,12 +56,12 @@ function AddSongForm({ songs }) {
         formData.append('Songs[0][lyrics]', lyrics);
 
 
-        if(albumId) {
-            formData.append('Songs[0][album_id]', albumId);
-        }
-        if (image) {
-            formData.append('Images[0][url]', image);
-        }
+        // if(albumId) {
+        //     formData.append('Songs[0][album_id]', albumId);
+        // }
+        // if (image) {
+        //     formData.append('Images[0][url]', image);
+        // }
 
 
         const res = await fetch('/api/songs', {
@@ -129,14 +129,6 @@ function AddSongForm({ songs }) {
                />
             </label>
             <p className="errors">{errors.lyrics}</p>
-            <label>
-               Album
-               <input
-                   type="number"
-                   value={albumId}
-                   onChange={(e) => setAlbumId(e.target.value)}
-               />
-           </label>
            {/* <ImageUpload
                onImageChange={handleImageChange}
                preview={imagePreview}
