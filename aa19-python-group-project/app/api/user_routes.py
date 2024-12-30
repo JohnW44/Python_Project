@@ -23,3 +23,14 @@ def user(id):
     """
     user = User.query.get(id)
     return user.to_dict()
+
+
+@user_routes.route('/test')
+def test_route():
+    """
+    Test route to verify API communication
+    """
+    return jsonify({
+        "message": "Backend connection successful!",
+        "status": 200
+    })
