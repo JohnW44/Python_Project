@@ -1,5 +1,6 @@
 const SET_USER = 'session/setUser';
 const REMOVE_USER = 'session/removeUser';
+const csrfToken = document.cookie.match(/(?:^|; )csrf_token=([^;]*)/)?.[1];
 
 const setUser = (user) => ({
   type: SET_USER,
@@ -11,7 +12,11 @@ const removeUser = () => ({
 });
 
 export const thunkAuthenticate = () => async (dispatch) => {
-	const response = await fetch("/api/auth/");
+	const response = await fetch("/api/auth/", {
+    method: "GET",
+    credentials: "same-origin", 
+  });
+
 	if (response.ok) {
 		const data = await response.json();
 		if (data.errors) {
@@ -23,10 +28,15 @@ export const thunkAuthenticate = () => async (dispatch) => {
 };
 
 export const thunkLogin = (credentials) => async dispatch => {
+  // const csrfToken = document.cookie.match(/(?:^|; )csrf_token=([^;]*)/)?.[1];
+
   const response = await fetch("/api/auth/login", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(credentials)
+    headers: { "Content-Type": "application/json",
+            "X-CSRF-TOKEN": csrfToken
+     },
+    body: JSON.stringify(credentials),
+    credentials: "same-origin",
   });
 
   if(response.ok) {
@@ -43,8 +53,11 @@ export const thunkLogin = (credentials) => async dispatch => {
 export const thunkSignup = (user) => async (dispatch) => {
   const response = await fetch("/api/auth/signup", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(user)
+    headers: { "Content-Type": "application/json",
+            "X-CSRF-TOKEN": csrfToken
+     },
+    body: JSON.stringify(user),
+    credentials: "same-origin",
   });
 
   if(response.ok) {
