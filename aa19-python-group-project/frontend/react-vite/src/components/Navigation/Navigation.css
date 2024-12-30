@@ -31,9 +31,6 @@ body, html {
 }
 
 .search-icon{
-  position: absolute;
-  left: 15px;
-  top: 50%;
   color: #666;
   font-size: 16px;
 }
