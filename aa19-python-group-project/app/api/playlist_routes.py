@@ -186,4 +186,4 @@ def delete_playlist(user_id, playlist_id):
         db.session.rollback()
         return jsonify({"message": "Error deleting playlist"}), 500
 
-
+boi
