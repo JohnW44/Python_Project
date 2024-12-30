@@ -10,6 +10,7 @@ function Navigation() {
 
 
   return (
+    <>
     <nav className="nav-container">
       <div className="nav-left">
         <img src="/logo.png" alt="Logo" className="logo" />
@@ -23,7 +24,7 @@ function Navigation() {
             type="search" 
             className="search-bar" 
             placeholder="Search for songs..."
-          />
+            />
       </div>
       </div>
       <div className="nav-right">
@@ -35,6 +36,14 @@ function Navigation() {
         <ProfileButton />
       </div>
     </nav>
+    {sessionUser && (
+      <div className="side-bar">
+        <NavLink to="/playlists" className="side-nav">
+        Playlists
+        </NavLink>
+      </div>
+    )}
+        </>
   );
 }
 
