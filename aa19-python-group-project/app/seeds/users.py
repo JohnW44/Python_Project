@@ -6,7 +6,7 @@ from sqlalchemy.sql import text
 def seed_users():
     demo = User(
         username='Demo', email='demo@aa.io', password='password', first_name='Demo',
-        last_name='User')
+        last_name='User', profile_image = "https://m.media-amazon.com/images/M/MV5BNzBmYjBjODktMzE1ZC00NDY1LWJiYzktMWFkM2VjZDVjZTA2XkEyXkFqcGc@._V1_.jpg")
     marnie = User(
         username='marnie', email='marnie@aa.io', password='password', first_name='Marnie',
         last_name='Smarnie')
