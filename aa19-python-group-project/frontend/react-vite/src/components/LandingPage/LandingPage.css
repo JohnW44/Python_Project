@@ -1,14 +1,7 @@
 .landing-page-container {
    display: flex;
-   height: calc(100vh - 60px);
+   /* height: calc(100vh - 60px); */
    padding-top: 60px;
-}
-
-.playlist-sidebar {
-   width: 250px;
-   background-color: #f5f5f5;
-   padding: 20px;
-   border-right: 1px solid #ddd;
 }
 
 .main-content {
@@ -21,6 +14,7 @@
    grid-template-columns: repeat(4, 1fr);
    gap: 20px;
    padding: 20px;
+   padding-left: 25%;
 }
 
 .album-circle {
@@ -48,7 +42,4 @@
    cursor: pointer;
 }
 
-.playlist-list {
-   list-style: none;
-   padding: 0;
-}
+

@@ -30,6 +30,7 @@ body, html {
   color: rgb(214, 218, 20)
 }
 
+
 .search-icon{
   color: #666;
   font-size: 16px;
@@ -38,16 +39,39 @@ body, html {
 
 .search-bar {
   width: 500px;
-  height: 55px;
+  height: auto;
   border-radius: 50px;
 }
 
 .search-bar::placeholder {
-  font-size: 20px;
+  font-size: 15px;
 }
 
 
 .profile-dropdown {
-  position: absolute;
+  font-size: large;
+  /* margin-top: 25%; */
+  list-style-type: none;
+  border: 1px solid #ccc;
+  background-color: blue;
+  padding-top: 20%;
 }
 
+.profile-dropdown li {
+  padding: 8px;
+  list-style: none;
+  border-radius: 5%;
+  border-color: red;
+}
+
+.side-bar {
+  position: fixed; 
+  top: 105px;   
+  width: 15%;
+  height: calc(100vh - 105px);
+  background-color: rgb(96, 255, 130);
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
