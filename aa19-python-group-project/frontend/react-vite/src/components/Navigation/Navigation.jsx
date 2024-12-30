@@ -23,7 +23,7 @@ function Navigation() {
             placeholder="Search for songs..."
           />
       </div>
-      
+      </div>
       <div className="nav-right">
         {sessionUser && (
           <NavLink to="/songs/new" className="nav-link">

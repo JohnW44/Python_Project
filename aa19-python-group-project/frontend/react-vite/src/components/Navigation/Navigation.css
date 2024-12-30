@@ -11,7 +11,6 @@ body, html {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
 }
 
 .nav-left{
@@ -32,9 +31,6 @@ body, html {
 }
 
 .search-icon{
-  position: absolute;
-  left: 15px;
-  top: 50%;
   color: #666;
   font-size: 16px;
 }
