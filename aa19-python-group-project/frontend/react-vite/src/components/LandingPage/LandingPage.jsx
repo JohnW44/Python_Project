@@ -12,7 +12,7 @@ const [albums, setAlbums] = useState([]);
 
             if (response.ok) {
                 const data = await response.json(); 
-                console.log('Fetched albums:', data);
+                // console.log('Fetched albums:', data);
                 if (data.Albums) {
                     setAlbums(data.Albums);
                 }

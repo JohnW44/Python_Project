@@ -14,6 +14,9 @@ const removeUser = () => ({
 export const thunkAuthenticate = () => async (dispatch) => {
 	const response = await fetch("/api/auth/", {
     method: "GET",
+    headers: { "Content-Type": "application/json",
+      "X-CSRF-TOKEN": csrfToken
+},
     credentials: "same-origin", 
   });
 
