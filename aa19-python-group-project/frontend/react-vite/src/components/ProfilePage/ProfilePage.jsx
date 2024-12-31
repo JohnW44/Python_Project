@@ -11,26 +11,26 @@ const user = useSelector(state => state.session.user)
 // const dispatch = useDispatch();
 
 useEffect(() => {
-    console.log(`${user.id}`)
-    fetch(`/users/${user.id}/likedsongs`, {
-        credentials: 'same-origin'
+    console.log('useEffect here')
+    fetch(`/api/users/${user.id}/likedsongs`)
+    .then((response) => {
+        console.log('Songs response received:', response.status); 
+    return response.json()
     })
-        .then((response) => response.json())
         .then((data) => {
+            console.log('Songs data received:', data);
             if (data.Songs) {
-                setLikedSongs(data.Songs); 
+                setLikedSongs(data.Songs || []); 
             }
         });
-    fetch(`http://localhost:5000/users/${user.id}/likedalbums`)
+    fetch(`/api/users/${user.id}/likedalbums`)
         .then((response) => response.json())
         .then((data) => {
             if (data.Albums) {
-                setLikedAlbums(data.Albums); 
+                setLikedAlbums(data.Albums || []); 
             }
         });
 }, [user.id]);
-
-
 
     return (
             <div className='profilebox'>

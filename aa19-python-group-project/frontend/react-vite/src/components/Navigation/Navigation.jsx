@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { FaSearch } from 'react-icons/fa';
 import palm from '../../../../../images/palm.png'
 import "./Navigation.css";
-import LoginFormModal from "../LoginFormModal";
+// import LoginFormModal from "../LoginFormModal";
 
 
 function Navigation() {
