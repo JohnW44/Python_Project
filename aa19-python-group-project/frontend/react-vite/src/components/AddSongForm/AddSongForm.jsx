@@ -11,12 +11,19 @@ function AddSongForm() {
     const [releasedDate, setReleasedDate] = useState("");
     const [duration, setDuration] = useState("");
     const [lyrics, setLyrics] = useState("");
-    // const [albumId, setAlbumId] = useState("");
-    // const [image, setImage] = useState(null);
-    // const [imagePreview, setImagePreview] = useState(null);
+    const [image, setImage] = useState(null);
+    const [imagePreview, setImagePreview] = useState(null);
     const [errors, setErrors] = useState({});
-    // const navigate = useNavigate();
-
+  
+    
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setImage(file);
+            const previewUrl = URL.createObjectURL(file);
+            setImagePreview(previewUrl);
+        }
+    };
 
     useEffect(() => {
         const errObj = {};
@@ -59,10 +66,9 @@ function AddSongForm() {
         // if(albumId) {
         //     formData.append('Songs[0][album_id]', albumId);
         // }
-        // if (image) {
-        //     formData.append('Images[0][url]', image);
-        // }
-
+        if (image) {
+            formData.append('Images[0][url]', image);
+        }
 
         const res = await fetch('/api/songs', {
             method: 'POST',
@@ -75,6 +81,7 @@ function AddSongForm() {
             const data = await res.json();
             setErrors(data.errors || {})
         }
+
     };
     return (
         <form className='song-form' onSubmit={onSubmit}>
@@ -128,14 +135,25 @@ function AddSongForm() {
                    onChange={(e) => setLyrics(e.target.value)}
                />
             </label>
-            <p className="errors">{errors.lyrics}</p>
-           {/* <ImageUpload
-               onImageChange={handleImageChange}
-               preview={imagePreview}
-           />
-           <p className="errors">{errors.image}</p> */}
+            <p className='errors'>{errors.lyrics}</p>
+           <label>
+            Song Image
+            <input
+                type='file'
+                accept='image/*'
+                onChange={handleImageChange}
+                />
+           </label>
+           {imagePreview && (
+            <div className='image-preview'>
+                <img 
+                    src={imagePreview}
+                    alt='Preview'
+                />
+            </div>
+           )}
             <button
-               type="submit"
+               type='submit'
                disabled={Object.values(errors).length}
            >
             Add Song

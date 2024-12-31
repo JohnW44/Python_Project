@@ -2,7 +2,9 @@ import { NavLink } from "react-router-dom";
 import ProfileButton from "./ProfileButton";
 import { useSelector } from "react-redux";
 import { FaSearch } from 'react-icons/fa';
+import palm from '../../../../../images/palm.png'
 import "./Navigation.css";
+import LoginFormModal from "../LoginFormModal";
 
 
 function Navigation() {
@@ -13,8 +15,12 @@ function Navigation() {
     <>
     <nav className="nav-container">
       <div className="nav-left">
-        <img src="/logo.png" alt="Logo" className="logo" />
-        <span className="site-name">Melody</span>
+      <NavLink to="/" className="site-name">
+          <img src={palm} alt="Logo" className="Logo"/>
+        </NavLink>
+        <NavLink to="/" className='site-name'>
+          Melody
+        </NavLink>
       </div>
       
       <div className="nav-center">
