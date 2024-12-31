@@ -36,7 +36,7 @@ def load_user(id):
 app.cli.add_command(seed_commands)
 
 app.config.from_object(Config)
-csrf = CSRFProtect(app)
+# csrf = CSRFProtect(app)
 # print("SECRET_KEY:", app.config.get('SECRET_KEY'))
 app.register_blueprint(user_routes, url_prefix='/api/users')
 app.register_blueprint(auth_routes, url_prefix='/api/auth')
@@ -49,7 +49,7 @@ db.init_app(app)
 Migrate(app, db)
 
 # Application Security
-CORS(app)
+CORS(app, supports_credentials=True)
 
 
 # Since we are deploying with Docker and Flask,

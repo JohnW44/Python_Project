@@ -1,8 +1,8 @@
-"""empty message
+"""create tables
 
-Revision ID: 6e5e35038d74
+Revision ID: ccd6c6d104ba
 Revises: 
-Create Date: 2024-12-20 18:11:49.083688
+Create Date: 2024-12-30 16:53:20.252444
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '6e5e35038d74'
+revision = 'ccd6c6d104ba'
 down_revision = None
 branch_labels = None
 depends_on = None
