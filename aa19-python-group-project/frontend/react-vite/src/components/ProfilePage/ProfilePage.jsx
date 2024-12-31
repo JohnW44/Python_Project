@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import './ProfilePage.css'
 // import { thunkAuthenticate } from '../../redux/session';
 import {useSelector} from 'react-redux';
+import Songplayer from '../Songplayer/Songplayer';
 
 function ProfilePage(){
 
@@ -9,6 +10,7 @@ const [likedSongs, setLikedSongs] = useState([])
 const [likedAlbums, setLikedAlbums] = useState([])
 const user = useSelector(state => state.session.user)
 // const dispatch = useDispatch();
+const [songLink, setSongLink] = useState()
 
 useEffect(() => {
     console.log('useEffect here')
@@ -32,6 +34,12 @@ useEffect(() => {
         });
 }, [user.id]);
 
+const handleSong = (song) => {
+    if(song.link) {
+        setSongLink(song.link)
+    }
+}
+
     return (
             <div className='profilebox'>
                 <h1>Profile Page</h1>
@@ -45,21 +53,25 @@ useEffect(() => {
                     </div>
                 </div>
 
-            <div className="liked-section">
-                <h2>Loved Songs</h2>
-                {likedSongs.length > 0 ? (
-                    <ul>
-                        {likedSongs.map((song) => (
-                            <li key={song.id}>
-                                <p>{song.title} - {song.artist}</p>
-                                <p>Duration: {song.duration} seconds</p>
-                            </li>
-                        ))}
-                    </ul>
-                ) : (
-                    <p>No liked songs.</p>
-                )}
-            </div>
+                <div className="liked-section">
+                    <h2>Loved Songs</h2>
+                    {likedSongs.length > 0 ? (
+                        <ul>
+                            {likedSongs.map((song) => (
+                                <li key={song.id}>
+                                    <div>
+                                        <p>{song.title} - {song.artist}</p>
+                                            <p>Duration: {song.duration} seconds</p>
+                                            <button onClick={() => handleSong(song)}>Play</button>
+                                            {songLink === song.link && <Songplayer songLink={song.link} />}
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                    ) : (
+                        <p>No liked songs.</p>
+                    )}
+                </div>
 
             <div className="liked-section">
                 <h2>Loved Albums</h2>

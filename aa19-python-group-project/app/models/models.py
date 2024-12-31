@@ -23,6 +23,7 @@ class Song(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     duration = db.Column(db.Integer, nullable=False)
     lyrics = db.Column(db.String(50000))
+    link = db.Column(db.String(500), nullable= False)
 
 
     users = relationship("User", back_populates="songs")
@@ -44,7 +45,8 @@ class Song(db.Model):
             "duration": self.duration,
             "lyrics": self.lyrics,
             "likes": [like.to_dict() for like in self.likes],
-            "images": [image.to_dict() for image in self.images]
+            "images": [image.to_dict() for image in self.images],
+            "link": self.link
         }
 
 
