@@ -1,16 +1,24 @@
 import { NavLink } from "react-router-dom";
+import { useEffect } from "react";
 import ProfileButton from "./ProfileButton";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { FaSearch } from 'react-icons/fa';
 import palm from '../../../../../images/palm.png'
 import "./Navigation.css";
+import { fetchSongs } from "../../redux/songs";
 // import LoginFormModal from "../LoginFormModal";
 
 
 function Navigation() {
   const sessionUser = useSelector(state => state.session.user);
+  const dispatch = useDispatch();
+  const allSongs = useSelector(state => state.songs.allSongs);
 
+  useEffect(() => {
+    dispatch(fetchSongs());
+  }, [dispatch]);
 
+ 
   return (
     <>
     <nav className="nav-container">
@@ -47,6 +55,15 @@ function Navigation() {
         <NavLink to="/playlists" className="side-nav">
         Playlists
         </NavLink>
+        <div className="songs-list">
+          {Object.values(allSongs).map(song => (
+            <div key={song.id} className="song-item">
+              <NavLink to={`/songs/${song.id}`} className='song-link'>
+              {song.title}
+              </NavLink>
+              </div>
+          ))}
+        </div>
       </div>
     )}
         </>

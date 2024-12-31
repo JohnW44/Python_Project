@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react';
-// import { useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { addSongThunk } from '../../redux/songs';
 import { useModal } from '../../context/Modal'
 // import { useNavigate } from 'react-router-dom';
 import './AddSongForm.css'
 
 
+
 function AddSongForm() {
+
     const [title, setTitle] = useState("");
     const [artist, setArtist] = useState("");
     const [releasedDate, setReleasedDate] = useState("");
@@ -14,8 +17,9 @@ function AddSongForm() {
     const [image, setImage] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
     const [errors, setErrors] = useState({});
+   
   
-    
+
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -52,6 +56,7 @@ function AddSongForm() {
 
     const { closeModal } = useModal();
 
+    const dispatch = useDispatch();
 
     const onSubmit = async (e) => {
         e.preventDefault();
@@ -70,17 +75,15 @@ function AddSongForm() {
             formData.append('Images[0][url]', image);
         }
 
-        const res = await fetch('/api/songs', {
-            method: 'POST',
-            body: formData,
-            credentials: 'include'
-        })
-        if (res.ok) {
+        const response = await dispatch(addSongThunk(formData));
+
+        if (!response.error) {
             closeModal();
         } else {
-            const data = await res.json();
-            setErrors(data.errors || {})
+            setErrors(response.errors || {});
         }
+    
+
 
     };
     return (
