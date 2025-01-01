@@ -27,14 +27,20 @@ def songs_in_album(albumId):
     """
     Query for all albums and return the songs in a list of dictoinaires.
     """
-    album = Album.query.options(joinedload(Album.songs)).get(albumId)
+    album = Album.query.options(
+        joinedload(Album.songs),
+        joinedload(Album.images)
+    ).get(albumId)
 
 
     if not album:
         return jsonify({"message": "No Album found"}),404
 
 
-    return jsonify({"Songs": [song.to_dict() for song in album.songs]})
+    return jsonify({
+                    "Album": album.to_dict(),
+                    "Songs": [song.to_dict() for song in album.songs]
+                    })
 
 
 @albums_routes.route('users/<userId>', methods =['GET'])
