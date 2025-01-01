@@ -1447,13 +1447,13 @@ Returns all the playslists that belong to a userId specified by id.
     ```json
     {
       "playlist": [
-        {
-          "id": 1,
-          "playlistId": 4,
-          "created_at": "2022-11-19 20:39:36",
-          "name": "Happy Songs Playlist",
-          "updated_at":  "2022-11-19 20:39:36",
-        }
+       {
+        "created_at": "Wed, 01 Jan 2025 22:01:06 GMT",
+        "id": 1,
+        "name": "Top Hits",
+        "updated_at": "Wed, 01 Jan 2025 22:01:06 GMT",
+        "user_id": 1
+       },
       ]
     }
     ```
