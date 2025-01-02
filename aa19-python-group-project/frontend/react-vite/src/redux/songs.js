@@ -30,19 +30,23 @@ export const fetchSongs = () => async (dispatchEvent) => {
 
 //ADD A SONG
 export const addSongThunk = (formData) => async (dispatch) => {
-    console.log("Sending request to /api/songs");
-    
+    console.log("Starting song upload...");
+    console.log("FormData contents:");
+    for (let pair of formData.entries()) {
+        console.log(pair[0] + ': ' + pair[1]);
+    }
+
     const res = await fetch('/api/songs/', {
         method: 'POST',
         body: formData,
-        credentials: 'include'
+        credentials: 'include',
     });
 
     console.log("Response status:", res.status);
-
+    
     if (res.ok) {
         const song = await res.json();
-        console.log("Response data:", song);
+        console.log("Success response:", song);
         dispatch(addSong(song.Songs));
         return song;
     } else {

@@ -39,26 +39,39 @@ def add_song():
     """
     Adds and Returns a new song when a user is signed in
     """
-    data = request.json
+    print("Received request")
+    print("Files:", request.files)
+    print("Form data:", request.form)
+    print("JSON:", request.json)
 
+    if "Songs[0][audio_file]" not in request.files:
+        print("No audio file found in request")
+        return jsonify({"errors": "audio file required"}), 400
 
-    if not data.get('Songs'):
-        return jsonify({ "message": "Bad Request"}), 400
+    if not request.form:
+        print("No form data found")
+        return jsonify({"errors": "song data required"}), 400
 
-    if "audio_file" not in request.files:
-         return jsonify({"errors": "audio file required"}), 400
-    
-    audio_file = request.files["audio_file"]
+    audio_file = request.files["Songs[0][audio_file]"] 
+    if not audio_file.filename:
+        print("Empty audio filename")
+        return jsonify({"errors": "valid audio file required"}), 400
+
     audio_file.filename = get_unique_filename(audio_file.filename)
     upload = upload_file_to_s3(audio_file)
 
     if "url" not in upload:
          return jsonify({"errors": upload}), 400
 
-    song_data = data['Songs'][0]
-    song_data['user_id'] = current_user.id
-    song_data['released_date'] = datetime.strptime(song_data['released_date'], '%Y-%m-%d').date();
-    song_data['audio_url'] = upload["url"]
+    song_data = {
+        'title': request.form.get('Songs[0][title]'),
+        'artist': request.form.get('Songs[0][artist]'),
+        'released_date': datetime.strptime(request.form.get('Songs[0][released_date]'), '%Y-%m-%d').date(),
+        'duration': request.form.get('Songs[0][duration]'),
+        'lyrics': request.form.get('Songs[0][lyrics]'),
+        'audio_url': upload["url"],
+        'user_id': current_user.id
+    }
     
 
     new_song = Song(**song_data)
@@ -67,10 +80,10 @@ def add_song():
 
 
    
-    if data.get('Images'):
+    if 'Images[0][url]' in request.form:
         new_image = Image(
             song_id=new_song.id,
-            url=data['Images'][0]['url']
+            url=request.form['Images[0][url]']
         )
         db.session.add(new_image)
         db.session.commit()
