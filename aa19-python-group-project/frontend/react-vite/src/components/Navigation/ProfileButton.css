@@ -1,0 +1,48 @@
+.profile-dropdown {
+    position: absolute;
+    top: 40px; 
+    right: 0;
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    width: 200px;
+    padding: 10px 0;
+    list-style: none;
+    margin: 0;
+  }
+
+.profile-dropdown li {
+  padding: 10px 15px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+
+.profile-dropdown li:hover {
+  background-color: red
+}
+.profile-dropdown a {
+  text-decoration: none;
+  width: 200%;
+  padding: 10px 15px;
+  background-color: #ff4d4d; 
+  color: black;
+  /* border: none; */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.profile-dropdown button {
+  width: 100%;
+  padding: 10px 15px;
+  background-color: #ff4d4d; 
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+/* Hover effect for logout button */
+.profile-dropdown button:hover {
+  background-color: #ff3333;
+}
+
