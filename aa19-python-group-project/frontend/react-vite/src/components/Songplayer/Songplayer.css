@@ -1,0 +1,26 @@
+/* src/components/Songplayer/Songplayer.css
+.player {
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+  }
+  
+  .controls {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+  
+  .controls button {
+    padding: 8px 12px;
+    background-color: #6200ea;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .controls button:hover {
+    background-color: #3700b3;
+  }
+   */
