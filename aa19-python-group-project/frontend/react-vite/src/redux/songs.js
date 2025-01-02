@@ -30,46 +30,29 @@ export const fetchSongs = () => async (dispatchEvent) => {
 
 //ADD A SONG
 export const addSongThunk = (formData) => async (dispatch) => {
-    console.log("Sending request to /api/songs");
-    
-    const songData = {
-        Songs: [{
-            title: formData.get('Songs[0][title]'),
-            artist: formData.get('Songs[0][artist]'),
-            released_date: formData.get('Songs[0][released_date]'),
-            duration: formData.get('Songs[0][duration]'),
-            lyrics: formData.get('Songs[0][lyrics]')
-        }]
-    };
-
-    const imageFile = formData.get('Images[0][url]');
-    if (imageFile) {
-        songData.Images = [{
-            url: imageFile.name
-        }];
+    console.log("Starting song upload...");
+    console.log("FormData contents:");
+    for (let pair of formData.entries()) {
+        console.log(pair[0] + ': ' + pair[1]);
     }
-
-    console.log("Sending song data:", songData);
 
     const res = await fetch('/api/songs/', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(songData),
-        credentials: 'include'
+        body: formData,
+        credentials: 'include',
     });
 
     console.log("Response status:", res.status);
-
+    
     if (res.ok) {
         const song = await res.json();
-        console.log("Response data:", song);
-        dispatch(addSong(song.Songs[0]));
+        console.log("Success response:", song);
+        dispatch(addSong(song.Songs));
         return song;
     } else {
-        console.log("Error response:", await res.text());
-        return { error: true, errors: { _error: "Failed to add song" } };
+        const errorData = await res.json();
+        console.log("Error response:", errorData);
+        return { error: true, errors: errorData };
     }
 };
 
@@ -88,8 +71,7 @@ const songsReducer = (state = initialState, action) => {
         }
         case ADD_SONG: {
             let newState = { ...state };
-            // newState.allSongs = { ...state.allSongs };
-            newState.allSongs.push(action.payload)
+            newState.allSongs[action.payload.id] = action.payload;
             return newState;
         }
         default: return state;

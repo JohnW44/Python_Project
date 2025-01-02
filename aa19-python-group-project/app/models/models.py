@@ -24,6 +24,7 @@ class Song(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     duration = db.Column(db.Integer, nullable=False)
     lyrics = db.Column(db.String(50000))
+    audio_file = db.Column(db.String(500), nullable=False)
 
 
     users = relationship("User", back_populates="songs")
@@ -44,6 +45,7 @@ class Song(db.Model):
             "user_id": self.user_id,
             "duration": self.duration,
             "lyrics": self.lyrics,
+            "audio_file": self.audio_file,
             "likes": [like.to_dict() for like in self.likes],
             "images": [image.to_dict() for image in self.images]
         }
