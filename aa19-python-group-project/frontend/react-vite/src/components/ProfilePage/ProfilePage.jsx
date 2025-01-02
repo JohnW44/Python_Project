@@ -11,14 +11,18 @@ const user = useSelector(state => state.session.user)
 // const dispatch = useDispatch();
 
 useEffect(() => {
-    console.log('useEffect here')
+    if (!user || !user.id) {
+        return;
+    }
+
+    // console.log('useEffect here')
     fetch(`/api/users/${user.id}/likedsongs`)
     .then((response) => {
-        console.log('Songs response received:', response.status); 
+        // console.log('Songs response received:', response.status); 
     return response.json()
     })
         .then((data) => {
-            console.log('Songs data received:', data);
+            // console.log('Songs data received:', data);
             if (data.Songs) {
                 setLikedSongs(data.Songs || []); 
             }
@@ -30,7 +34,7 @@ useEffect(() => {
                 setLikedAlbums(data.Albums || []); 
             }
         });
-}, [user.id]);
+}, [user]);
 
     return (
             <div className='profilebox'>

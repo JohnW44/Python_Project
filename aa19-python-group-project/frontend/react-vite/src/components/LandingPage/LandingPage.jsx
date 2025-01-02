@@ -30,19 +30,21 @@ const navigate = useNavigate();
             <div className="main-content">
                <div className="albums-grid">
                    {albums.map(album => (
-                     <div 
+                    <div 
                      key={album.id} 
-                     className="album-circle"
+                     className="album-card"
                      onClick={() => navigate(`/albums/${album.id}`)}
-                 >
+                        >
                      {album.images && album.images.length > 0 && album.images[0].url ? (
-                         <img src={album.images[0].url} alt={album.title} />
+                         <img src={album.images[0].url} alt={album.title} className='album-card-image' />
                      ) : (
                          <div>No image available</div> 
                      )}
-                     <p>{album.title}</p>
-                     <p>{album.artist}</p>
-                       </div>
+                        <div className='album-card-details'> 
+                            <p className= "album-title"> {album.title}</p>
+                            <p className='album-artist'>{album.artist}</p>
+                        </div>
+                    </div>
                    ))}
                </div>
            </div>
