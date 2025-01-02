@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
 import { thunkSignup } from "../../redux/session";
-import "./SignupForm.css";
+import "./SignupFormModal.css";
 
 function SignupFormModal() {
   const dispatch = useDispatch();
@@ -12,6 +12,7 @@ function SignupFormModal() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [firstname, setFirstname] = useState("")
   const [lastname, setLastname] = useState("")
+  const [profileImage, setProfileImage] = useState("")
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
 
@@ -30,8 +31,9 @@ function SignupFormModal() {
         email,
         username,
         password,
-        first_name:firstname,
+        first_name: firstname,
         last_name: lastname,
+        profile_image: profileImage,
       })
     );
 
@@ -46,7 +48,7 @@ function SignupFormModal() {
     <>
       <h1>Sign Up</h1>
       {errors.server && <p>{errors.server}</p>}
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="form">
         <label>
           Email
           <input
@@ -107,7 +109,18 @@ function SignupFormModal() {
             required
           />
         </label>
-        {errors.lastName && <p>{errors.lastName}</p>} 
+
+        {errors.lastName && <p>{errors.lastName}</p>}
+        <label>
+          Profile Image URL
+          <input
+            type="text"
+            value={profileImage}
+            onChange={(e) => setProfileImage(e.target.value)}
+          />
+        </label>
+        {errors.profile_image && <p>{errors.profile_image}</p>} 
+
         <button type="submit">Sign Up</button>
       </form>
     </>
