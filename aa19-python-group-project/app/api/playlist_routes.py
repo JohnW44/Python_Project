@@ -39,50 +39,48 @@ def get_user_playlists(user_id):
 
 
 
-@playlists_routes.route('/users/<int:user_id>/playlists/<int:playlist_id>', methods=["POST"])
+@playlists_routes.route('/playlist', methods=["POST"])
 @login_required
-def create_playlist_for_user(user_id, playlist_id):
+def create_playlist():
     """
-   Create a new playlist based on user Id
+    Creates a playlist if the user is logged in, and checks for authorization and existence of the user.
     """
+
+    data = request.json
+    user_id = data.get('user_id') 
+    name = data.get('name')
+    playlist_id = data.get('playlist_id')
+
+
     if user_id != current_user.id:
         return jsonify({"message": "Unauthorized"}), 403
 
+
     user = User.query.get(user_id)
     if not user:
-        return jsonify({"message": 'User not found'}), 404
+        return jsonify({"message": "User not found"}), 404
 
-    existing_playlist = Playlist.query.get(playlist_id)
-    if not existing_playlist:
-        return jsonify({"message": "Playlist Not Created"}), 404
 
-    try:
-        new_playlist = Playlist(
-            playlist_id=playlist_id,
-            user_id=user_id,
-            name=f"{existing_playlist.name} - Copy",
-            created_at=existing_playlist.created_at,
-            updated_at=existing_playlist.updated_at
-        )
+    existing_playlist = Playlist.query.filter_by(user_id=user_id, name=name).first()
+    if existing_playlist:
+        return jsonify({"message": "Playlist already exists for this user"}), 400
 
-        db.session.add(new_playlist)
-        db.session.commit()
 
-        return jsonify({
-            "playlist": [
-                {
-                    "id": new_playlist.id,
-                    "playlistId": new_playlist.playlist_id,
-                    "name": new_playlist.name,
-                    "created_at": new_playlist.created_at.strftime('%Y-%m-%d %H:%M:%S'),
-                    "updated_at": new_playlist.updated_at.strftime('%Y-%m-%d %H:%M:%S')
-                }
-            ]
-        }), 201
+    if not name:
+        return jsonify({"message": "Please enter required fields"}), 400
 
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({"message": "Playlist Not Created"}), 500
+    new_playlist = Playlist(
+        user_id=user_id,
+        name=name,
+        playlist_id= playlist_id,
+        created_at=datetime.now(),
+        updated_at=datetime.now()
+    )
+
+    db.session.add(new_playlist)
+    db.session.commit()
+
+    return jsonify({"message": "Playlist successfully created", "Playlist": new_playlist.to_dict()}), 200
 
 @playlists_routes.route('/users/<int:user_id>/playlists/<int:playlist_id>/song/<int:song_id>', methods=["POST"])
 @login_required
@@ -185,3 +183,5 @@ def delete_playlist(user_id, playlist_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({"message": "Error deleting playlist"}), 500
+
+
