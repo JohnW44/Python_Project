@@ -16,6 +16,7 @@ function AddSongForm() {
     const [lyrics, setLyrics] = useState("");
     const [image, setImage] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
+    const [audioFile, setAudioFile] = useState(null);
     const [errors, setErrors] = useState({});
    
   
@@ -26,6 +27,13 @@ function AddSongForm() {
             setImage(file);
             const previewUrl = URL.createObjectURL(file);
             setImagePreview(previewUrl);
+        }
+    };
+
+    const handleAudioChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setAudioFile(file);
         }
     };
 
@@ -50,8 +58,11 @@ function AddSongForm() {
         if (lyrics.length > 50000) {
             errObj.lyrics = "Lyrics cannot exceed 50,000 characters";
         }
+        if (!audioFile) {
+            errObj.audioFile = "Audio file is required";
+        }
         setErrors(errObj);
-    }, [title, artist, releasedDate, duration, lyrics]);
+    }, [title, artist, releasedDate, duration, lyrics, audioFile]);
 
 
     const { closeModal } = useModal();
@@ -74,6 +85,9 @@ function AddSongForm() {
         if (image) {
             formData.append('Images[0][url]', image);
         }
+        if (audioFile) {
+            formData.append('Songs[0][audio_file]', audioFile);
+        }
 
         const response = await dispatch(addSongThunk(formData));
 
@@ -87,7 +101,7 @@ function AddSongForm() {
 
     };
     return (
-        <form className='song-form' onSubmit={onSubmit}>
+        <form className='song-form' onSubmit={onSubmit} encType="multipart/form-data">
             <h2>Add a New Song</h2>
 
 
@@ -155,6 +169,16 @@ function AddSongForm() {
                 />
             </div>
            )}
+            <label>
+                Audio File
+                <input
+                    type='file'
+                    accept='.mp3,.wav,.ogg,.m4a'
+                    onChange={handleAudioChange}
+                    required
+                />
+            </label>
+            <p className='errors'>{errors.audioFile}</p>
             <button
                type='submit'
                disabled={Object.values(errors).length}
