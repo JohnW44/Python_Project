@@ -28,6 +28,7 @@ wtforms = "==3.0.1"
 zipp = "==3.17.0"
 flask-cors = "*"
 flask-dotenv = "*"
+boto3 = "*"
 
 [dev-packages]
 

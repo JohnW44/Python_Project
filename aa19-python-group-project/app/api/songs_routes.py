@@ -2,15 +2,16 @@ from flask import Blueprint, jsonify, request
 from app.models import Song, Image
 from flask_login import login_required, current_user
 from datetime import datetime
+from app.api.melody_songs_aws import (
+     upload_file_to_s3,
+     get_unique_filename
+)
 from app import db  
 
 
 
 
 songs_routes = Blueprint('songs_routes', __name__)
-
-
-
 
 @songs_routes.route('/', methods=['GET'])
 def songs():
@@ -19,8 +20,6 @@ def songs():
     """
     songs = Song.query.all()
     return jsonify({'Songs': [song.to_dict() for song in songs]})
-
-
 
 
 @songs_routes.route('/<int:songId>', methods=['GET'])
@@ -46,16 +45,23 @@ def add_song():
     if not data.get('Songs'):
         return jsonify({ "message": "Bad Request"}), 400
 
+    if "audio_file" not in request.files:
+         return jsonify({"errors": "audio file required"}), 400
+    
+    audio_file = request.files["audio_file"]
+    audio_file.filename = get_unique_filename(audio_file.filename)
+    upload = upload_file_to_s3(audio_file)
 
+    if "url" not in upload:
+         return jsonify({"errors": upload}), 400
 
     song_data = data['Songs'][0]
     song_data['user_id'] = current_user.id
     song_data['released_date'] = datetime.strptime(song_data['released_date'], '%Y-%m-%d').date();
+    song_data['audio_url'] = upload["url"]
     
 
     new_song = Song(**song_data)
-
-
     db.session.add(new_song)
     db.session.commit()
 
@@ -71,8 +77,6 @@ def add_song():
     return jsonify({'Songs': new_song.to_dict()}), 201
 
 
-
-
 @songs_routes.route('/<int:songId>', methods=['PUT'])
 @login_required
 def update_song(songId):
@@ -81,27 +85,36 @@ def update_song(songId):
     """
     data = request.json
 
-
     song = Song.query.get(songId)
     if not song:
-            return jsonify({"error": "Song couldn't be found"}), 404
+        return jsonify({"error": "Song couldn't be found"}), 404
     if song.user_id != current_user.id:
-            return jsonify({"error": "Unauthorized"}), 403
+        return jsonify({"error": "Unauthorized"}), 403
     if not data.get('Songs'):
-            return jsonify({"message": "Bad Request"}), 400
-   
+        return jsonify({"message": "Bad Request"}), 400
+
+    if "audio_file" in request.files:
+        audio_file = request.files["audio_file"]
+        audio_file.filename = get_unique_filename(audio_file.filename)
+        upload = upload_file_to_s3(audio_file)
+
+        if "url" not in upload:
+            return jsonify({"errors": upload}), 400
+            
+        song.audio_url = upload["url"]
+
     song_data = data['Songs'][0]
 
     if "title" in song_data and song_data["title"] == "":
-         return jsonify({"error": "Title cannot be empty"}), 400 
+        return jsonify({"error": "Title cannot be empty"}), 400 
     if "title" in song_data:
         song.title = song_data['title']
     if "artist" in song_data and song_data["artist"] == "":
-         return jsonify({"error": "Artist cannot be empty"}), 400     
+        return jsonify({"error": "Artist cannot be empty"}), 400     
     if "artist" in song_data:
         song.artist = song_data['artist']
     if "released_date" in song_data and song_data["released_date"] == "":
-         return jsonify({"error": "Released date cannot be empty"}), 400     
+        return jsonify({"error": "Released date cannot be empty"}), 400     
     if "released_date" in song_data:    
         song.released_date = datetime.strptime(song_data['released_date'], '%Y-%m-%d').date()
     if "album_id" in song_data:
@@ -109,7 +122,7 @@ def update_song(songId):
     if "lyrics" in song_data:
         song.lyrics = song_data['lyrics']
     if "duration" in song_data and song_data["duration"] == "":
-         return jsonify({"error": "Duration cannot be empty"}), 400     
+        return jsonify({"error": "Duration cannot be empty"}), 400     
     if "duration" in song_data:
         song.duration = song_data['duration']    
     
@@ -117,7 +130,6 @@ def update_song(songId):
         existing_image = Image.query.filter_by(song_id=songId).first()
         if existing_image:
             db.session.delete(existing_image)
-
 
         new_image = Image(
             song_id=songId,
