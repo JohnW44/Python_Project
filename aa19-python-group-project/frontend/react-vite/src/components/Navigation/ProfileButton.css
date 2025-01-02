@@ -41,8 +41,10 @@
   cursor: pointer;
 }
 
-/* Hover effect for logout button */
 .profile-dropdown button:hover {
   background-color: #ff3333;
 }
 
+.icon {
+  font-size: 2rem;
+}
