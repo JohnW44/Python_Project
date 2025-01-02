@@ -27,6 +27,12 @@ function LoginFormModal() {
       closeModal();
     }
   };
+  const demoLogin = (e) => {
+    e.preventDefault();
+    // dispatch(thunkLogin({email: "demo@aa.io", password: "password"}))
+    dispatch(thunkLogin({email: "dan@dan.com", password: "dan"}));
+    closeModal()
+  }
 
   return (
     <>
@@ -54,6 +60,9 @@ function LoginFormModal() {
         {errors.password && <p>{errors.password}</p>}
         <button type="submit">Log In</button>
       </form>
+      <li>
+            <button onClick={demoLogin}>Demo User</button>
+        </li>
     </>
   );
 }

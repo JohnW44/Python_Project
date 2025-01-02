@@ -31,6 +31,12 @@ function LoginFormPage() {
     }
   };
 
+  const demoLogin = (e) => {
+    e.preventDefault();
+    // dispatch(thunkLogin({email: "demo@aa.io", password: "password"}))
+    dispatch(thunkLogin({email: "dan@dan.com", password: "dan"}))
+  }
+
   return (
     <>
       <h1>Log In</h1>
@@ -54,13 +60,15 @@ function LoginFormPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            
           />
           
         </label>
         {errors.password && <p>{errors.password}</p>}
         <button type="submit">Log In</button>
       </form>
+        <li>
+            <button onClick={demoLogin}>Demo User</button>
+        </li>
     </>
   );
 }

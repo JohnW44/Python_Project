@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { FaUserCircle } from 'react-icons/fa';
-import { thunkLogout } from "../../redux/session";
+import { thunkLogin, thunkLogout } from "../../redux/session";
 import OpenModalMenuItem from "./OpenModalMenuItem";
 import LoginFormModal from "../LoginFormModal";
 import SignupFormModal from "../SignupFormModal";
@@ -40,6 +40,14 @@ function ProfileButton() {
     closeMenu();
   };
 
+  //demo is corrupted must signupo with new demo acc and set here
+  const demoLogin = (e) => {
+    e.preventDefault();
+    // dispatch(thunkLogin({email: "demo@aa.io", password: "password"}))
+    dispatch(thunkLogin({email: "dan@dan.com", password: "dan"}))
+    closeMenu()
+  }
+
   return (
     <>
       <button onClick={toggleMenu}>
@@ -70,6 +78,9 @@ function ProfileButton() {
                 onItemClick={closeMenu}
                 modalComponent={<SignupFormModal />}
               />
+              <li>
+                <button onClick={demoLogin}>Demo User</button>
+              </li>
             </>
           )}
         </ul>
