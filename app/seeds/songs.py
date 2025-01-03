@@ -3,7 +3,6 @@ from sqlalchemy.sql import text
 from datetime import datetime, date
 from app.models.db import environment, SCHEMA
 
-audio_path = '../audio/audio.mp3'
 
 def seed_songs():
     song1 = Song(
@@ -15,7 +14,7 @@ def seed_songs():
             user_id = 1,
             duration = 400,
             lyrics = "brbrr brrr brrr",
-            audio_file = audio_path
+            audio_file = "https://melody-songs.s3.us-east-1.amazonaws.com/f96e4f101184478191d4dc4b94ead986.mp3"
             )
     # song2 = Song(
     #         title = "second song",

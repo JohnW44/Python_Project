@@ -16,7 +16,7 @@ def seed_playlists():
     )
     playlist3 = Playlist(
         playlist_id = 3,
-        user_id = 2,
+        user_id = 3,
         name = "Workout Tunes"
     )
     db.session.add(playlist1)
