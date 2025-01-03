@@ -20,8 +20,8 @@ class Song(db.Model):
     artist = db.Column(db.String(255), nullable=False)
     released_date = db.Column(db.Date, nullable=False)
     created_at = db.Column( db.DateTime, nullable=False, server_default=func.now())
-    album_id = db.Column(db.Integer, db.ForeignKey('albums.id'), nullable=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    album_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('albums.id')), nullable=True)
+    user_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('users.id')), nullable=False)
     duration = db.Column(db.Integer, nullable=False)
     lyrics = db.Column(db.String(50000))
     audio_file = db.Column(db.String(500), nullable=False)
@@ -57,16 +57,12 @@ class Like(db.Model):
     __tablename__ = 'likes'
 
     if environment == "production":
-        __table_args__ = (
-            {'schema': SCHEMA},
-            CheckConstraint('(song_id IS NOT NULL AND album_id IS NULL) OR (song_id IS NULL AND album_id IS NOT NULL)',
-                            name='check_like_references_only_one')
-        )
+        __table_args__ ={'schema': SCHEMA}
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id= db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
-    song_id = db.Column(db.Integer, db.ForeignKey("songs.id"), nullable=True)
-    album_id = db.Column(db.Integer,db.ForeignKey("albums.id"), nullable=True)
+    user_id= db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("users.id")), nullable=False)
+    song_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("songs.id")), nullable=True)
+    album_id = db.Column(db.Integer,db.ForeignKey(add_prefix_for_prod("albums.id")), nullable=True)
     created_at = db.Column(db.DateTime, nullable=False, server_default=func.now())
 
     albums = relationship("Album", back_populates="likes")
@@ -96,7 +92,7 @@ class Album(db.Model):
     released_year = db.Column(db.Integer, nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, server_default=func.now())
     # song_id = db.Column(db.Integer, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("users.id")), nullable=False)
     duration = db.Column(db.Integer, nullable=False)
    
     users = relationship("User", back_populates="albums")
@@ -128,8 +124,8 @@ class Image(db.Model):
 
 
     id = db.Column(db.Integer, primary_key=True)
-    song_id = db.Column(db.Integer, db.ForeignKey('songs.id'), nullable=True, unique=True)
-    album_id = db.Column(db.Integer, db.ForeignKey('albums.id'), nullable=False)
+    song_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('songs.id')), nullable=True, unique=True)
+    album_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('albums.id')), nullable=False)
     url = db.Column(db.String(1000), nullable=False)
 
 
@@ -155,7 +151,7 @@ class Playlist(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     playlist_id = db.Column(db.Integer, unique=True, nullable=False)
-    user_id= db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    user_id= db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('users.id')), nullable=False)
     name = db.Column(db.String(255), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
@@ -179,9 +175,9 @@ class PlaylistSong(db.Model):
         __table_args__ = {'schema': SCHEMA}
 
     id = db.Column(db.Integer, primary_key=True)
-    playlist_id = db.Column(db.Integer, db.ForeignKey('playlists.id'), nullable=False)  # ForeignKey to Playlist model
+    playlist_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('playlists.id')), nullable=False)  # ForeignKey to Playlist model
     song_name = db.Column(db.String(255), nullable=False)
-    song_id = db.Column(db.Integer, db.ForeignKey('songs.id'), nullable=False)
+    song_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('songs.id')), nullable=False)
     playlist = db.relationship('Playlist', back_populates='songs')
     songs = db.relationship("Song", back_populates="playlist_songs")
 
