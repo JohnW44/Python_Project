@@ -68,7 +68,6 @@ def add_song():
     new_song = Song(**song_data)
     db.session.add(new_song)
     
-    # Handle optional image upload
     if 'image_file' in request.files:
         image_file = request.files['image_file']
         image_file.filename = get_unique_filename(image_file.filename)
