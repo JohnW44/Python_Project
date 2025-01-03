@@ -3,12 +3,14 @@ import os
 from dotenv import load_dotenv
 import uuid
 
+ALLOWED_EXTENSIONS = {"mp3", "wav", "ogg"}
+
 def get_unique_filename(filename):
     ext = filename.rsplit(".", 1)[1].lower()
     unique_filename = uuid.uuid4().hex
     return f"{unique_filename}.{ext}"
 
-def upload_file_to_s3(file):
+def upload_file_to_s3(file, acl="public-read"):
     load_dotenv()
     s3 = boto3.client(
         "s3",
@@ -24,6 +26,7 @@ def upload_file_to_s3(file):
             bucket_name,
             file.filename,
             ExtraArgs={
+                "ACL": acl,
                 "ContentType": file.content_type
             }
         )

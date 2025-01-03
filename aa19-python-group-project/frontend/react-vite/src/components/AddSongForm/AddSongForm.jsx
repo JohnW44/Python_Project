@@ -72,21 +72,21 @@ function AddSongForm() {
     const onSubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData();
-        formData.append('Songs[0][title]', title);
-        formData.append('Songs[0][artist]', artist);
-        formData.append('Songs[0][released_date]', releasedDate);
-        formData.append('Songs[0][duration]', duration);
-        formData.append('Songs[0][lyrics]', lyrics);
+        formData.append('title', title);
+        formData.append('artist', artist);
+        formData.append('released_date', releasedDate);
+        formData.append('duration', duration);
+        formData.append('lyrics', lyrics);
 
 
         // if(albumId) {
         //     formData.append('Songs[0][album_id]', albumId);
         // }
         if (image) {
-            formData.append('Images[0][url]', image);
+            formData.append('image_url', image);
         }
         if (audioFile) {
-            formData.append('Songs[0][audio_file]', audioFile);
+            formData.append('audio_url', audioFile);
         }
 
         const response = await dispatch(addSongThunk(formData));
@@ -173,7 +173,7 @@ function AddSongForm() {
                 Audio File
                 <input
                     type='file'
-                    accept='.mp3,.wav,.ogg,.m4a'
+                    accept='.mp3,.wav,.ogg,'
                     onChange={handleAudioChange}
                     required
                 />
