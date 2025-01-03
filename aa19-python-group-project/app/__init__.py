@@ -18,7 +18,7 @@ from .api.likes_routes import likes_routes
 from dotenv import load_dotenv
 # from .api.login_route import login_routes
 
-# load_dotenv()
+load_dotenv()
 
 app = Flask(__name__, static_folder='../frontend/react-vite/dist', static_url_path='/')
 # app.config['SECRET_KEY']= "DJEM"

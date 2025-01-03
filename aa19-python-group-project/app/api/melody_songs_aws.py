@@ -12,6 +12,17 @@ def get_unique_filename(filename):
 
 def upload_file_to_s3(file, acl="public-read"):
     load_dotenv()
+
+    print("\n=== S3 Upload Debug ===")
+    print(f"1. File info:")
+    print(f"   - Filename: {file.filename}")
+    print(f"   - Content Type: {file.content_type}")
+    
+    print("\n2. AWS Configuration:")
+    print(f"   - Bucket: {os.environ.get('S3_BUCKET')}")
+    print(f"   - Key exists: {bool(os.environ.get('S3_KEY'))}")
+    print(f"   - Secret exists: {bool(os.environ.get('S3_SECRET'))}")
+    
     s3 = boto3.client(
         "s3",
         aws_access_key_id=os.environ.get("S3_KEY"),
@@ -31,8 +42,13 @@ def upload_file_to_s3(file, acl="public-read"):
             }
         )
         
-        return {"url": f"https://{bucket_name}.s3.amazonaws.com/{file.filename}"}
+        url = f"https://{bucket_name}.s3.amazonaws.com/{file.filename}"
+        print(f"\n4. Upload successful!")
+        print(f"   URL: {url}")
+        return {"url": url}
     except Exception as e:
+        print(f"\nError during upload:")
+        print(f"Exception: {str(e)}")
         return {"errors": str(e)}
 
 def test_aws_connection():

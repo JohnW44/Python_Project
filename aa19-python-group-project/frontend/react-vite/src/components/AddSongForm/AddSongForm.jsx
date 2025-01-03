@@ -14,7 +14,7 @@ function AddSongForm() {
     const [releasedDate, setReleasedDate] = useState("");
     const [duration, setDuration] = useState("");
     const [lyrics, setLyrics] = useState("");
-    const [image, setImage] = useState(null);
+    const [image_file, setImage] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
     const [audioFile, setAudioFile] = useState(null);
     const [errors, setErrors] = useState({});
@@ -82,11 +82,11 @@ function AddSongForm() {
         // if(albumId) {
         //     formData.append('Songs[0][album_id]', albumId);
         // }
-        if (image) {
-            formData.append('image_url', image);
+        if (image_file) {
+            formData.append('image_url', image_file);
         }
         if (audioFile) {
-            formData.append('audio_url', audioFile);
+            formData.append('audio_file', audioFile);
         }
 
         const response = await dispatch(addSongThunk(formData));
