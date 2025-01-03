@@ -44,7 +44,7 @@ def seed_albums():
     image2 = Image(
         url="https://cdn-p.smehost.net/sites/35faef12c1b64b21b3fda052d205af13/wp-content/uploads/2023/02/230222-daftpunk-ram10.jpg",
         album_id=album2.id,
-        song_id=2
+        song_id=1
     )
 
     db.session.add(image1)
