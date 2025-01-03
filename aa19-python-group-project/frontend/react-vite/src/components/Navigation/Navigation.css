@@ -81,10 +81,40 @@ body, html {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.songs-list {
-  color:black;
+.all-songs-header,
+.my-songs-header {
+    padding: 10px;
+    font-weight: bold;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
 }
 
+.user-song {
+    background-color: rgba(247, 170, 29, 0.1);
+}
+
+.song-item {
+    margin: 4px 0;
+    padding: 8px;
+    border-radius: 4px;
+}
+
+.song-link {
+    text-decoration: none;
+    color: black;
+    display: block;
+    width: 100%;
+}
+
+.song-link:hover {
+    color: rgb(67, 156, 184);
+}
+
+.songs-list {
+    color: black;
+    overflow-y: auto;
+    max-height: calc(100% - 100px);
+}
 
 .nav-link {
   padding: 8px 16px;

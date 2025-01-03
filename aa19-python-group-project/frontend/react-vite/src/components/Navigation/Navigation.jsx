@@ -50,22 +50,38 @@ function Navigation() {
         <ProfileButton />
       </div>
     </nav>
-    {sessionUser && (
-      <div className="side-bar">
-        <NavLink to="/playlists" className="side-nav">
-        Playlists
-        </NavLink>
-        <div className="songs-list">
-          {Object.values(allSongs).map(song => (
-            <div key={song.id} className="song-item">
-              <NavLink to={`/songs/${song.id}`} className='song-link'>
+    <div className="side-bar">
+      {sessionUser && (
+        <>
+          <NavLink to="/playlists" className="side-nav">
+            Playlists
+          </NavLink>
+          <div className="my-songs-header">My Songs</div>
+          <div className="songs-list">
+            {Object.values(allSongs)
+              .filter(song => song.userId === sessionUser.id)
+              .map(song => (
+                <div key={song.id} className="song-item user-song">
+                  <NavLink to={`/songs/${song.id}`} className='song-link'>
+                    {song.title}
+                  </NavLink>
+                </div>
+              ))}
+          </div>
+        </>
+      )}
+      
+      <div className="all-songs-header">All Songs</div>
+      <div className="songs-list">
+        {Object.values(allSongs).map(song => (
+          <div key={song.id} className="song-item">
+            <NavLink to={`/songs/${song.id}`} className='song-link'>
               {song.title}
-              </NavLink>
-              </div>
-          ))}
-        </div>
+            </NavLink>
+          </div>
+        ))}
       </div>
-    )}
+    </div>
         </>
   );
 }

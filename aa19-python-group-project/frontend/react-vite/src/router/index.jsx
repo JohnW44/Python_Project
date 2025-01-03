@@ -6,6 +6,7 @@ import Layout from './Layout';
 import LandingPage from '../components/LandingPage/LandingPage';
 import ProfilePage from '../components/ProfilePage/ProfilePage';
 import AlbumPage from '../components/AlbumPage/AlbumPage'
+import SongsPage from '../components/SongsPage/SongsPage';
 
 
 
@@ -38,6 +39,10 @@ export const router = createBrowserRouter([
         path: "albums/:albumId",
         element: <AlbumPage />,
       },
+      {
+        path: "songs/:songId",
+        element: <SongsPage />
+      }
     ],
   },
 ]);
