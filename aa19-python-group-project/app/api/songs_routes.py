@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request
 from app.models import Song, Image
 from flask_login import login_required, current_user
 from datetime import datetime
+import os
 from app.api.melody_songs_aws import (
      upload_file_to_s3,
      get_unique_filename
@@ -37,56 +38,50 @@ def song_details(songId):
 @login_required
 def add_song():
     """
-    Adds and Returns a new song when a user is signed in
+    Add song to Database while a user is logged in
     """
-    print("Received request")
-    print("Files:", request.files)
-    print("Form data:", request.form)
-    print("JSON:", request.json)
-
-    if "Songs[0][audio_file]" not in request.files:
-        print("No audio file found in request")
+    if "audio_file" not in request.files:
         return jsonify({"errors": "audio file required"}), 400
 
-    if not request.form:
-        print("No form data found")
-        return jsonify({"errors": "song data required"}), 400
-
-    audio_file = request.files["Songs[0][audio_file]"] 
+    audio_file = request.files["audio_file"]
     if not audio_file.filename:
-        print("Empty audio filename")
         return jsonify({"errors": "valid audio file required"}), 400
-
+    
+    
     audio_file.filename = get_unique_filename(audio_file.filename)
     upload = upload_file_to_s3(audio_file)
+    
+    if "errors" in upload:
+        return jsonify({"errors": upload["errors"]}), 400
 
-    if "url" not in upload:
-         return jsonify({"errors": upload}), 400
-
+   
     song_data = {
-        'title': request.form.get('Songs[0][title]'),
-        'artist': request.form.get('Songs[0][artist]'),
-        'released_date': datetime.strptime(request.form.get('Songs[0][released_date]'), '%Y-%m-%d').date(),
-        'duration': request.form.get('Songs[0][duration]'),
-        'lyrics': request.form.get('Songs[0][lyrics]'),
-        'audio_url': upload["url"],
+        'title': request.form.get('title'),
+        'artist': request.form.get('artist'),
+        'released_date': datetime.strptime(request.form.get('released_date'), '%Y-%m-%d').date(),
+        'duration': request.form.get('duration'),
+        'lyrics': request.form.get('lyrics'),
+        'audio_file': upload["url"],
         'user_id': current_user.id
     }
     
-
     new_song = Song(**song_data)
     db.session.add(new_song)
+    
+    # Handle optional image upload
+    if 'image_file' in request.files:
+        image_file = request.files['image_file']
+        image_file.filename = get_unique_filename(image_file.filename)
+        image_upload = upload_file_to_s3(image_file)
+        
+        if "url" in image_upload:
+            new_image = Image(
+                song_id=new_song.id,
+                url=image_upload["url"]
+            )
+            db.session.add(new_image)
+    
     db.session.commit()
-
-
-   
-    if 'Images[0][url]' in request.form:
-        new_image = Image(
-            song_id=new_song.id,
-            url=request.form['Images[0][url]']
-        )
-        db.session.add(new_image)
-        db.session.commit()
     return jsonify({'Songs': new_song.to_dict()}), 201
 
 
