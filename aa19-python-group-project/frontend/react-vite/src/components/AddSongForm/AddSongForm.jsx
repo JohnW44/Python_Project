@@ -1,39 +1,30 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { addSongThunk } from '../../redux/songs';
-import { useModal } from '../../context/Modal'
-// import { useNavigate } from 'react-router-dom';
+import { addSongThunk, fetchSongs } from '../../redux/songs';
+import { useNavigate } from 'react-router-dom';
 import './AddSongForm.css'
 
-
-
 function AddSongForm() {
-
     const [title, setTitle] = useState("");
     const [artist, setArtist] = useState("");
     const [releasedDate, setReleasedDate] = useState("");
     const [duration, setDuration] = useState("");
     const [lyrics, setLyrics] = useState("");
-    const [image_file, setImage] = useState(null);
-    const [imagePreview, setImagePreview] = useState(null);
+    const [imageFile, setImageFile] = useState(null);  // Changed back to imageFile
     const [audioFile, setAudioFile] = useState(null);
     const [errors, setErrors] = useState({});
    
-  
-
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            setImage(file);
-            const previewUrl = URL.createObjectURL(file);
-            setImagePreview(previewUrl);
-        }
-    };
-
     const handleAudioChange = (e) => {
         const file = e.target.files[0];
         if (file) {
             setAudioFile(file);
+        }
+    };
+
+    const handleImageChange = (e) => {  // Restored handleImageChange
+        const file = e.target.files[0];
+        if (file) {
+            setImageFile(file);
         }
     };
 
@@ -64,10 +55,8 @@ function AddSongForm() {
         setErrors(errObj);
     }, [title, artist, releasedDate, duration, lyrics, audioFile]);
 
-
-    const { closeModal } = useModal();
-
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const onSubmit = async (e) => {
         e.preventDefault();
@@ -77,13 +66,9 @@ function AddSongForm() {
         formData.append('released_date', releasedDate);
         formData.append('duration', duration);
         formData.append('lyrics', lyrics);
-
-
-        // if(albumId) {
-        //     formData.append('Songs[0][album_id]', albumId);
-        // }
-        if (image_file) {
-            formData.append('image_url', image_file);
+        
+        if (imageFile) {
+            formData.append('image', imageFile);  // Changed back to image file
         }
         if (audioFile) {
             formData.append('audio_file', audioFile);
@@ -92,18 +77,19 @@ function AddSongForm() {
         const response = await dispatch(addSongThunk(formData));
 
         if (!response.error) {
-            closeModal();
+            const newSongId = response.Songs.id; 
+            if (newSongId) {
+                navigate(`/songs/${newSongId}`);
+                dispatch(fetchSongs());
+            }
         } else {
             setErrors(response.errors || {});
         }
-    
-
-
     };
+
     return (
         <form className='song-form' onSubmit={onSubmit} encType="multipart/form-data">
             <h2>Add a New Song</h2>
-
 
             <label>
                 Title
@@ -146,29 +132,21 @@ function AddSongForm() {
             </label>
             <p className='errors'>{errors.duration}</p>
             <label>
-            Lyrics
-               <textarea
-                   value={lyrics}
-                   onChange={(e) => setLyrics(e.target.value)}
-               />
+                Lyrics
+                <textarea
+                    value={lyrics}
+                    onChange={(e) => setLyrics(e.target.value)}
+                />
             </label>
             <p className='errors'>{errors.lyrics}</p>
-           <label>
-            Song Image
-            <input
-                type='file'
-                accept='image/*'
-                onChange={handleImageChange}
+            <label>
+                Image
+                <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
                 />
-           </label>
-           {imagePreview && (
-            <div className='image-preview'>
-                <img 
-                    src={imagePreview}
-                    alt='Preview'
-                />
-            </div>
-           )}
+            </label>
             <label>
                 Audio File
                 <input
@@ -180,14 +158,13 @@ function AddSongForm() {
             </label>
             <p className='errors'>{errors.audioFile}</p>
             <button
-               type='submit'
-               disabled={Object.values(errors).length}
-           >
-            Add Song
+                type='submit'
+                disabled={Object.values(errors).length}
+            >
+                Add Song
             </button>
         </form>
     );
 }
-
 
 export default AddSongForm;

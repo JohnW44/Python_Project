@@ -56,3 +56,39 @@
 .details-title {
     margin-bottom: 20px;
 }
+
+.song-actions {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.edit-button,
+.delete-button {
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: none;
+    font-weight: bold;
+    margin-left: 20%;
+}
+
+.edit-button {
+    background-color: #4CAF50;
+    color: white;
+    margin-left: 20%;
+}
+
+.edit-button:hover {
+    background-color: #45a049;
+}
+
+.delete-button {
+    background-color: #f44336;
+    color: white;
+    margin-left: 20%;
+}
+
+.delete-button:hover {
+    background-color: #da190b;
+}

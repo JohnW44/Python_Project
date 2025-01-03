@@ -129,7 +129,7 @@ class Image(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     song_id = db.Column(db.Integer, db.ForeignKey('songs.id'), nullable=True, unique=True)
-    album_id = db.Column(db.Integer, db.ForeignKey('albums.id'), nullable=False)
+    album_id = db.Column(db.Integer, db.ForeignKey('albums.id'), nullable=False) 
     url = db.Column(db.String(1000), nullable=False)
 
 
