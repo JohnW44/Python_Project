@@ -9,15 +9,21 @@ import { fetchSongs } from "../../redux/songs";
 // import LoginFormModal from "../LoginFormModal";
 
 
+
+
 function Navigation() {
   const sessionUser = useSelector(state => state.session.user);
   const dispatch = useDispatch();
   const allSongs = useSelector(state => state.songs.allSongs);
 
+
   useEffect(() => {
     dispatch(fetchSongs());
   }, [dispatch]);
 
+
+  const userSongs = sessionUser ? Object.values(allSongs).filter(song => song.userId === sessionUser.id) : [];
+  const otherSongs = sessionUser ? Object.values(allSongs).filter(song => song.userId !== sessionUser.id) : Object.values(allSongs);
  
   return (
     <>
@@ -30,13 +36,13 @@ function Navigation() {
           Melody
         </NavLink>
       </div>
-      
+     
       <div className="nav-center">
         <div className="search-container">
           <FaSearch className="search-icon" />
-          <input 
-            type="search" 
-            className="search-bar" 
+          <input
+            type="search"
+            className="search-bar"
             placeholder="Search for songs..."
             />
       </div>
@@ -50,25 +56,41 @@ function Navigation() {
         <ProfileButton />
       </div>
     </nav>
-    {sessionUser && (
-      <div className="side-bar">
-        <NavLink to="/playlists" className="side-nav">
-        Playlists
-        </NavLink>
-        <div className="songs-list">
-          {Object.values(allSongs).map(song => (
+    <div className="side-bar">
+      {sessionUser && (
+        <>
+          {/* <NavLink to="/playlists" className="side-nav">
+            Playlists
+          </NavLink> */}
+          <div className="my-songs-header">My Songs</div>
+          <div className="songs-list">
+          {userSongs.map(song => (
+                <div key={song.id} className="song-item user-song">
+                  <NavLink to={`/songs/${song.id}`} className='song-link'>
+                    {song.title}
+                  </NavLink>
+                </div>
+              ))}
+          </div>
+        </>
+      )}
+     
+      <div className="all-songs-header">All Songs</div>
+      <div className="songs-list">
+      {otherSongs.map(song => (
             <div key={song.id} className="song-item">
               <NavLink to={`/songs/${song.id}`} className='song-link'>
-              {song.title}
+                {song.title}
               </NavLink>
-              </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
-    )}
+    </div>
         </>
   );
 }
+
+
 
 
 export default Navigation;

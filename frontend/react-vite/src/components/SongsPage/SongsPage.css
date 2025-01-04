@@ -1,0 +1,108 @@
+.song-page {
+    padding: 5%
+}
+
+
+.song-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-left: 20%;
+}
+
+
+.song-cover {
+    width: 300px;
+    height: 300px;
+    object-fit: cover;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+
+.song-image {
+    width: 300px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+
+.placeholder-image {
+    width: 300px;
+    height: 300px;
+    object-fit: contain;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+
+.song-info h3 {
+    color: #666;
+}
+
+
+.song-details-list {
+    background: white;
+    border-radius: 8px;
+    margin-left: 20%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+    background-color: rgb(247, 170, 29);
+    padding: 3%;
+}
+
+
+.song-details-item {
+    padding: 5%;
+    font-size: 20px;
+}
+
+
+.details-title {
+    margin-bottom: 20px;
+}
+
+
+.song-actions {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+
+.edit-button,
+.delete-button {
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: none;
+    font-weight: bold;
+    margin-left: 20%;
+}
+
+
+.edit-button {
+    background-color: #4CAF50;
+    color: white;
+    margin-left: 20%;
+}
+
+
+.edit-button:hover {
+    background-color: #45a049;
+}
+
+
+.delete-button {
+    background-color: #f44336;
+    color: white;
+    margin-left: 20%;
+}
+
+
+.delete-button:hover {
+    background-color: #da190b;
+}
