@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from app.models import Song, Image
+from app.models import Song, Image, Album
 from flask_login import login_required, current_user
 from datetime import datetime
 import os
@@ -43,16 +43,18 @@ def add_song():
     if "audio_file" not in request.files:
         return jsonify({"errors": "audio file required"}), 400
 
+
     audio_file = request.files["audio_file"]
     if not audio_file.filename:
         return jsonify({"errors": "valid audio file required"}), 400
-    
-    
+   
+   
     audio_file.filename = get_unique_filename(audio_file.filename)
     upload = upload_file_to_s3(audio_file)
-    
+   
     if "errors" in upload:
         return jsonify({"errors": upload["errors"]}), 400
+
 
    
     song_data = {
@@ -64,23 +66,30 @@ def add_song():
         'audio_file': upload["url"],
         'user_id': current_user.id
     }
-    
+   
     new_song = Song(**song_data)
     db.session.add(new_song)
-    
-    if 'image_file' in request.files:
-        image_file = request.files['image_file']
-        image_file.filename = get_unique_filename(image_file.filename)
-        image_upload = upload_file_to_s3(image_file)
-        
-        if "url" in image_upload:
+    db.session.commit()
+   
+    if new_song.album_id:
+        album = Album.query.get(new_song.album_id)
+        if album and album.images:
             new_image = Image(
                 song_id=new_song.id,
-                url=image_upload["url"]
+                url=album.images[0].url,
+                album_id=new_song.album_id
             )
             db.session.add(new_image)
-    
-    db.session.commit()
+    elif 'image_file' in request.files:
+        image_file = request.files['image_file']
+        if image_file.filename:
+            new_image = Image(
+                song_id=new_song.id,
+                url=image_file.filename,
+                album_id=1
+            )
+            db.session.add(new_image)
+            db.session.commit()
     return jsonify({'Songs': new_song.to_dict()}), 201
 
 

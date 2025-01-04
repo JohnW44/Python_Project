@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { addSongThunk, fetchSongs } from '../../redux/songs';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import './AddSongForm.css'
 
 function AddSongForm() {
@@ -10,9 +10,12 @@ function AddSongForm() {
     const [releasedDate, setReleasedDate] = useState("");
     const [duration, setDuration] = useState("");
     const [lyrics, setLyrics] = useState("");
-    const [imageFile, setImageFile] = useState(null);  // Changed back to imageFile
+    const [imageFile, setImageFile] = useState(null);
     const [audioFile, setAudioFile] = useState(null);
     const [errors, setErrors] = useState({});
+    const [albumId, setAlbumId] = useState(null)
+
+    const { albumId: paramAlbumId } = useParams();
    
     const handleAudioChange = (e) => {
         const file = e.target.files[0];
@@ -21,7 +24,7 @@ function AddSongForm() {
         }
     };
 
-    const handleImageChange = (e) => {  // Restored handleImageChange
+    const handleImageChange = (e) => {  
         const file = e.target.files[0];
         if (file) {
             setImageFile(file);
@@ -55,6 +58,12 @@ function AddSongForm() {
         setErrors(errObj);
     }, [title, artist, releasedDate, duration, lyrics, audioFile]);
 
+    useEffect(() => {
+        if (paramAlbumId) {
+            setAlbumId(paramAlbumId);
+        }
+    }, [paramAlbumId]);
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -67,8 +76,11 @@ function AddSongForm() {
         formData.append('duration', duration);
         formData.append('lyrics', lyrics);
         
+        if (albumId){
+            formData.append('album_id', albumId)
+        }
         if (imageFile) {
-            formData.append('image', imageFile);  // Changed back to image file
+            formData.append('image', imageFile);
         }
         if (audioFile) {
             formData.append('audio_file', audioFile);
