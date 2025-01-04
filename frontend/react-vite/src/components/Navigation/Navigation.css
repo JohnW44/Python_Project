@@ -6,7 +6,7 @@ body, html {
 
 
 .nav-container {
-  background-color: rgb(67, 156, 184);
+  background-color: #121b2a;
   padding: 20px;
   height: 65px;
   display: flex;
@@ -23,7 +23,7 @@ body, html {
 
 
 .Logo {
-  height: 50px;
+  height: 120px;
   width:auto;
 }
 
@@ -31,7 +31,7 @@ body, html {
 .site-name {
   font-size: 24px;
   font-weight: bold;
-  color: rgb(214, 218, 20)
+  color: #FD7238;
 }
 
 
@@ -86,7 +86,7 @@ body, html {
   top: 105px;  
   width: 15%;
   height: calc(100vh - 105px);
-  background-color: rgb(96, 255, 130);
+  background-color: #121b2a;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   padding: 20px;
@@ -98,13 +98,13 @@ body, html {
 .my-songs-header {
     padding: 10px;
     font-weight: bold;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid #FD7238;
     margin-bottom: 10px;
 }
 
 
 .user-song {
-    background-color: rgba(247, 170, 29, 0.1);
+    background-color: #c71d54;
 }
 
 
@@ -129,7 +129,7 @@ body, html {
 
 
 .songs-list {
-    color: black;
+    color: #c71d54;
     overflow-y: auto;
     max-height: calc(100% - 100px);
 }
@@ -144,4 +144,6 @@ body, html {
   text-decoration: none;
 }
 
-
+a.song-link {
+  color: #c71d54;
+}

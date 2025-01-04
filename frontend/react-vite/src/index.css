@@ -1,1 +1,21 @@
 /* TODO: Add sitewide styles */
+:root {
+    --background-color: rgb(28, 1, 44);
+    --text-color: #c71d54
+}
+
+body {
+    margin: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: Arial, sans-serif;
+  }
+
+  a {
+    color: #1DB954;  
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
