@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { addSongThunk, fetchSongs } from '../../redux/songs';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import './AddSongForm.css'
 
 
@@ -14,11 +14,32 @@ function AddSongForm() {
     const [imageFile, setImageFile] = useState(null);
     const [audioFile, setAudioFile] = useState(null);
     const [errors, setErrors] = useState({});
-    const [albumId, setAlbumId] = useState(null)
-
+    const [albumId, setAlbumId] = useState(null);
+    const [isEditing, setIsEditing] = useState(false);
 
     const { albumId: paramAlbumId } = useParams();
-   
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const editSongId = queryParams.get('songId');
+
+    useEffect(() => {
+        if (editSongId) {
+            setIsEditing(true);
+            fetch(`/api/songs/${editSongId}`)
+                .then((response) => response.json())
+                .then((data) => {
+                    setTitle(data.title);
+                    setArtist(data.artist);
+                    const date = new Date(data.released_date);
+                    const formattedDate = date.toISOString().split('T')[0];
+                    setReleasedDate(formattedDate);
+                    setDuration(data.duration);
+                    setLyrics(data.lyrics || '');
+                    setAlbumId(data.album_id);
+                });
+        }
+    }, [editSongId]);
+
     const handleAudioChange = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -56,11 +77,11 @@ function AddSongForm() {
         if (lyrics.length > 50000) {
             errObj.lyrics = "Lyrics cannot exceed 50,000 characters";
         }
-        if (!audioFile) {
+        if (!isEditing && !audioFile) {
             errObj.audioFile = "Audio file is required";
         }
         setErrors(errObj);
-    }, [title, artist, releasedDate, duration, lyrics, audioFile]);
+    }, [title, artist, releasedDate, duration, lyrics, audioFile, isEditing]);
 
 
     useEffect(() => {
@@ -76,10 +97,13 @@ function AddSongForm() {
 
     const onSubmit = async (e) => {
         e.preventDefault();
+        
+        const formattedDate = new Date(releasedDate).toISOString().split('T')[0];
+        
         const formData = new FormData();
         formData.append('title', title);
         formData.append('artist', artist);
-        formData.append('released_date', releasedDate);
+        formData.append('released_date', formattedDate);
         formData.append('duration', duration);
         formData.append('lyrics', lyrics);
        
@@ -89,18 +113,21 @@ function AddSongForm() {
         if (imageFile) {
             formData.append('image', imageFile);
         }
-        if (audioFile) {
+        if (!isEditing && audioFile) {
             formData.append('audio_file', audioFile);
         }
 
-
-        const response = await dispatch(addSongThunk(formData));
-
-
+        const response = isEditing 
+            ? await fetch(`/api/songs/${editSongId}`, {
+                method: 'PUT',
+                body: formData,
+            }).then(res => res.json())
+            : await dispatch(addSongThunk(formData));
+        
         if (!response.error) {
-            const newSongId = response.Songs.id;
-            if (newSongId) {
-                navigate(`/songs/${newSongId}`);
+            const songId = isEditing ? editSongId : response.Songs.id;
+            if (songId) {
+                navigate(`/songs/${songId}`);
                 dispatch(fetchSongs());
             }
         } else {
@@ -111,7 +138,7 @@ function AddSongForm() {
 
     return (
         <form className='song-form' onSubmit={onSubmit} encType="multipart/form-data">
-            <h2>Add a New Song</h2>
+            <h2>{isEditing ? 'Edit Song' : 'Add a New Song'}</h2>
 
 
             <label>
@@ -170,21 +197,25 @@ function AddSongForm() {
                     onChange={handleImageChange}
                 />
             </label>
-            <label>
-                Audio File
-                <input
-                    type='file'
-                    accept='.mp3,.wav,.ogg,'
-                    onChange={handleAudioChange}
-                    required
-                />
-            </label>
-            <p className='errors'>{errors.audioFile}</p>
+            {!isEditing && (
+                <>
+                    <label>
+                        Audio File
+                        <input
+                            type='file'
+                            accept='.mp3,.wav,.ogg,'
+                            onChange={handleAudioChange}
+                            required
+                        />
+                    </label>
+                    <p className='errors'>{errors.audioFile}</p>
+                </>
+            )}
             <button
                 type='submit'
                 disabled={Object.values(errors).length}
             >
-                Add Song
+                {isEditing ? 'Save Changes' : 'Add Song'}
             </button>
         </form>
     );

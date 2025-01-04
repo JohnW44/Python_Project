@@ -25,7 +25,7 @@ function SongsPage() {
 
 
     const handleEdit = () => {
-        navigate(`/song/new?songId=${songId}`);
+        navigate(`/songs/new?songId=${songId}`);
     }
 
 

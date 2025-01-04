@@ -43,9 +43,6 @@ def add_song():
     if "audio_file" not in request.files:
         return jsonify({"errors": "audio file required"}), 400
 
-
-
-
     audio_file = request.files["audio_file"]
     if not audio_file.filename:
         return jsonify({"errors": "valid audio file required"}), 400
@@ -57,10 +54,6 @@ def add_song():
     if "errors" in upload:
         return jsonify({"errors": upload["errors"]}), 400
 
-
-
-
-   
     song_data = {
         'title': request.form.get('title'),
         'artist': request.form.get('artist'),
@@ -103,60 +96,46 @@ def update_song(songId):
     """
     Updates and returns a song uploaded by user
     """
-    data = request.json
-
     song = Song.query.get(songId)
     if not song:
         return jsonify({"error": "Song couldn't be found"}), 404
     if song.user_id != current_user.id:
         return jsonify({"error": "Unauthorized"}), 403
-    if not data.get('Songs'):
-        return jsonify({"message": "Bad Request"}), 400
 
-    if "audio_file" in request.files:
-        audio_file = request.files["audio_file"]
-        audio_file.filename = get_unique_filename(audio_file.filename)
-        upload = upload_file_to_s3(audio_file)
-
-        if "url" not in upload:
-            return jsonify({"errors": upload}), 400
-            
-        song.audio_url = upload["url"]
-
-    song_data = data['Songs'][0]
-
-    if "title" in song_data and song_data["title"] == "":
+    if "title" in request.form and request.form.get("title") == "":
         return jsonify({"error": "Title cannot be empty"}), 400 
-    if "title" in song_data:
-        song.title = song_data['title']
-    if "artist" in song_data and song_data["artist"] == "":
+    if "title" in request.form:
+        song.title = request.form.get('title')
+    if "artist" in request.form and request.form.get("artist") == "":
         return jsonify({"error": "Artist cannot be empty"}), 400     
-    if "artist" in song_data:
-        song.artist = song_data['artist']
-    if "released_date" in song_data and song_data["released_date"] == "":
+    if "artist" in request.form:
+        song.artist = request.form.get('artist')
+    if "released_date" in request.form and request.form.get("released_date") == "":
         return jsonify({"error": "Released date cannot be empty"}), 400     
-    if "released_date" in song_data:    
-        song.released_date = datetime.strptime(song_data['released_date'], '%Y-%m-%d').date()
-    if "album_id" in song_data:
-        song.album_id = song_data['album_id']
-    if "lyrics" in song_data:
-        song.lyrics = song_data['lyrics']
-    if "duration" in song_data and song_data["duration"] == "":
+    if "released_date" in request.form:    
+        song.released_date = datetime.strptime(request.form.get('released_date'), '%Y-%m-%d').date()
+    if "album_id" in request.form:
+        song.album_id = request.form.get('album_id')
+    if "lyrics" in request.form:
+        song.lyrics = request.form.get('lyrics')
+    if "duration" in request.form and request.form.get("duration") == "":
         return jsonify({"error": "Duration cannot be empty"}), 400     
-    if "duration" in song_data:
-        song.duration = song_data['duration']    
+    if "duration" in request.form:
+        song.duration = request.form.get('duration')    
     
-    if data.get('Images'):
-        existing_image = Image.query.filter_by(song_id=songId).first()
-        if existing_image:
-            db.session.delete(existing_image)
+    if "image" in request.files:
+        image_file = request.files["image"]
+        if image_file.filename:
+            existing_image = Image.query.filter_by(song_id=songId).first()
+            if existing_image:
+                db.session.delete(existing_image)
 
-        new_image = Image(
-            song_id=songId,
-            album_id=song_data['album_id'],
-            url=data['Images'][0]['url']
-        )
-        db.session.add(new_image)
+            new_image = Image(
+                song_id=songId,
+                album_id=song.album_id,
+                url=image_file.filename
+            )
+            db.session.add(new_image)
        
     db.session.commit()
     return jsonify({'Songs': song.to_dict()}), 200
