@@ -1,4 +1,4 @@
-/* src/components/Songplayer/Songplayer.css
+/* src/components/Songplayer/Songplayer.css */
 .player {
     width: 100%;
     max-width: 600px;
@@ -23,4 +23,4 @@
   .controls button:hover {
     background-color: #3700b3;
   }
-   */
+  

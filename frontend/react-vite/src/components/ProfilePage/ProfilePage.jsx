@@ -2,12 +2,14 @@ import { useEffect, useState } from 'react'
 import './ProfilePage.css'
 // import { thunkAuthenticate } from '../../redux/session';
 import {useSelector} from 'react-redux';
+import Songplayer from '../Songplayer/Songplayer';
 
 function ProfilePage(){
 
 const [likedSongs, setLikedSongs] = useState([])
 const [likedAlbums, setLikedAlbums] = useState([])
 const user = useSelector(state => state.session.user)
+const [songLink, setSongLink] = useState(null);
 // const dispatch = useDispatch();
 
 useEffect(() => {
@@ -36,6 +38,11 @@ useEffect(() => {
         });
 }, [user]);
 
+const handleSong = (song) => {
+    console.log("song", song.audio_file)
+    setSongLink(song.audio_file); 
+  };
+
     return (
             <div className='profilebox'>
                 <h1>Profile Page</h1>
@@ -49,21 +56,32 @@ useEffect(() => {
                     </div>
                 </div>
 
-            <div className="liked-section">
-                <h2>Loved Songs</h2>
-                {likedSongs.length > 0 ? (
-                    <ul>
+                <div className="liked-section">
+                    <h2>Loved Songs</h2>
+                    {likedSongs.length > 0 ? (
+                    <div className="albums-grid">
                         {likedSongs.map((song) => (
-                            <li key={song.id}>
-                                <p>{song.title} - {song.artist}</p>
-                                <p>Duration: {song.duration} seconds</p>
-                            </li>
+                        <div
+                            key={song.id}
+                            className="album-card"
+                            onClick={() => handleSong(song)} >
+                            {song.album && song.album.images && song.album.images.length > 0 && song.album.images[0].url ? (
+                            <img src={song.album.images[0].url} alt={song.title} className="album-card-image" />
+                            ) : (
+                            <div>No image available</div>
+                            )}
+                            <div className="album-card-details">
+                            <p className="album-title">{song.title}</p>
+                            <p className="album-artist">{song.artist}</p>
+                            </div>
+                        </div>
                         ))}
-                    </ul>
-                ) : (
+                    </div>
+                    ) : (
                     <p>No liked songs.</p>
-                )}
-            </div>
+                    )}
+                    {songLink && <Songplayer songLink={songLink} />}
+                </div>
 
             <div className="liked-section">
                 <h2>Loved Albums</h2>
