@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import ProfileButton from "./ProfileButton";
 import { useDispatch, useSelector } from "react-redux";
 import { FaSearch } from 'react-icons/fa';
-import palm from '../../../../../images/palm.png'
+import logo from '../../../../../images/Melody_Logo1.png'
 import "./Navigation.css";
 import { fetchSongs } from "../../redux/songs";
 // import LoginFormModal from "../LoginFormModal";
@@ -30,7 +30,7 @@ function Navigation() {
     <nav className="nav-container">
       <div className="nav-left">
       <NavLink to="/" className="site-name">
-          <img src={palm} alt="Logo" className="Logo"/>
+          <img src={logo} alt="Logo" className="Logo"/>
         </NavLink>
         <NavLink to="/" className='site-name'>
           Melody
