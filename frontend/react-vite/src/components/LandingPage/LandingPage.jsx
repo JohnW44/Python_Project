@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import './LandingPage.css';
 import { useEffect, useState } from 'react';
+import Melody_Logo from '../../../../../images/Melody_Logo.png'
 
 
 function LandingPage() {
@@ -35,10 +36,18 @@ const navigate = useNavigate();
                      className="album-card"
                      onClick={() => navigate(`/albums/${album.id}`)}
                         >
-                     {album.images && album.images.length > 0 && album.images[0].url ? (
-                         <img src={album.images[0].url} alt={album.title} className='album-card-image' />
+                     {album.images && album.images.length > 0 ? (
+                         <img 
+                             src={album?.images?.[0]?.url || Melody_Logo} 
+                             alt={album.title} 
+                             className='album-card-image' 
+                         />
                      ) : (
-                         <div>No image available</div> 
+                         <img 
+                             src={Melody_Logo} 
+                             alt="Default cover" 
+                             className="placeholder-image" 
+                         />
                      )}
                         <div className='album-card-details'> 
                             <p className= "album-title"> {album.title}</p>
