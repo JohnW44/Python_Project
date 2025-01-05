@@ -1,10 +1,10 @@
-.album-page {
+.album-page2 {
     padding: 2rem;
     max-width: 1200px;
     margin: 0 auto;
 }
 
-.album-header {
+.album-header2 {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -12,41 +12,78 @@
     margin-left: 20%;
 }
 
-.album-cover {
+.album-cover2 {
     width: 300px;
     height: 300px;
     object-fit: cover;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.album-info h3 {
+.album-info2 h3 {
     color: #666;
 }
 
-.album-songs-list {
+.album-songs-list2 {
     background: white;
     border-radius: 8px;
     margin-left: 20%;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 6);
-    background-color: rgb(247, 170, 29);
+    background-color: #FD7238;
     padding: 3%;
 }
 
-.song-number {
+.song-number2 {
     width: 30px;      
     text-align: right;
     color: #000000;
 }
 
-.song-title {
+.song-title2 {
     flex: 1;    
     padding: 5%;
     font-size: 20px;       
 }
 
-.song-duration {
+.song-duration2 {
     width: 60px;     
     text-align: right;
     color: #000000;
 }
 
+.placeholder-image2 {
+   width: 100%; 
+   height: 150px; 
+   max-height: 150px;
+   max-width: 100%;
+   /* object-fit: cover;  */
+   /* border-radius: 8px; */
+   margin-bottom: 10px;
+}
+
+.album-card-image2 {
+    max-height: 400px;
+    max-width: 400px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: 10px;
+}
+
+.song-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px; 
+}
+
+.song-number {
+    margin-right: 50px; 
+}
+
+.song-title {
+    flex: 1; 
+}
+
+.song-item:hover {
+    background-color: #f0f0f0; 
+    cursor: pointer;
+}
