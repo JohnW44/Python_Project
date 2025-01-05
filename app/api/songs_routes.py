@@ -93,13 +93,10 @@ def add_song():
             
             print("Image uploaded successfully:", image_upload["url"])
    
-    try:
+
         db.session.commit()
         return jsonify({'Songs': new_song.to_dict()}), 201
-    except Exception as e:
-        db.session.rollback()
-        print(f"Database error: {str(e)}")
-        return jsonify({"errors": str(e)}), 500
+    
 
 
 @songs_routes.route('/<int:songId>', methods=['PUT'])
