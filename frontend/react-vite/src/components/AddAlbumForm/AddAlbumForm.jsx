@@ -6,7 +6,7 @@ function AddAlbumForm() {
     const [title, setTitle] = useState("");
     const [artist, setArtist] = useState("");
     const [releasedYear, setReleasedYear] = useState("");
-    const [duration, setDuration] = useState("");
+    // const [duration, setDuration] = useState("");
     const [imageFile, setImageFile] = useState(null);
     const [errors, setErrors] = useState({});
 
@@ -32,11 +32,11 @@ function AddAlbumForm() {
         if (!releasedYear){
             errObj.releasedYear = "Release year is required";
         }
-        if (duration <= 0) {
-            errObj.duration = "Album duration must be at least one second";
-        }
+        // if (duration <= 0) {
+        //     errObj.duration = "Album duration must be at least one second";
+        // }
         setErrors(errObj);
-    }, [title, artist, releasedYear, duration]);
+    }, [title, artist, releasedYear]); //took out Duration
 
     const navigate = useNavigate();
 
@@ -47,7 +47,7 @@ function AddAlbumForm() {
         formData.append('title', title);
         formData.append('artist', artist);
         formData.append('released_year', releasedYear);
-        formData.append('duration', duration);
+        formData.append('duration', '1');
         
         if (imageFile) {
             formData.append('images', imageFile);
@@ -105,7 +105,7 @@ function AddAlbumForm() {
                 />
             </label>
             <p className='errors'>{errors.releasedYear}</p>
-
+{/* 
             <label>
                 Duration (seconds)
                 <input
@@ -115,7 +115,7 @@ function AddAlbumForm() {
                     required
                 />
             </label>
-            <p className='errors'>{errors.duration}</p>
+            <p className='errors'>{errors.duration}</p> */}
 
             <label>
                 Album Cover
