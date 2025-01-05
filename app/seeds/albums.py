@@ -12,26 +12,7 @@ def seed_albums():
             user_id=1,
             duration=4464
             )
-    album2 = Album( 
-            title='album2',
-            artist='Dafter Punk',
-            released_year=2013,
-            created_at=datetime.now(),
-            user_id=2,
-            duration=4464
-            )
-    album3 = Album( 
-            title='Album3',
-            artist='Daft Punk',
-            released_year=2013,
-            created_at=datetime.now(),
-            user_id=1,
-            duration=5000
-            )
-    
     db.session.add(album1)
-    db.session.add(album2)
-    db.session.add(album3)
     db.session.commit()
 
 
