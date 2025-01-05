@@ -49,9 +49,14 @@ function Navigation() {
       </div>
       <div className="nav-right">
         {sessionUser && (
+          <>
           <NavLink to="/songs/new" className="nav-link">
             Add Song
           </NavLink>
+          <NavLink to="/albums/new" className="nav-link">
+            Create Album
+          </NavLink>
+          </>
         )}
         <ProfileButton />
       </div>

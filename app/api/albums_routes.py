@@ -3,6 +3,10 @@ from app.models import Album , Song, Image
 from app import db  
 from flask_login import current_user, login_required
 from datetime import datetime
+from app.api.melody_images import (
+    upload_file_to_s3 as upload_image_to_s3,
+    get_unique_filename as get_unique_image_filename
+)
 
 
 # use this to cross models to_dict methods
@@ -182,20 +186,20 @@ def create_album():
     if not current_user.is_authenticated:
         return jsonify({"error": "Authentication required"}), 401
    
-    data = request.json
+    # data = request.json
 
 
-    title = data.get('title')
-    artist = data.get('artist')
-    released_year = data.get('released_year')
-    duration = data.get('duration')
-    image_urls = data.get('images', [])
+    title = request.form.get('title')
+    artist = request.form.get('artist')
+    released_year = request.form.get('released_year')
+    duration = request.form.get('duration')
+    # image = request.form.get('images')
 
 
     if not title or not artist or not released_year or not duration:
         return jsonify({"message": "Please enter required fields"}), 400
    
-    new_data = Album(
+    new_album = Album(
         user_id = current_user.id,
         title= title,
         artist= artist,
@@ -204,18 +208,33 @@ def create_album():
         created_at = datetime.now()
     )
    
-    db.session.add(new_data)
-    db.session.commit()
+    db.session.add(new_album)
+    db.session.flush()
 
 
-    for url in image_urls:
-        image = Image(url=url, album_id=new_data.id)
-        db.session.add(image)
+    if 'images' in request.files:
+        image_file = request.files['images']
+        if image_file.filename:
+            print("Processing image file:", image_file.filename)
+            
+            image_file.filename = get_unique_image_filename(image_file.filename)
+            image_upload = upload_image_to_s3(image_file)
+            
+            if "errors" in image_upload:
+                print("Image upload error:", image_upload["errors"])
+                return jsonify({"errors": image_upload["errors"]}), 400
+
+            new_image = Image(
+                album_id=new_album.id,
+                url=image_upload["url"],
+            )
+            db.session.add(new_image)
+            print("Image uploaded successfully:", image_upload["url"])
 
 
     db.session.commit()
 
 
     return jsonify({"message": "Album successfully created",
-                    "Album": new_data.to_dict()}),200
+                    "Album": new_album.to_dict()}),200
 
