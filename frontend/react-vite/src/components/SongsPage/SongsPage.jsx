@@ -4,11 +4,13 @@ import Melody_Logo from '../../../../../images/Melody_Logo.png'
 import './SongsPage.css';
 import { useSelector, useDispatch } from "react-redux";
 import { fetchSongs } from "../../redux/songs";
+import Songplayer from "../Songplayer/Songplayer";
 
 
 function SongsPage() {
     const { songId } = useParams();
     const [song, setSongs] = useState(null);
+    const [songLink, setSongLink] = useState(null);
     const sessionUser = useSelector(state => state.session.user);
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -20,6 +22,10 @@ function SongsPage() {
         .then((data) => {
             console.log("Full song data:", JSON.stringify(data, null, 2));
             setSongs(data);
+
+            if (data.audio_file) {
+                setSongLink(data.audio_file)
+            }
         })
     }, [songId]);
 
@@ -90,12 +96,13 @@ function SongsPage() {
                 <h2 className="details-title">Song Info</h2>
                 {song && (
                     <div className="song-details-item">
-                        <p>Genre: {song.genre || 'Unknown'}</p>
                         <p>Release Date: {song.released_date ? new Date(song.released_date).toLocaleDateString() : 'Unknown'}</p>
                         <p>Lyrics: {song.lyrics || 'No lyrics'}</p>
                     </div>
                 )}
+            {songLink && <Songplayer songLink= {songLink} />}
             </div>
+
         </div>
         </>
     );

@@ -7,7 +7,7 @@ import Songplayer from '../Songplayer/Songplayer';
 function ProfilePage(){
 
 const [likedSongs, setLikedSongs] = useState([])
-const [likedAlbums, setLikedAlbums] = useState([])
+// const [likedAlbums, setLikedAlbums] = useState([])
 const user = useSelector(state => state.session.user)
 const [songLink, setSongLink] = useState(null);
 // const dispatch = useDispatch();
@@ -29,13 +29,7 @@ useEffect(() => {
                 setLikedSongs(data.Songs || []); 
             }
         });
-    fetch(`/api/users/${user.id}/likedalbums`)
-        .then((response) => response.json())
-        .then((data) => {
-            if (data.Albums) {
-                setLikedAlbums(data.Albums || []); 
-            }
-        });
+        
 }, [user]);
 
 const handleSong = (song) => {
@@ -83,21 +77,6 @@ const handleSong = (song) => {
                     {songLink && <Songplayer songLink={songLink} />}
                 </div>
 
-            <div className="liked-section">
-                <h2>Loved Albums</h2>
-                {likedAlbums.length > 0 ? (
-                    <ul>
-                        {likedAlbums.map((album) => (
-                            <li key={album.id}>
-                                <p>{album.title} sang by {album.artist}</p>
-                                <p>Released: {album.released_year}</p>
-                            </li>
-                        ))}
-                    </ul>
-                ) : (
-                    <p>No liked albums.</p>
-                )}
-            </div>
         </div>
     );
 }

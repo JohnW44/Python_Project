@@ -30,7 +30,7 @@ function LoginFormModal() {
   const demoLogin = (e) => {
     e.preventDefault();
     // dispatch(thunkLogin({email: "demo@aa.io", password: "password"}))
-    dispatch(thunkLogin({email: "dan@dan.com", password: "dan"}));
+    dispatch(thunkLogin({email: "demo@aa.io", password: "password"}));
     closeModal()
   }
 
