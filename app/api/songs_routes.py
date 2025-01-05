@@ -4,8 +4,12 @@ from flask_login import login_required, current_user
 from datetime import datetime
 import os
 from app.api.melody_songs_aws import (
-     upload_file_to_s3,
-     get_unique_filename
+     upload_file_to_s3 as upload_song_to_s3,
+     get_unique_filename as get_unique_song_filename
+)
+from app.api.melody_images import (
+    upload_file_to_s3 as upload_image_to_s3,
+    get_unique_filename as get_unique_image_filename
 )
 from app import db  
 
@@ -48,8 +52,8 @@ def add_song():
         return jsonify({"errors": "valid audio file required"}), 400
    
    
-    audio_file.filename = get_unique_filename(audio_file.filename)
-    upload = upload_file_to_s3(audio_file)
+    audio_file.filename = get_unique_song_filename(audio_file.filename)
+    upload = upload_song_to_s3(audio_file)
    
     if "errors" in upload:
         return jsonify({"errors": upload["errors"]}), 400
@@ -66,28 +70,36 @@ def add_song():
    
     new_song = Song(**song_data)
     db.session.add(new_song)
-    db.session.commit()
+    db.session.flush()
    
-    if new_song.album_id:
-        album = Album.query.get(new_song.album_id)
-        if album and album.images:
-            new_image = Image(
-                song_id=new_song.id,
-                url=album.images[0].url,
-                album_id=new_song.album_id
-            )
-            db.session.add(new_image)
-    elif 'image_file' in request.files:
-        image_file = request.files['image_file']
+    if 'image' in request.files:
+        image_file = request.files['image']
         if image_file.filename:
+            print("Processing image file:", image_file.filename)
+            
+            image_file.filename = get_unique_image_filename(image_file.filename)
+            image_upload = upload_image_to_s3(image_file)
+            
+            if "errors" in image_upload:
+                print("Image upload error:", image_upload["errors"])
+                return jsonify({"errors": image_upload["errors"]}), 400
+
             new_image = Image(
                 song_id=new_song.id,
-                url=image_file.filename,
-                album_id=1
+                url=image_upload["url"],
             )
             db.session.add(new_image)
-            db.session.commit()
-    return jsonify({'Songs': new_song.to_dict()}), 201
+            # db.session.commit()
+            
+            print("Image uploaded successfully:", image_upload["url"])
+   
+    try:
+        db.session.commit()
+        return jsonify({'Songs': new_song.to_dict()}), 201
+    except Exception as e:
+        db.session.rollback()
+        print(f"Database error: {str(e)}")
+        return jsonify({"errors": str(e)}), 500
 
 
 @songs_routes.route('/<int:songId>', methods=['PUT'])
@@ -129,11 +141,17 @@ def update_song(songId):
             existing_image = Image.query.filter_by(song_id=songId).first()
             if existing_image:
                 db.session.delete(existing_image)
+                db.session.commit()
+
+            image_file.filename = get_unique_image_filename(image_file.filename)
+            image_upload = upload_image_to_s3(image_file)
+            
+            if "errors" in image_upload:
+                return jsonify({"errors": image_upload["errors"]}), 400
 
             new_image = Image(
                 song_id=songId,
-                album_id=song.album_id,
-                url=image_file.filename
+                url=image_upload["url"]
             )
             db.session.add(new_image)
        

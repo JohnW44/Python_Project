@@ -125,7 +125,7 @@ class Image(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     song_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('songs.id')), nullable=True, unique=True)
-    album_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('albums.id')), nullable=False)
+    album_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('albums.id')), nullable=True) #!Changed this to True for Image troubleshooting
     url = db.Column(db.String(1000), nullable=False)
 
 
