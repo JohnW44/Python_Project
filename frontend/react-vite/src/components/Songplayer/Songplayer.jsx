@@ -25,7 +25,7 @@ const Songplayer = ({ songLink }) => {
 
 
       wavesurferRef.current.on('ready', () => {
-        wavesurferRef.current.play();
+        wavesurferRef.current.stop();
       });
     }
 

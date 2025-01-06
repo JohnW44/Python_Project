@@ -8,6 +8,7 @@ function AlbumPage() {
     const { albumId } = useParams();
     const [songs, setSongs] = useState([]);
     const [album, setAlbum] = useState(null);
+    const [albumSongs, setAlbumSongs] = useState([])
     const sessionUser = useSelector(state => state.session.user);
     const navigate = useNavigate()
 
@@ -23,8 +24,40 @@ function AlbumPage() {
     const handleEdit = () => {
             navigate(`/albums/new?albumId=${albumId}`);
         }
+        useEffect(() => {
+            if (sessionUser && album && sessionUser.id === album.user_id) {
+                fetch('/api/songs/')
+                    .then((response) => response.json())
+                    .then((data) => {
+                        const albumSongs = data.Songs.filter(song => 
+                            song.user_id === sessionUser.id && !song.album_id
+                        );
+                        setAlbumSongs(albumSongs);
+                    });
+            }
+        }, [songs, album, sessionUser]);
     
-    
+    const handleAddSongToAlbum = async (songId) => {
+            const response = await fetch(`/api/albums/${albumId}/${sessionUser.id}/songs`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ songid: songId })
+            });
+
+            if (response.ok) {
+                fetch(`/api/albums/${albumId}/songs`)
+                    .then((response) => response.json())
+                    .then((data) => {
+                        setSongs(data.Songs || []);
+                    });
+                } else {
+                    const data = await response.json();
+                    console.error("Failed to add song:", data.message);
+                }
+        };
+
     const handleDelete = () => {
         if (window.confirm("Are you sure you want to delete this album?")) {
             fetch(`/api/albums/${albumId}`, {
@@ -80,9 +113,25 @@ function AlbumPage() {
                     <div key={song.id} className="song-item" onClick={() => songclick(song.id)}>
                         <span className="song-number">{index + 1}</span>
                         <span className="song-title">{song.title} </span>
-                        <span className="song-duration">{song.duration} </span>
+                        <span className="song-duration">{Math.floor(song.duration / 60)}:{String(song.duration % 60).padStart(2, '0')}</span>
                     </div>
                 ))}
+                {sessionUser && album && sessionUser.id === album.user_id && (
+                    <div className="add-songs-section">
+                        <h3>Add Songs to Album</h3>
+                        {albumSongs.map(song => (
+                            <div key={song.id} className="album-song-item">
+                                <span>{song.title}</span>
+                                <button 
+                                    onClick={() => handleAddSongToAlbum(song.id)}
+                                    className="add-to-album-button"
+                                >
+                                    Add to Album
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
         </div>
     );
