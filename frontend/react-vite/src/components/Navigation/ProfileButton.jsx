@@ -46,8 +46,8 @@ function ProfileButton() {
   //demo is corrupted must signupo with new demo acc and set here
   const demoLogin = (e) => {
     e.preventDefault();
-    // dispatch(thunkLogin({email: "demo@aa.io", password: "password"}))
-    dispatch(thunkLogin({email: "dan@dan.com", password: "dan"}))
+    dispatch(thunkLogin({email: "demo@aa.io", password: "password"}))
+    // dispatch(thunkLogin({email: "dan@dan.com", password: "dan"}))
     closeMenu()
   }
 
