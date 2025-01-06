@@ -1,17 +1,35 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import './ProfilePage.css'
 // import { thunkAuthenticate } from '../../redux/session';
 import {useSelector} from 'react-redux';
 import Songplayer from '../Songplayer/Songplayer';
 import { useNavigate } from 'react-router-dom';
+import { FaStar } from 'react-icons/fa';
+import { LikedSongsContext } from '../../context/LikeSongs';
 
 function ProfilePage(){
 const navigate = useNavigate();
-const [likedSongs, setLikedSongs] = useState([]);
+const { likedSongs, setLikedSongs } = useContext(LikedSongsContext);
 // const [likedAlbums, setLikedAlbums] = useState([])
 const user = useSelector(state => state.session.user);
 const [songLink, setSongLink] = useState(null);
 // const dispatch = useDispatch();
+
+const handleUnlike = (song) => {
+    if (!user) return;
+    
+    fetch(`/api/users/${user.id}/likedsongs`, {
+        method: 'DELETE',
+        headers: { 'Content-type': 'application/json' },
+        body: JSON.stringify({ song_id: song.id })
+    })
+    .then(response => {
+        if (response.ok) {
+            setLikedSongs(current => current.filter(s => s.id !== song.id));
+        }
+    });
+};
+
 
 useEffect(() => {
     if (!user || !user.id) {
@@ -32,7 +50,7 @@ useEffect(() => {
             }
         });
         
-}, [user, navigate]);
+    }, [user, navigate, setLikedSongs]);
 
 if (!user) {
     return null;
@@ -75,26 +93,37 @@ const handleSong = (song) => {
                 <div className="liked-section">
                     <h2>Loved Songs</h2>
                     {likedSongs.length > 0 ? (
-                    <div className="albums-grid">
-                        {likedSongs.map((song) => (
-                        <div
-                            key={song.id}
-                            className="album-card"
-                            onClick={() => handleSong(song)} >
-                            {song.album && song.album.images && song.album.images.length > 0 && song.album.images[0].url ? (
-                            <img src={song.album.images[0].url} alt={song.title} className="album-card-image" />
-                            ) : (
-                            <div>No image available</div>
-                            )}
-                            <div className="album-card-details">
-                            <p className="album-title">{song.title}</p>
-                            <p className="album-artist">{song.artist}</p>
-                            </div>
+                        <div className="songs-table">
+                            {likedSongs.map((song) => (
+                                <div key={song.id} className="song-row">
+                                    <div className="song-info" onClick={() => handleSong(song)}>
+                                        <img 
+                                            src={song.album?.images?.[0]?.url || 'default-album-image.png'} 
+                                            alt={song.title} 
+                                            className="song-thumbnail" 
+                                        />
+                                        <div className="song-details">
+                                            <p className="song-title">{song.title}</p>
+                                            <p className="song-artist">{song.artist}</p>
+                                            <p className="song-duration">
+                                                {Math.floor(song.duration / 60)}:{String(song.duration % 60).padStart(2, '0')}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <button 
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleUnlike(song);
+                                        }} 
+                                        className="unlike-button"
+                                    >
+                                        <FaStar className="star-icon filled" />
+                                    </button>
+                                </div>
+                            ))}
                         </div>
-                        ))}
-                    </div>
                     ) : (
-                    <p>No liked songs.</p>
+                        <p>No liked songs.</p>
                     )}
                     {songLink && <Songplayer songLink={songLink} />}
                 </div>
