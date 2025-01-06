@@ -57,7 +57,28 @@ function AlbumPage() {
                     console.error("Failed to add song:", data.message);
                 }
         };
+    
+    const handleRemoveSongFromAlbum = async (songId) => {
+        const response = await fetch(`/api/albums/${albumId}/${sessionUser.id}/songs`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ songid: songId })
+        });
 
+        if (response.ok) {
+            fetch(`/api/albums/${albumId}/songs`)
+                .then((response) => response.json())
+                .then((data) => {
+                    setSongs(data.Songs || []);
+                });
+        } else {
+            const data = await response.json();
+            console.error("Failed to remove song:", data.message)
+        }
+    }
+    
     const handleDelete = () => {
         if (window.confirm("Are you sure you want to delete this album?")) {
             fetch(`/api/albums/${albumId}`, {
@@ -88,18 +109,18 @@ function AlbumPage() {
                     <h3>Songs: {songs.length}</h3>
                 </div>
                 {sessionUser && album && sessionUser.id === album.user_id && (
-                    <div className="album-actions">
+                    <div className="album-actions2">
                         <button
                             type="button"
                             onClick={handleEdit}
-                            className="edit-button"
+                            className="edit-album-button"
                         >
                             Edit Album
                         </button>
                         <button
                             type="button"
                             onClick={handleDelete}
-                            className="delete-button"
+                            className="delete-album-button"
                         >
                             Delete Album
                         </button>
@@ -107,29 +128,47 @@ function AlbumPage() {
                 )}
             </div>
 
-            <div className="album-songs-list2" >
+            <div className="album-songs-list2">
                 <h2 className="songs-title2">Songs</h2>
                 {songs.map((song, index) => (
-                    <div key={song.id} className="song-item" onClick={() => songclick(song.id)}>
-                        <span className="song-number">{index + 1}</span>
-                        <span className="song-title">{song.title} </span>
-                        <span className="song-duration">{Math.floor(song.duration / 60)}:{String(song.duration % 60).padStart(2, '0')}</span>
+                    <div key={song.id} className="song-item">
+                        <div onClick={() => songclick(song.id)}>
+                            <span className="song-number">{index + 1}</span>
+                            <span className="song-title">{song.title}</span>
+                            <span className="song-duration">{Math.floor(song.duration / 60)}:{String(song.duration % 60).padStart(2, '0')}</span>
+                        </div>
+                        {sessionUser && album && sessionUser.id === album.user_id && (
+                            <button 
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleRemoveSongFromAlbum(song.id);
+                                }}
+                                className="remove-from-album-button"
+                            >
+                                Remove
+                            </button>
+                        )}
                     </div>
                 ))}
+
                 {sessionUser && album && sessionUser.id === album.user_id && (
                     <div className="add-songs-section">
                         <h3>Add Songs to Album</h3>
-                        {albumSongs.map(song => (
-                            <div key={song.id} className="album-song-item">
-                                <span>{song.title}</span>
-                                <button 
-                                    onClick={() => handleAddSongToAlbum(song.id)}
-                                    className="add-to-album-button"
-                                >
-                                    Add to Album
-                                </button>
-                            </div>
-                        ))}
+                        {albumSongs.length > 0 ? (
+                            albumSongs.map(song => (
+                                <div key={song.id} className="album-song-item">
+                                    <span>{song.title}</span>
+                                    <button 
+                                        onClick={() => handleAddSongToAlbum(song.id)}
+                                        className="add-to-album-button"
+                                    >
+                                        Add to Album
+                                    </button>
+                                </div>
+                            ))
+                        ) : (
+                            <p>No available songs to add</p>
+                        )}
                     </div>
                 )}
             </div>
