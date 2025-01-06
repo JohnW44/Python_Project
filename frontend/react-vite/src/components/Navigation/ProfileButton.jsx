@@ -68,7 +68,7 @@ function ProfileButton() {
               <li>Hey {user.username}</li>
               <li>{user.email}</li>
               <li>
-                <button onClick={goSettings}>Settings</button> {/* Changed NavLink to button */}
+                <button onClick={goSettings}>Profile Page</button> {/* Changed NavLink to button */}
               </li>
               <li>
                 <button onClick={logout}>Log Out</button>
