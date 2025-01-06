@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 import { useEffect, useContext } from "react";
 import ProfileButton from "./ProfileButton";
 import { useDispatch, useSelector } from "react-redux";
-import { FaSearch } from 'react-icons/fa';
+// import { FaSearch } from 'react-icons/fa';
 import logo from '../../../../../images/Melody_Logo1.png'
 import { LikedSongsContext } from "../../context/LikeSongs";
 import { fetchSongs } from "../../redux/songs";
@@ -74,12 +74,12 @@ function Navigation() {
      
       <div className="nav-center">
         <div className="search-container">
-          <FaSearch className="search-icon" />
+          {/* <FaSearch className="search-icon" />
           <input
             type="search"
             className="search-bar"
             placeholder="Search for songs..."
-            />
+            /> */}
       </div>
       </div>
       <div className="nav-right">
