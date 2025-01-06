@@ -5,14 +5,32 @@ from app.models.db import environment, SCHEMA
 
 def seed_albums():
     album1 = Album( 
-            title='Random Access Memories',
+            title='Discovery',
             artist='Daft Punk',
-            released_year=2013,
+            released_year=2001,
             created_at=datetime.now(),
             user_id=1,
             duration=4464
             )
+    album2 = Album( 
+            title='Views',
+            artist='Drake',
+            released_year=2016,
+            created_at=datetime.now(),
+            user_id=1,
+            duration=4000
+            )
+    album3 = Album( 
+            title='My Beautiful Dark Twisted Fantasy',
+            artist='Kanye',
+            released_year=2010,
+            created_at=datetime.now(),
+            user_id=1,
+            duration=3500
+            )
     db.session.add(album1)
+    db.session.add(album2)
+    db.session.add(album3)
     db.session.commit()
 
 
