@@ -33,15 +33,7 @@
    cursor: pointer;
 }
 
-.album-circle img {
-   /* width: 100px; */
-   /* height: 200px; */
-   border-radius: 50%;
-   border-color: black;
-   object-fit: cover;
-   margin-bottom: 10px;
-   transition: transform 0.3s ease;
-}
+
 
 .album-circle img:hover {
    transform: scale(1.05);
@@ -51,7 +43,18 @@
 .album-card-image {
    width: 100%;
    height: 150px;
-   object-fit: cover;
+   max-height: 150px;
+   /* object-fit: cover; */
+   border-radius: 8px;
+   margin-bottom: 10px;
+}
+
+.placeholder-image {
+   width: 100%; 
+   height: 150px; 
+   max-height: 150px;
+   max-width: 100%;
+   /* object-fit: cover;  */
    border-radius: 8px;
    margin-bottom: 10px;
 }
