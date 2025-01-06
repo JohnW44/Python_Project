@@ -10,9 +10,10 @@ function SignupFormModal() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [firstname, setFirstname] = useState("")
-  const [lastname, setLastname] = useState("")
-  const [profileImage, setProfileImage] = useState("")
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState("");
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
 
@@ -21,21 +22,21 @@ function SignupFormModal() {
 
     if (password !== confirmPassword) {
       return setErrors({
-        confirmPassword:
-          "Confirm Password field must be the same as the Password field",
+        confirmPassword: "Confirm Password field must be the same as the Password field",
       });
     }
 
-    const serverResponse = await dispatch(
-      thunkSignup({
-        email,
-        username,
-        password,
-        first_name: firstname,
-        last_name: lastname,
-        profile_image: profileImage,
-      })
-    );
+    const formData = new FormData();
+    formData.append("email", email);
+    formData.append("username", username);
+    formData.append("password", password);
+    formData.append("first_name", firstname);
+    formData.append("last_name", lastname);
+    if (imageFile) {
+      formData.append("profile_image", imageFile);
+    }
+
+    const serverResponse = await dispatch(thunkSignup(formData));
 
     if (serverResponse) {
       setErrors(serverResponse);
@@ -44,11 +45,21 @@ function SignupFormModal() {
     }
   };
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file);
+      const previewUrl = URL.createObjectURL(file);
+      setImagePreview(previewUrl);
+    }
+  };
+
   return (
     <>
+    <div className="signup-modal-container">
       <h1>Sign Up</h1>
       {errors.server && <p>{errors.server}</p>}
-      <form onSubmit={handleSubmit} className="form">
+      <form onSubmit={handleSubmit} encType="multipart/form-data">
         <label>
           Email
           <input
@@ -56,7 +67,7 @@ function SignupFormModal() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-          />
+            />
         </label>
         {errors.email && <p>{errors.email}</p>}
         <label>
@@ -66,7 +77,7 @@ function SignupFormModal() {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
-          />
+            />
         </label>
         {errors.username && <p>{errors.username}</p>}
         <label>
@@ -76,7 +87,7 @@ function SignupFormModal() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-          />
+            />
         </label>
         {errors.password && <p>{errors.password}</p>}
         <label>
@@ -86,7 +97,7 @@ function SignupFormModal() {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             required
-          />
+            />
         </label>
         {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
         <label>
@@ -96,7 +107,7 @@ function SignupFormModal() {
             value={firstname}
             onChange={(e) => setFirstname(e.target.value)}
             required
-          />
+            />
         </label>
         {errors.firstName && <p>{errors.firstName}</p>} 
 
@@ -107,22 +118,30 @@ function SignupFormModal() {
             value={lastname}
             onChange={(e) => setLastname(e.target.value)}
             required
-          />
+            />
         </label>
 
         {errors.lastName && <p>{errors.lastName}</p>}
-        <label>
-          Profile Image URL
-          <input
-            type="text"
-            value={profileImage}
-            onChange={(e) => setProfileImage(e.target.value)}
-          />
-        </label>
-        {errors.profile_image && <p>{errors.profile_image}</p>} 
+        <div className="image-upload-section">
 
+        <label>
+          Profile Image
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            />
+        </label>
+        {imagePreview && (
+          <div className="image-preview-signup">
+            <img src={imagePreview} alt="Preview" style={{ width: '100px' }} />
+          </div>
+        )}
+        </div>
+        {errors.profile_image && <p>{errors.profile_image}</p>}
         <button type="submit">Sign Up</button>
       </form>
+      </div>
     </>
   );
 }

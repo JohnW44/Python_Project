@@ -3,6 +3,7 @@ from app.models import User, db
 from app.forms import LoginForm
 from app.forms import SignUpForm
 from flask_login import current_user, login_user, logout_user, login_required
+from .melody_images import upload_file_to_s3, get_unique_filename 
 
 auth_routes = Blueprint('auth', __name__)
 
@@ -52,18 +53,39 @@ def sign_up():
     """
     form = SignUpForm()
     form['csrf_token'].data = request.cookies['csrf_token']
+    
     if form.validate_on_submit():
+        profile_image_url = None
+        if 'profile_image' in request.files:
+            image = request.files['profile_image']
+            if image:
+                image.filename = get_unique_filename(image.filename)
+                upload_response = upload_file_to_s3(image)
+                
+                if "url" not in upload_response:
+                    return {"errors": "Failed to upload image"}, 400
+                profile_image_url = upload_response["url"]
+
         user = User(
             username=form.data['username'],
             email=form.data['email'],
             password=form.data['password'],
             first_name=form.data['first_name'],
-            last_name=form.data['last_name']
+            last_name=form.data['last_name'],
+            profile_image=profile_image_url
         )
+        
         db.session.add(user)
-        db.session.commit()
-        login_user(user)
-        return user.to_dict()
+        try:
+            db.session.commit()
+            login_user(user)
+            return user.to_dict()
+        except Exception as e:
+            db.session.rollback()
+            return {"errors": str(e)}, 400
+    
+    # If form validation fails, return the errors
+    return {"errors": form.errors}, 401
     return form.errors, 401
 
 

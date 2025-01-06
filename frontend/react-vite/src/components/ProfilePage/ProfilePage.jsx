@@ -3,17 +3,19 @@ import './ProfilePage.css'
 // import { thunkAuthenticate } from '../../redux/session';
 import {useSelector} from 'react-redux';
 import Songplayer from '../Songplayer/Songplayer';
+import { useNavigate } from 'react-router-dom';
 
 function ProfilePage(){
-
-const [likedSongs, setLikedSongs] = useState([])
+const navigate = useNavigate();
+const [likedSongs, setLikedSongs] = useState([]);
 // const [likedAlbums, setLikedAlbums] = useState([])
-const user = useSelector(state => state.session.user)
+const user = useSelector(state => state.session.user);
 const [songLink, setSongLink] = useState(null);
 // const dispatch = useDispatch();
 
 useEffect(() => {
     if (!user || !user.id) {
+        navigate('/')
         return;
     }
 
@@ -30,7 +32,11 @@ useEffect(() => {
             }
         });
         
-}, [user]);
+}, [user, navigate]);
+
+if (!user) {
+    return null;
+}
 
 const handleSong = (song) => {
     console.log("song", song.audio_file)
@@ -41,7 +47,23 @@ const handleSong = (song) => {
             <div className='profilebox'>
                 <h1>Profile Page</h1>
                 <div className='profileinfo'>
-                    <img src={user.profile_image} className='profile-pic'/>
+                    {user.profile_image ? (
+                        <img 
+                            src={user.profile_image} 
+                            className='profile-pic'
+                            alt="Profile"
+                            onError={(e) => {
+                                e.target.src = 'default-profile-image.png'; 
+                                e.target.onerror = null; 
+                            }}
+                        />
+                    ) : (
+                        <img 
+                            src='default-profile-image.png' 
+                            className='profile-pic'
+                            alt="Default Profile"
+                        />
+                    )}
                     <div className='details'>
                         <p>Username: {user.username}</p>
                         <p>Email: {user.email}</p>

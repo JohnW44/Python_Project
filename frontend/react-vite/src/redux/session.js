@@ -31,12 +31,12 @@ export const thunkAuthenticate = () => async (dispatch) => {
 };
 
 export const thunkLogin = (credentials) => async dispatch => {
-  // const csrfToken = document.cookie.match(/(?:^|; )csrf_token=([^;]*)/)?.[1];
+  const csrfToken = document.cookie.match(/(?:^|; )csrf_token=([^;]*)/)?.[1];
 
   const response = await fetch("/api/auth/login", {
     method: "POST",
     headers: { "Content-Type": "application/json",
-            // "X-CSRF-TOKEN": csrfToken
+            "X-CSRF-TOKEN": csrfToken
      },
     body: JSON.stringify(credentials),
     credentials: "same-origin",
@@ -53,24 +53,25 @@ export const thunkLogin = (credentials) => async dispatch => {
   }
 };
 
-export const thunkSignup = (user) => async (dispatch) => {
+export const thunkSignup = (formData) => async (dispatch) => {
   const response = await fetch("/api/auth/signup", {
     method: "POST",
-    headers: { "Content-Type": "application/json",
-            "X-CSRF-TOKEN": csrfToken
-     },
-    body: JSON.stringify(user),
+    headers: {
+      "X-CSRF-TOKEN": csrfToken
+    },
+    body: formData,
     credentials: "same-origin",
   });
 
-  if(response.ok) {
+  if (response.ok) {
     const data = await response.json();
     dispatch(setUser(data));
+    return null;
   } else if (response.status < 500) {
     const errorMessages = await response.json();
-    return errorMessages
+    return errorMessages;
   } else {
-    return { server: "Something went wrong. Please try again" }
+    return { server: "Something went wrong. Please try again" };
   }
 };
 

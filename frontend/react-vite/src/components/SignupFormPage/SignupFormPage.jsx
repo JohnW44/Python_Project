@@ -14,6 +14,8 @@ function SignupFormPage() {
   const [firstname, setFirstname] = useState("")
   const [lastname, setLastname] = useState("")
   const [errors, setErrors] = useState({});
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState("");
 
   if (sessionUser) return <Navigate to="/" replace={true} />;
 
@@ -27,20 +29,31 @@ function SignupFormPage() {
       });
     }
 
-    const serverResponse = await dispatch(
-      thunkSignup({
-        email,
-        username,
-        password,
-        first_name:firstname,
-        last_name: lastname,
-      })
-    );
+    const formData = new FormData();
+    formData.append("email", email);
+    formData.append("username", username);
+    formData.append("password", password);
+    formData.append("first_name", firstname);
+    formData.append("last_name", lastname);
+    if (imageFile) {
+      formData.append("profile_image", imageFile);
+    }
+
+    const serverResponse = await dispatch(thunkSignup(formData));
 
     if (serverResponse) {
       setErrors(serverResponse);
     } else {
       navigate("/");
+    }
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file);
+      const previewUrl = URL.createObjectURL(file);
+      setImagePreview(previewUrl);
     }
   };
 
@@ -110,6 +123,19 @@ function SignupFormPage() {
           />
         </label>
         {errors.lastName && <p>{errors.lastName}</p>}  
+        <label>
+          Profile Image
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+          />
+        </label>
+        {imagePreview && (
+          <div className="image-preview">
+            <img src={imagePreview} alt="Preview" style={{ width: '100px' }} />
+          </div>
+        )}
         <button type="submit">Sign Up</button>
       </form>
     </>

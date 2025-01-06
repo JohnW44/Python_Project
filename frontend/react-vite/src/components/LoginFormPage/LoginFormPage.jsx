@@ -10,7 +10,7 @@ function LoginFormPage() {
   const sessionUser = useSelector((state) => state.session.user);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState([]);
 
   if (sessionUser) return <Navigate to="/" replace={true} />;
 
@@ -31,10 +31,17 @@ function LoginFormPage() {
     }
   };
 
-  const demoLogin = (e) => {
+  const demoLogin = async (e) => {
     e.preventDefault();
-    // dispatch(thunkLogin({email: "demo@aa.io", password: "password"}))
-    dispatch(thunkLogin({email: "dan@dan.com", password: "dan"}))
+    const serverResponse = await dispatch(
+      thunkLogin({email: "dan@dan.com", password: "dan"})
+    );
+
+    if (serverResponse) {
+      setErrors(serverResponse);
+    } else {
+      navigate("/");
+    }
   }
 
   return (
