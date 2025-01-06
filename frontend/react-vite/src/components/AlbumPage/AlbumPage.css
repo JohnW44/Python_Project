@@ -71,8 +71,11 @@
 
 .song-item {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px; 
+    padding: 10px;
+    cursor: pointer;
+    width: 97%;
 }
 
 .song-number {
@@ -81,6 +84,12 @@
 
 .song-title {
     flex: 1; 
+    margin-right: 50px;
+}
+
+.song-duration {
+    min-width: 60px;
+    text-align: right;
 }
 
 .song-item:hover {
@@ -88,24 +97,42 @@
     cursor: pointer;
 }
 
-.albums-actions {
+.albums-actions2 {
     margin-top: 20px;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 10px;
+    width: 100%;
 }
 
-.edit-button,
-.delete-button {
-    padding: 8px 16px;
+.edit-album-button {
+    padding: 10px;
     border-radius: 4px;
     cursor: pointer;
     border: none;
     font-weight: bold;
-    margin-left: 18%;
-    margin-bottom: 10%;
+    background-color:#1db954;
+    margin-right: 5px;
 }
 
+.edit-album-button:hover {
+    background-color: #1ed760;
+}
+
+.delete-album-button {
+    padding: 10px; 
+    border-radius: 4px;
+    cursor: pointer;
+    border: none;
+    font-weight: bold;
+    margin-bottom: 10px;
+    background-color: #ff4444;
+}
+
+.delete-album-button:hover {
+    background-color: #831b1b;
+}
 .add-songs-section {
     margin-top: 20px;
     padding: 20px;
@@ -120,6 +147,7 @@
     margin: 5px 0;
     background-color: #f5f5f5;
     border-radius: 4px;
+    width: 100%;
 }
 
 .add-to-album-button {
@@ -129,8 +157,31 @@
     padding: 5px 10px;
     border-radius: 4px;
     cursor: pointer;
+    margin-left: 10px;
 }
 
 .add-to-album-button:hover {
     background-color: #1ed760;
+}
+
+.remove-from-album-button {
+    background-color: #ff4444;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.remove-from-album-button:hover {
+    background-color: #cc0000;
+}
+
+.album-song-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    width: 100%;
 }
