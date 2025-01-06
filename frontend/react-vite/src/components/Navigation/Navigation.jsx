@@ -27,7 +27,7 @@ function Navigation() {
         setLikedSongs(data.Songs || [])
       })
     }
-  }, [sessionUser]);
+  }, [sessionUser, setLikedSongs]);
 
   const handleLike = (song) => {
     if (!sessionUser) return;

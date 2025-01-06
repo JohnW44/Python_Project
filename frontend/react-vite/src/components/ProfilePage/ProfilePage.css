@@ -101,13 +101,8 @@
     border: none;
     cursor: pointer;
     margin-left: 20px;
-}
-
-.star-icon.filled {
     color: gold;
     font-size: 25px;
-    cursor: pointer;
-    border: none;
 }
 
 

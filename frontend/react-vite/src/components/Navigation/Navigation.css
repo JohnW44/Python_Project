@@ -191,6 +191,7 @@ a.song-link {
 button.like-button {
   background-color: transparent;
   border-color: transparent;
-  color: #FD7238
+  color: #FD7238;
+  size: 25px;
 }
 
