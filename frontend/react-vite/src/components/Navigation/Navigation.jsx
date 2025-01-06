@@ -101,8 +101,8 @@ function Navigation() {
         <>
           {/* <NavLink to="/playlists" className="side-nav">
             Playlists
-          </NavLink> */}
-          <div className="my-songs-header">My Songs</div>
+          // </NavLink> */}
+          {/* // <div className="my-songs-header">My Songs</div> */}
           <div className="songs-list">
           {userSongs.map(song => (
                 <div key={song.id} className="song-item user-song">

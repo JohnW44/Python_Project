@@ -42,11 +42,11 @@
     color: #000;
 }
 
-.liked-section p {
+/* .liked-section p {
     font-size: 20px;
     margin-bottom: 20px;
     color: #000;
-}
+} */
 
 .songs-table {
     display: flex;
