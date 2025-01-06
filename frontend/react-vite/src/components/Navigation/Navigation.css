@@ -193,5 +193,11 @@ button.like-button {
   border-color: transparent;
   color: #FD7238;
   size: 25px;
+  cursor: pointer;
 }
 
+button.like-button:hover {
+  color: #FD7238;
+  font-weight: bolder;
+  transform: scale(1.5);
+}
