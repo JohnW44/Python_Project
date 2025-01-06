@@ -1,25 +1,113 @@
 .profilebox {
     padding-left: 20%;
+    padding-top: 20px;
+    padding-right: 20%;
+    color: #000;
 }
 
+.profileinfo {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    color: #000;
+}
 
-.profile-pic{
+.profile-pic {
     width: 150px;
     height: 150px;
     border-radius: 50%;
+    object-fit: cover;
+    margin-right: 20px;
+    color: #000;
 }
 
-.profileinfo{
-    display: flex;
-    align-items: center;
-}
-
-.details{
+.details {
     display: flex;
     flex-direction: column;
 }
 
 .details p {
-    margin: 20px;
-    font-size: 30px;
+    margin: 10px 0;
+    font-size: 22px;
+    color: #000;
 }
+
+.liked-section {
+    margin-top: 40px;
+}
+
+.liked-section h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #000;
+}
+
+.songs-table {
+    display: flex;
+    flex-direction: column;
+}
+
+.song-row {
+    display: flex;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #FD7238;
+    border-radius: 10px;
+}
+
+.song-row:hover {
+    background-color: #f5f5f5;
+}
+
+.song-info {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.song-thumbnail {
+    max-width: 100px;
+    max-height: 100px;
+    border-radius: 5px;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+.song-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.song-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #000000;
+    margin-left:20px;
+}
+
+.song-artist {
+    font-size: 16px;
+    color: #000000;
+    margin-left:20px;
+}
+
+.song-duration {
+    font-size: 14px;
+    color: #000000;
+}
+
+.unlike-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: 20px;
+}
+
+.star-icon.filled {
+    color: gold;
+    font-size: 25px;
+    cursor: pointer;
+    border: none;
+}
+
+

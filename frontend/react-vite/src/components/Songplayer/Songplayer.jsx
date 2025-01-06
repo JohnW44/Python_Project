@@ -19,7 +19,7 @@ const Songplayer = ({ songLink }) => {
         height: 100,
         barWidth: 3,
         responsive: true,
-        cursorColor: 'gray',
+        cursorColor: 'black',
       });
       wavesurferRef.current.load(songLink);
 
@@ -46,7 +46,7 @@ const Songplayer = ({ songLink }) => {
           {wavesurferRef.current?.isPlaying() ? 'Pause' : 'Play'}
         </button>
         <button onClick={() => wavesurferRef.current.stop()}>
-          Stop
+          Rewind
         </button>
       </div>
     </div>

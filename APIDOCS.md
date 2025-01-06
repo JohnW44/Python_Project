@@ -60,15 +60,15 @@ Returns the information about the current user that is logged in.
   * Body:
 
     ```json
-    {
-      "user": {
-        "email": "john.smith@gmail.com",
-        "firstName": "John",
-        "id": 1,
-        "lastName": "Smith",
-        "username": "JohnSmith"
-      }
-    }
+  {
+    "email": "demo@aa.io",
+    "first_name": "Demo",
+    "id": 1,
+    "last_name": "User",
+    "likes": [],
+    "profile_image": "https://m.media-amazon.com/images/M/MV5BNzBmYjBjODktMzE1ZC00NDY1LWJiYzktMWFkM2VjZDVjZTA2XkEyXkFqcGc@._V1_.jpg",
+    "username": "Demo"
+  }
     ```
 
 * Successful Response when there is no logged in user
@@ -98,8 +98,8 @@ information.
 
     ```json
     {
-      "email": "john.smith@gmail.com",
-      "password": "secret password"
+      "email": "demo@aa.io",
+      "password": "password"
     }
     ```
 
@@ -111,13 +111,13 @@ information.
 
     ```json
     {
-      "user": {
-        "email": "john.smith@gmail.com",
-        "first_name": "John",
-        "id": 1,
-        "last_name": "Smith",
-        "username": "JohnSmith"
-      }
+    "email": "demo@aa.io",
+    "first_name": "Demo",
+    "id": 1,
+    "last_name": "User",
+    "likes": [],
+    "profile_image": "https://m.media-amazon.com/images/M/MV5BNzBmYjBjODktMzE1ZC00NDY1LWJiYzktMWFkM2VjZDVjZTA2XkEyXkFqcGc@._V1_.jpg",
+    "username": "Demo"
     }
     ```
 
@@ -202,12 +202,14 @@ user's information.
 
     ```json
     {
-        "email": "john.smith@gmail.com",
-        "first_name": "John",
-        "id": 1,
-        "last_name": "Smith",
-        "username": "JohnSmith"
-      }
+    "email": "john.smith@gmail.com",
+    "first_name": "John",
+    "id": 7,
+    "last_name": "Smith",
+    "likes": [],
+    "profile_image": null,
+    "username": "JohnSmith"
+    }
     
     ```
 
@@ -219,11 +221,14 @@ user's information.
 
     ```json
     {
-      "message": "User already exists",
-      "errors": {
-        "email": "User with that email already exists",
-        "username": "User with that username already exists"
-      }
+    "errors": {
+        "email": [
+            "Email address is already in use."
+        ],
+        "username": [
+            "Username is already in use."
+        ]
+    }
     }
     ```
 
@@ -257,7 +262,7 @@ Returns all the songs.
 * Require Authentication: false
 * Request
   * Method: GET
-  * Route path: /songs
+  * Route path: api/songs
   * Body: none
 
 
@@ -270,27 +275,49 @@ Returns all the songs.
 
     ```json
     {
-      "Songs": [
+    "Songs": [
         {
-          "album_id": 1,
-          "artist": "Big Bird",
-          "created_at": "2021-11-19 20:39:36",
-          "duration": 500,
-          "id": 1,
-          "images": [
-            {
-              "album_id": 1,
-              "id": 1,
-              "song_id":1,
-              "url": "url"
-            }
-          ],
-          "lyrics": "Happy birthday too youu",
-          "released_date": "year, month, date",
-          "title": "Happy birthday",
-          "user_id": 1,
-        }
-      ]
+            "album_id": 1,
+            "artist": "Daft Punk",
+            "audio_file": "https://melody-songs.s3.us-east-1.amazonaws.com/07a9740ea7754e2292a349e8d6932620.mp3",
+            "created_at": "Sun, 05 Jan 2025 22:46:15 GMT",
+            "duration": 313,
+            "id": 1,
+            "images": [
+                {
+                    "album_id": null,
+                    "id": 1,
+                    "song_id": 1,
+                    "url": "https://melody-images.s3.amazonaws.com/894af893cf264901abeed04663974000.jpeg"
+                }
+            ],
+            "likes": [],
+            "lyrics": "Iam a whole bunch of lyrics",
+            "released_date": "Tue, 01 Jan 2013 00:00:00 GMT",
+            "title": "One more time",
+            "user_id": 1
+        },
+        {
+            "album_id": 1,
+            "artist": "Daft Punkers",
+            "audio_file": "https://melody-songs.s3.us-east-1.amazonaws.com/07a9740ea7754e2292a349e8d6932620.mp3",
+            "created_at": "Sun, 05 Jan 2025 22:46:15 GMT",
+            "duration": 313,
+            "id": 2,
+            "images": [
+                {
+                    "album_id": null,
+                    "id": 1,
+                    "song_id": 2,
+                    "url": "https://melody-images.s3.amazonaws.com/894af893cf264901abeed04663974000.jpeg"
+                }
+            ],
+            "likes": [],
+            "lyrics": "Iam a whole bunch of lyrics",
+            "released_date": "Tue, 01 Jan 2015 00:00:00 GMT",
+            "title": "Two more times",
+            "user_id": 1
+        } ]
     }
     ```
 
@@ -306,7 +333,7 @@ Returns the details of a song specified by its id.
 * Require Authentication: false
 * Request
   * Method: GET
-  * Route path: /songs/:songId
+  * Route path: api/songs/:songId
   * Body: none
 
 
@@ -319,35 +346,25 @@ Returns the details of a song specified by its id.
 
     ```json
     {
-      "Songs": [
+    "album_id": 1,
+    "artist": "Daft Punk",
+    "audio_file": "https://melody-songs.s3.us-east-1.amazonaws.com/07a9740ea7754e2292a349e8d6932620.mp3",
+    "created_at": "Sun, 05 Jan 2025 22:46:15 GMT",
+    "duration": 313,
+    "id": 1,
+    "images": [
         {
-          "album_id": 1,
-          "artist": "Big Bird",
-          "created_at": "2021-11-19 20:39:36",
-          "duration": 500,
-          "id": 1,
-      "Images": [
-        {
-          "album_id": 1,
-          "id": 1,
-          "song_id": 1,
-          "url": "image url",
-        },
-      ],
-      "likes": [
-        {
-          "album_id": null,
-          "id": 1,
-          "song_id": 1,
-          "user_id": 1
-        },
-            ],
-        "lyrics": "Happy birthday too youu",
-        "released_date": "Fri, 01 Feb 2013 00:00:00 GMT",
-        "title": "Happy birthday",
-        "user_id": 1,
+            "album_id": null,
+            "id": 1,
+            "song_id": 1,
+            "url": "https://melody-images.s3.amazonaws.com/894af893cf264901abeed04663974000.jpeg"
         }
-      ],
+    ],
+    "likes": [],
+    "lyrics": "Iam a whole bunch of lyrics",
+    "released_date": "Tue, 01 Jan 2013 00:00:00 GMT",
+    "title": "One more time",
+    "user_id": 1
     }
     ```
 
@@ -375,7 +392,7 @@ Adds and returns a new song when a user is signed in.
 * Require Authentication: true
 * Request
   * Method: POST
-  * Route path: /songs
+  * Route path: api/songs
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -475,7 +492,7 @@ Updates and returns an existing song.
 * Require proper authorization: Song must belong to the current user
 * Request
   * Method: PUT
-  * Route path: /songs/:songId
+  * Route path: api/songs/:songId
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -587,7 +604,7 @@ Deletes an existing song.
 * Require proper authorization: Song must belong to the current user
 * Request
   * Method: DELETE
-  * Route path: /songs/:songId
+  * Route path: api/songs/:songId
   * Body: none
 
 
@@ -655,7 +672,8 @@ Creates an album.
     "duration": 4534,
     "images" : [
       "https://m.media-amazon.com/images/M/MV5BNDRkM2NjMzctNGNmNy00ZjUzLWJlN2UtM2ZlZGI5M2NkMTAyXkEyXkFqcGc@._V1_.jpgdd"
-      ]}
+      ]
+  }
   ```
 
 
@@ -754,7 +772,7 @@ Returns all the songs that belong to an album specified by id.
 * Require Authentication: false
 * Request
   * Method: GET
-  * Route path: /albums/:albumId/songs
+  * Route path: api/albums/:albumId/songs
   * Body: none
 
 
@@ -808,72 +826,6 @@ Returns all the songs that belong to an album specified by id.
       "message": "No Album found"
     }
     ```
-<!--
-### Add an Image to a album based on the album's id
-
-
-Create and return a new image for an album specified by id.
-
-
-* Require Authentication: true
-* Require proper authorization: Review must belong to the current user
-* Request
-  * Method: POST
-  * Route path: /album/:albumId/addImage
-  * Headers:
-    * Content-Type: application/json
-  * Body:
-
-
-    ```json
-    {
-      "url": "image url"
-    }
-    ```
-
-
-* Successful Response
-  * Status Code: 201
-  * Headers:
-    * Content-Type: application/json
-  * Body:
-
-
-    ```json
-    {
-      "id": 1,
-      "url": "image url"
-    }
-    ```
-
-
-* Error response: Couldn't find album with the specified id
-  * Status Code: 404
-  * Headers:
-    * Content-Type: application/json
-  * Body:
-
-
-    ```json
-    {
-      "message": "Album couldn't be found"
-    }
-    ```
-
-
-* Error response: Cannot add any more images because there is a maximum of 10
-  images per resource
-  * Status Code: 403
-  * Headers:
-    * Content-Type: application/json
-  * Body:
-
-
-    ```json
-    {
-      "message": "Maximum number of images for this resource was reached"
-    }
-    ``` -->
 
 
  ### Users should be able to view all albums created by users
@@ -944,7 +896,7 @@ Add Songs based on albumId if user is album owner.
 * Require Authentication: True
 * Request
   * Method: POST
-  * Route path: /albums/:albumId/:userId/songs
+  * Route path: api/albums/:albumId/:userId/songs
   * Body: none
 
 
@@ -1022,6 +974,7 @@ Add Songs based on albumId if user is album owner.
       "message": "Album Not Found"
     }
     ```
+    
 ### Users should be able to remove songs from albums based on AlbumId
 
 
@@ -1032,7 +985,7 @@ Deletes an existing song, based on AlbumId.
 * Require proper authorization: Song must belong to the current user
 * Request
   * Method: DELETE
-  * Route path: /albums/:albumId/:userId/songs
+  * Route path: api/albums/:albumId/:userId/songs
   * Body: none
 
 
@@ -1064,24 +1017,6 @@ Deletes an existing song, based on AlbumId.
     ```
 
 
-    <!-- * Error response: Couldn't find Song with the specified id
-  * Status Code: 404
-  * Headers:
-    * Content-Type: application/json
-  * Body:
-
-
-    ```json
-    {
-      "message": "Song couldn't be found"
-    }
-    ``` -->
-
-
-
-
-
-
 ### Users should be able to DELETE albums based on AlbumId
 
 
@@ -1092,7 +1027,7 @@ Deletes an existing album, based on AlbumId.
 * Require proper authorization: Album must belong to the current user
 * Request
   * Method: DELETE
-  * Route path: /albums/:albumId
+  * Route path: api/albums/:albumId
   * Body: none
 
 
@@ -1128,71 +1063,6 @@ Deletes an existing album, based on AlbumId.
 
 ## LIKES
 
-### Get all Songs liked by the Current User
-
-Returns all the songs liked by the current user.
-
-* Require Authentication: true
-* Request
-  * Method: GET
-  * Route path: /users/:userId/likedsongs
-  * Body: none
-* Successful Response
-  * Status Code: 200
-  * Headers:
-    * Content-Type: application/json
-  * Body:
-
-    ```json
-    {
-      "Songs": [
-        {
-          "id": 1,
-          "title": "Happy birthday",
-          "artist": "Big Bird",
-          "album_id": 1,
-          "duration": 500,
-        }
-      ]
-    }
-    ```
-### Get all liked Albums of the Current User
-
-Returns all the albums liked by the current user.
-
-* Require Authentication: true
-* Request
-  * Method: GET
-  * Route path: /users/:userId/likedalbums
-  * Body: none
-
-* Successful Response
-  * Status Code: 200
-  * Headers:
-    * Content-Type: application/json
-  * Body:
-
-    ```json
-    {
-     "Album": [
-        {
-          "id": 1,
-          "playlistId": 4,
-          "artist": "Big Bird",
-          "released_year": 2022,
-          "created_at": "2022-11-19 20:39:36",
-          "title": "Happy Songs",
-          "Images": [
-            {
-              "id": 1,
-              "url": "image url"
-            }
-          ],
-        }
-      ]
-    }
-    ```
-
 ### Users should be able to like a Song
 
 Like song based on songId
@@ -1201,7 +1071,7 @@ Like song based on songId
 * Require Authentication: true
 * Request
   * Method: POST
-  * Route path: /users/:userId/likedsongs
+  * Route path: api/users/:userId/likedsongs
   * Body: 
   ```json
   {
@@ -1250,67 +1120,6 @@ Like song based on songId
     }
    ```
 
-
-### Users should be able to like an Album
-
-Like album based on albumId
-
-
-* Require Authentication: true
-* Request
-  * Method: POST
-  * Route path: /users/:userId/likedalbums
-  * Body: none
-* Successful Response
-  * Status Code: 200
-  * Headers:
-    * Content-Type: application/json
-  * Body:
-
-    ```json
-    {
-  "Album": [
-        {
-          "id": 1,
-          "playlistId": 4,
-          "artist": "Big Bird",
-          "released_year": 2022,
-          "created_at": "2022-11-19 20:39:36",
-          "title": "Happy Songs",
-          "Images": [
-            {
-              "id": 1,
-              "url": "image url"
-            }
-          ],
-        }
-      ]
-    }
-    ```
-* Successful Response
-  * Status Code: 200
-  * Headers:
-    * Content-Type: application/json
-  * Body:
-
-    ```json
-    {
-      "message": "Successfully Liked Album"
-    }
-    ```
-
-* Error response: Couldn't find Album with the specified id
-  * Status Code: 404
-  * Headers:
-    * Content-Type: application/json
-  * Body:
-
-    ```json
-    {
-      "message": "Album couldn't be found"
-    }
-   ```
-   
 ### Users should be able to unlike a Song
 
 Unlike song based on songId
@@ -1319,7 +1128,7 @@ Unlike song based on songId
 * Require Authentication: true
 * Request
   * Method: PUT
-  * Route path: /users/:userId/likedsongs
+  * Route path: api/users/:userId/likedsongs
   * Body: none
 * Successful Response
   * Status Code: 200
@@ -1364,81 +1173,16 @@ Unlike song based on songId
     }
    ```
 
+   ### Get all Songs liked by the Current User
 
-### Users should be able to unlike an album
+  Returns all the songs liked by the current user.
 
-Unlike album based on albumId
-
-
-* Require Authentication: true
-* Request
-  * Method: PUT
-  * Route path: /users/:userId/likedalbums
-  * Body: none
-* Successful Response
-  * Status Code: 200
-  * Headers:
-    * Content-Type: application/json
-  * Body:
-
-    ```json
-    {
-    "Album": [
-        {
-          "id": 1,
-          "playlistId": 4,
-          "artist": "Big Bird",
-          "released_year": 2022,
-          "created_at": "2022-11-19 20:39:36",
-          "title": "Happy Songs",
-          "Images": [
-            {
-              "id": 1,
-              "url": "image url"
-            }
-          ],
-        }
-      ]
-    }
-    ```
-* Successful Response
-  * Status Code: 200
-  * Headers:
-    * Content-Type: application/json
-  * Body:
-
-    ```json
-    {
-      "message": "Successfully Unliked Album"
-    }
-    ```
-
-* Error response: Couldn't find Song with the specified id
-  * Status Code: 404
-  * Headers:
-    * Content-Type: application/json
-  * Body:
-
-    ```json
-    {
-      "message": "Album couldn't be found"
-    }
-   ```
-
-## PLAYLISTS
-
-
-### User should GET all playlists created by user based on userId
-
-Returns all the playslists that belong to a userId specified by id.
-
-* Require Authentication: false
-* Request
+  * Require Authentication: true
+  * Request
   * Method: GET
-  * Route path: /users/:userId/playlists
+  * Route path: api/users/:userId/likedsongs
   * Body: none
-
-* Successful Response
+  * Successful Response
   * Status Code: 200
   * Headers:
     * Content-Type: application/json
@@ -1446,195 +1190,16 @@ Returns all the playslists that belong to a userId specified by id.
 
     ```json
     {
-      "playlist": [
-       {
-        "created_at": "Wed, 01 Jan 2025 22:01:06 GMT",
-        "id": 1,
-        "name": "Top Hits",
-        "updated_at": "Wed, 01 Jan 2025 22:01:06 GMT",
-        "user_id": 1
-       },
-      ]
-    }
-    ```
-
-* Error response: Couldn't find a Playlist with the specified id
-  * Status Code: 404
-  * Headers:
-    * Content-Type: application/json
-  * Body:
-
-    ```json
-    {
-      "message": "Playlist couldn't be found"
-    }
-    ```
-
-### Create a new playlist based on user Id
-
-Create new playlist
-
-* Require Authentication: True
-* Request
-  * Method: POST
-  * Route path: /users/:userId/playlists/:playlistId
-  * Body: none
-
-* Successful Response
-  * Status Code: 200
-  * Headers:
-    * Content-Type: application/json
-  * Body:
-
-    ```json
-    {
-      "playlist": [
+      "Songs": [
         {
           "id": 1,
-          "playlistId": 4,
-          "created_at": "2022-11-19 20:39:36",
-          "name": "Happy Songs Playlist",
-          "updated_at":  "2022-11-19 20:39:36",
+          "title": "Happy birthday",
+          "artist": "Big Bird",
+          "album_id": 1,
+          "duration": 500,
         }
       ]
     }
     ```
-
-    * Successful Response
-  * Status Code: 201
-  * Headers:
-    * Content-Type: application/json
-  * Body:
-
-    ```json
-    {
-      "message": "Playlist successfully created"
-    }
-    ```
-
-* Error response: Couldn't add a Playlist with the specified id
-  * Status Code: 404
-  * Headers:
-    * Content-Type: application/json
-  * Body:
-
-    ```json
-    {
-      "message": "Playlist Not Created"
-    }
-    ```
-
-
-
-### Add Songs to an User created Playlist based on Playlist's id
-
-Add Songs based on playListId.
-
-* Require Authentication: True
-* Request
-  * Method: POST
-  * Route path: /users/:userId/playlists/:playlistId/song/:songId
-  * Body: none
-
-* Successful Response
-  * Status Code: 200
-  * Headers:
-    * Content-Type: application/json
-  * Body:
-
-    ```json
-    {
-      "playlist": [
-        {
-          "id": 1,
-          "playlistId": 4,
-          "created_at": "2022-11-19 20:39:36",
-          "name": "Happy Songs Playlist",
-          "updated_at":  "2022-11-19 20:39:36",
-        }
-      ]
-    }
-    ```
-
-    * Successful Response
-  * Status Code: 201
-  * Headers:
-    * Content-Type: application/json
-  * Body:
-
-    ```json
-    {
-      "message": "Song successfully added to Playlist"
-    }
-    ```
-
-* Error response: Couldn't find a Playlist with the specified id
-  * Status Code: 404
-  * Headers:
-    * Content-Type: application/json
-  * Body:
-
-    ```json
-    {
-      "message": "Playlist Not Found"
-    }
-    ```
-
-### Delete a song on users playlist    
-Add Songs based on playListId.
-
-* Require Authentication: True
-* Request
-  * Method: DELETE
-  * Route path: /users/:userId/playlists/:playlistId/song/:songId
-  * Body: none
-   
-   
-    * Successful Response
-  * Status Code: 201
-  * Headers:
-    * Content-Type: application/json
-  * Body:
-
-    ```json
-    {
-      "message": "Song successfully deleted from Playlist"
-    }
-    ```
-
-
-### Users should be able DELETE playlists based on PlaylistId
-
-Deletes an existing playlist, based on PlaylistId.
-
-* Require Authentication: true
-* Require proper authorization: Playlist must belong to the current user
-* Request
-  * Method: DELETE
-  * Route path: /users/userId/playlists/:playlistId
-  * Body: none
-
-* Successful Response
-  * Status Code: 200
-  * Headers:
-    * Content-Type: application/json
-  * Body:
-
-    ```json
-    {
-      "message": " Successfully deleted"
-    }
-    ```
-
-* Error response: Couldn't find a Playlist with the specified id
-  * Status Code: 404
-  * Headers:
-    * Content-Type: application/json
-  * Body:
-
-    ```json
-    {
-      "message": "Playlist couldn't be found"
-    }
-   ```
+    
 

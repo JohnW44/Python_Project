@@ -98,7 +98,7 @@ const handleSong = (song) => {
                                 <div key={song.id} className="song-row">
                                     <div className="song-info" onClick={() => handleSong(song)}>
                                         <img 
-                                            src={song.album?.images?.[0]?.url || 'default-album-image.png'} 
+                                            src={song.images?.[0]?.url || 'default-album-image.png'} 
                                             alt={song.title} 
                                             className="song-thumbnail" 
                                         />
