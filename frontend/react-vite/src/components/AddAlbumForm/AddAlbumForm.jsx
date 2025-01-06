@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './AddAlbumForm.css';
 
 function AddAlbumForm() {
@@ -9,6 +9,12 @@ function AddAlbumForm() {
     // const [duration, setDuration] = useState("");
     const [imageFile, setImageFile] = useState(null);
     const [errors, setErrors] = useState({});
+    const [isEditing, setIsEditing] = useState(false);
+
+    const navigate = useNavigate();
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search)
+    const editAlbumId = queryParams.get('albumId')
 
     const handleImageChange = (e) => {  
         const file = e.target.files[0];
@@ -16,6 +22,21 @@ function AddAlbumForm() {
             setImageFile(file);
         }
     };
+
+    useEffect(() => {
+        if (editAlbumId) {
+            setIsEditing(true);
+            fetch(`/api/albums/${editAlbumId}/songs`)
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.Album) {
+                        setTitle(data.Album.title);
+                        setArtist(data.Album.artist);
+                        setReleasedYear(data.Album.released_year);
+                    }
+                });
+        }
+    }, [editAlbumId]);
 
     useEffect(() => {
         const errObj = {};
@@ -38,8 +59,6 @@ function AddAlbumForm() {
         setErrors(errObj);
     }, [title, artist, releasedYear]); //took out Duration
 
-    const navigate = useNavigate();
-
     const onSubmit = async (e) => {
         e.preventDefault();
         
@@ -52,15 +71,17 @@ function AddAlbumForm() {
         if (imageFile) {
             formData.append('images', imageFile);
         }
-
-        const response = await fetch('/api/albums/', {
-            method: 'POST',
-            body: formData,
-        });
+        const response = await fetch(
+            isEditing ? `/api/albums/${editAlbumId}` : '/api/albums/', 
+            {
+                method: isEditing ? 'PUT' : 'POST',
+                body: formData,
+            }
+        );
 
         if (response.ok) {
             const data = await response.json();
-            navigate(`/albums/${data.Album.id}`);
+            navigate(`/albums/${isEditing ? editAlbumId : data.Album.id}`);
         } else {
             const data = await response.json();
             setErrors(data.errors || {});
@@ -69,7 +90,7 @@ function AddAlbumForm() {
 
     return (
         <form className='album-form' onSubmit={onSubmit} encType="multipart/form-data">
-            <h2>Create New Album</h2>
+            <h2>{isEditing ? 'Edit Album' : 'Create New Album'}</h2>
 
             <label>
                 Title
@@ -130,7 +151,7 @@ function AddAlbumForm() {
                 type='submit'
                 disabled={Object.values(errors).length > 0}
             >
-                Create Album
+                {isEditing ? 'Save Changes' : 'Create Album'}
             </button>
         </form>
     );

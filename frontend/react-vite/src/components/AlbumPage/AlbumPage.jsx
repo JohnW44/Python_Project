@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 import './AlbumPage.css';
 import Melody_Logo from '../../../../../images/Melody_Logo.png'
 
@@ -7,6 +8,7 @@ function AlbumPage() {
     const { albumId } = useParams();
     const [songs, setSongs] = useState([]);
     const [album, setAlbum] = useState(null);
+    const sessionUser = useSelector(state => state.session.user);
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -17,6 +19,23 @@ function AlbumPage() {
                 setAlbum(data.Album || {});
             });
     }, [albumId]);
+
+    const handleEdit = () => {
+            navigate(`/albums/new?albumId=${albumId}`);
+        }
+    
+    
+    const handleDelete = () => {
+        if (window.confirm("Are you sure you want to delete this album?")) {
+            fetch(`/api/albums/${albumId}`, {
+                method: 'DELETE'
+            })
+            .then((response) => response.json())
+            .then(() => {
+                navigate('/');
+            })
+        }
+    };
 
     const songclick = (songId) => {
         navigate(`/songs/${songId}`)
@@ -35,6 +54,24 @@ function AlbumPage() {
                     <h3>Released: {album ? album.released_year : 'Unknown'}</h3>
                     <h3>Songs: {songs.length}</h3>
                 </div>
+                {sessionUser && album && sessionUser.id === album.user_id && (
+                    <div className="album-actions">
+                        <button
+                            type="button"
+                            onClick={handleEdit}
+                            className="edit-button"
+                        >
+                            Edit Album
+                        </button>
+                        <button
+                            type="button"
+                            onClick={handleDelete}
+                            className="delete-button"
+                        >
+                            Delete Album
+                        </button>
+                    </div>
+                )}
             </div>
 
             <div className="album-songs-list2" >

@@ -238,3 +238,55 @@ def create_album():
     return jsonify({"message": "Album successfully created",
                     "Album": new_album.to_dict()}),200
 
+
+@albums_routes.route('/<int:albumId>', methods=['PUT'])
+@login_required
+def update_album(albumId):
+    """
+    Updates and returns an album uploaded by user
+    """
+    album = Album.query.get(albumId)
+    if not album:
+        return jsonify({"error": "Album couldn't be found"}), 404
+    if album.user_id != current_user.id:
+        return jsonify({"error": "Unauthorized"}), 403
+
+    if "title" in request.form and request.form.get("title") == "":
+        return jsonify({"error": "Title cannot be empty"}), 400
+    if "title" in request.form:
+        album.title = request.form.get('title')
+    if "artist" in request.form and request.form.get("artist") == "":
+        return jsonify({"error": "Artist cannot be empty"}), 400
+    if "artist" in request.form:
+        album.artist = request.form.get('artist')
+    if "released_year" in request.form and request.form.get("released_year") == "":
+        return jsonify({"error": "Released year cannot be empty"}), 400
+    if "released_year" in request.form:
+        album.released_year = request.form.get('released_year')
+    if "duration" in request.form and request.form.get("duration") == "":
+        return jsonify({"error": "Duration cannot be empty"}), 400
+    if "duration" in request.form:
+        album.duration = request.form.get('duration')
+
+    if "images" in request.files:
+        image_file = request.files["images"]
+        if image_file.filename:
+            existing_image = Image.query.filter_by(album_id=albumId).first()
+            if existing_image:
+                db.session.delete(existing_image)
+                db.session.commit()
+
+            image_file.filename = get_unique_image_filename(image_file.filename)
+            image_upload = upload_image_to_s3(image_file)
+            
+            if "errors" in image_upload:
+                return jsonify({"errors": image_upload["errors"]}), 400
+
+            new_image = Image(
+                album_id=albumId,
+                url=image_upload["url"]
+            )
+            db.session.add(new_image)
+    
+    db.session.commit()
+    return jsonify({'Album': album.to_dict()}), 200
