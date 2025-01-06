@@ -5,6 +5,8 @@ body, html {
 }
 
 
+
+
 .nav-container {
   background-color: #121b2a;
   padding: 20px;
@@ -15,11 +17,15 @@ body, html {
 }
 
 
+
+
 .nav-left{
   display:flex;
   align-items: center;
   gap: 10px;
 }
+
+
 
 
 .Logo {
@@ -28,11 +34,17 @@ body, html {
 }
 
 
+
+
 .site-name {
   font-size: 24px;
   font-weight: bold;
   color: #FD7238;
 }
+
+
+
+
 
 
 
@@ -45,6 +57,10 @@ body, html {
 
 
 
+
+
+
+
 .search-bar {
   width: 500px;
   height: auto;
@@ -52,9 +68,13 @@ body, html {
 }
 
 
+
+
 .search-bar::placeholder {
   font-size: 15px;
 }
+
+
 
 
 /* moved to profilebutton.css */
@@ -73,12 +93,16 @@ body, html {
 } */
 
 
+
+
 /* .profile-dropdown li {
   padding: 8px;
   list-style: none;
   border-radius: 5%;
   border-color: red;
 } */
+
+
 
 
 .side-bar {
@@ -94,6 +118,8 @@ body, html {
 }
 
 
+
+
 .all-songs-header,
 .my-songs-header {
     padding: 10px;
@@ -103,9 +129,13 @@ body, html {
 }
 
 
+
+
 .user-song {
     background-color: #c71d54;
 }
+
+
 
 
 .song-item {
@@ -113,6 +143,8 @@ body, html {
     padding: 8px;
     border-radius: 4px;
 }
+
+
 
 
 .song-link {
@@ -123,16 +155,22 @@ body, html {
 }
 
 
+
+
 .song-link:hover {
     color: rgb(67, 156, 184);
 }
 
 
+
+
 .songs-list {
     color: #c71d54;
-    overflow-y: auto;
+    /* overflow-y: auto; */
     max-height: calc(100% - 100px);
 }
+
+
 
 
 .nav-link {
@@ -144,6 +182,15 @@ body, html {
   text-decoration: none;
 }
 
+
 a.song-link {
   color: #c71d54;
 }
+
+
+button.like-button {
+  background-color: transparent;
+  border-color: transparent;
+  color: #FD7238
+}
+
